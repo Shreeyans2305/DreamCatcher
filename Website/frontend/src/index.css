@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-indic: 'Mukta', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
+    
+    /* Custom User Palette Tokens */
+    --color-mahogany: #3D2123;
+    --color-mahogany-deep: #2A1517;
+    --color-mahogany-light: #522E31;
+    --color-slate-gray: #4E5458;
+    --color-slate-muted: #6B7277;
+    --color-rose-sand: #EBD1C6;
+    --color-rose-sand-subtle: #F5E8E2;
+    --color-linen-base: #F8F1EC;
+    --color-terracotta: #A83E28;
+    --color-cedar: #285B43;
+  }
+
+  html {
+    font-family: var(--font-indic);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100vh;
+    color: #2A1517;
+    background-color: var(--color-linen-base);
+    line-height: 1.75;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom high-contrast scrollbars for field tables */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F8F1EC;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #4E5458;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3D2123;
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid #3D2123;
+    outline-offset: 2px;
+  }
+}
+
+/* Custom Indic Typography & Touch ergonomics */
+.font-indic {
+  font-family: 'Mukta', 'Noto Sans Gujarati', system-ui, sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Touch friendly minimum touch target */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
