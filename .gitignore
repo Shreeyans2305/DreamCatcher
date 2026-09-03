@@ -34,6 +34,7 @@ venv.bak/
 
 # Environment variables (keep .env.example)
 .env
+.env.gcp
 .env.local
 .env.*.local
 
@@ -57,6 +58,13 @@ backend/alembic/versions/__pycache__/
 
 # Logs
 *.log
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
 logs/
 
 # Docker
