@@ -29,6 +29,7 @@ class OpportunitiesProvider extends ChangeNotifier {
   String get searchQuery => _searchQuery;
 
   int get totalMatchedCount => _eligibilityMap.values.where((e) => e.isEligible).length;
+  List<Opportunity> get allOpportunities => _allOpportunities;
 
   List<Opportunity> get filteredOpportunities {
     return _allOpportunities.where((opp) {
@@ -116,28 +117,19 @@ class OpportunitiesProvider extends ChangeNotifier {
     final student = _authProvider.currentStudent;
     if (student == null) return;
 
-    try {
-      // 1. Try fetching directly from /students/{student_id}/eligible-opportunities
-      final results = await _apiClient.fetchEligibleOpportunities(student.id);
-      for (final res in results) {
-        _eligibilityMap[res.opportunityId] = res;
-      }
-    } catch (e) {
-      debugPrint('Error calling fetchEligibleOpportunities: $e. Falling back to individual check.');
-    }
-
-    // 2. For any opportunities without an eligibility record, evaluate using check-eligibility
     final studentEdu = student.educationRecords.isNotEmpty ? student.educationRecords.first : null;
     final profileDict = <String, dynamic>{
       if (student.gender != null) 'gender': student.gender,
       if (student.location?.state != null) 'state': student.location!.state,
-      if (student.location != null && student.location!.ruralUrban != 'unknown')
-        'rural_status': student.location!.ruralUrban,
+      'rural_status': _authProvider.ruralUrban,
       if (studentEdu != null) 'education_level': studentEdu.educationLevel,
+      'social_category': _authProvider.socialCategory,
+      if (_authProvider.tribe.isNotEmpty) 'tribe': _authProvider.tribe,
+      'income': _authProvider.familyIncome,
     };
 
-    for (final opp in _allOpportunities) {
-      if (!_eligibilityMap.containsKey(opp.id)) {
+    try {
+      await Future.wait(_allOpportunities.map((opp) async {
         try {
           final res = await _apiClient.checkOpportunityEligibility(opp.id, profileDict);
           _eligibilityMap[opp.id] = res;
@@ -145,9 +137,9 @@ class OpportunitiesProvider extends ChangeNotifier {
         } catch (_) {
           // No eligibility rules defined on this opportunity, or check skipped
         }
-      } else {
-        opp.eligibilityResult = _eligibilityMap[opp.id];
-      }
+      }));
+    } catch (e) {
+      debugPrint('Error evaluating student eligibility: $e');
     }
 
     notifyListeners();

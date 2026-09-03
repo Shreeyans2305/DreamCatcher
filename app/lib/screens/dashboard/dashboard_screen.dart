@@ -28,9 +28,11 @@ class DashboardScreen extends StatelessWidget {
     final student = auth.currentStudent;
 
     final name = student?.name.split(' ').first ?? 'Friend';
-    final completenessPercent = student?.completenessPercentage ?? 80;
-    final matchedCount = opps.totalMatchedCount > 0 ? opps.totalMatchedCount : 4;
-    final district = student?.location?.district ?? 'your district';
+    final completenessPercent = (student?.profileCompleteness != null)
+        ? (student!.profileCompleteness * 100).round()
+        : 0;
+    final matchedCount = opps.totalMatchedCount;
+    final region = student?.location?.district ?? student?.location?.state ?? 'your area';
 
     return Scaffold(
       backgroundColor: DesignTokens.background,
@@ -132,8 +134,10 @@ class DashboardScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   backgroundColor: Colors.white,
                   child: AvatarStack(
-                    label: '24 students from $district found scholarships this month',
-                    totalCount: 24,
+                    label: matchedCount > 0
+                        ? '$matchedCount opportunities matched for $region'
+                        : 'Explore all scholarships & schemes available for $region',
+                    totalCount: matchedCount > 0 ? matchedCount : opps.allOpportunities.length,
                   ),
                 ),
                 const SizedBox(height: 24),

@@ -157,7 +157,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            // Demographics & Quotas Section
+            _buildSectionHeader(
+              title: 'Demographics & Quotas',
+              onAddOrEdit: () => _showEditDemographicsDialog(context, auth),
+              editLabel: 'Update',
+            ),
+            const SizedBox(height: 8),
+            RoundedCard(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _buildDemographicRow(
+                    icon: Icons.badge_outlined,
+                    label: 'Social Category & Caste',
+                    value: auth.socialCategory,
+                  ),
+                  const Divider(height: 18),
+                  _buildDemographicRow(
+                    icon: Icons.diversity_3_outlined,
+                    label: 'Tribe Affiliation',
+                    value: auth.tribe.isNotEmpty ? auth.tribe : 'None specified',
+                    isTribe: auth.tribe.isNotEmpty,
+                  ),
+                  const Divider(height: 18),
+                  _buildDemographicRow(
+                    icon: Icons.currency_rupee_rounded,
+                    label: 'Annual Family Income',
+                    value: auth.familyIncome == 0
+                        ? '₹0 (Nil Income / Under ₹25k)'
+                        : auth.familyIncome <= 25000
+                            ? '₹${auth.familyIncome.toStringAsFixed(0)} (Under ₹25,000)'
+                            : '₹${auth.familyIncome.toStringAsFixed(0)} / year',
+                    isZeroAid: auth.familyIncome <= 25000,
+                  ),
+                  const Divider(height: 18),
+                  _buildDemographicRow(
+                    icon: Icons.holiday_village_outlined,
+                    label: 'Area Classification',
+                    value: auth.ruralUrban.toUpperCase(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
 
             // Education Section
             _buildSectionHeader(
@@ -648,6 +691,240 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: const Text('Save'),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDemographicRow({
+    required IconData icon,
+    required String label,
+    required String value,
+    bool isTribe = false,
+    bool isZeroAid = false,
+  }) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: DesignTokens.primary),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textSecondary),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: isZeroAid
+                ? DesignTokens.mintBg
+                : (isTribe ? DesignTokens.primaryLight : const Color(0xFFF3F4F6)),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+          ),
+          child: Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isZeroAid
+                  ? DesignTokens.mintText
+                  : (isTribe ? DesignTokens.primary : DesignTokens.textPrimary),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showEditDemographicsDialog(BuildContext context, AuthProvider auth) {
+    String selectedCategory = auth.socialCategory;
+    String selectedTribe = auth.tribe;
+    double selectedIncome = auth.familyIncome;
+    final tribeController = TextEditingController(text: selectedTribe);
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (dialogCtx, setDialogState) => AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Update Demographics & Quotas',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Social Category / Caste Quota', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: ['General', 'OBC', 'SC', 'ST', 'EWS'].map((cat) {
+                    final isSel = selectedCategory == cat;
+                    return ChoiceChip(
+                      label: Text(cat),
+                      selected: isSel,
+                      selectedColor: DesignTokens.primary,
+                      backgroundColor: Colors.white,
+                      labelStyle: TextStyle(
+                        color: isSel ? Colors.white : DesignTokens.textPrimary,
+                        fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                      onSelected: (sel) {
+                        if (sel) setDialogState(() => selectedCategory = cat);
+                      },
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                const Text('Tribe / Community (Optional)', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                const SizedBox(height: 4),
+                Text(
+                  'Unlocks specific Ministry of Tribal Affairs (MoTA) and PVTG programs.',
+                  style: GoogleFonts.inter(fontSize: 12, color: DesignTokens.textSecondary),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: ['Bhil', 'Gond', 'Santhal', 'Munda', 'Oraon', 'Bodo', 'Warli', 'Khasi', 'Garo', 'PVTG'].map((t) {
+                    final isSel = selectedTribe.toLowerCase() == t.toLowerCase();
+                    return ChoiceChip(
+                      label: Text(t),
+                      selected: isSel,
+                      selectedColor: DesignTokens.primary,
+                      backgroundColor: Colors.white,
+                      labelStyle: TextStyle(
+                        fontSize: 12,
+                        color: isSel ? Colors.white : DesignTokens.textPrimary,
+                        fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                      onSelected: (sel) {
+                        setDialogState(() {
+                          selectedTribe = sel ? t : '';
+                          tribeController.text = selectedTribe;
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: tribeController,
+                  decoration: const InputDecoration(
+                    hintText: 'Or enter custom tribe / PVTG name...',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  ),
+                  onChanged: (val) => selectedTribe = val,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Family Income', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                    Text(
+                      selectedIncome == 0
+                          ? '₹0 (Nil Income)'
+                          : selectedIncome <= 25000
+                              ? '₹${selectedIncome.toStringAsFixed(0)} (Under ₹25k)'
+                              : '₹${(selectedIncome / 1000).toStringAsFixed(0)}k',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: selectedIncome <= 25000 ? DesignTokens.mintText : DesignTokens.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _buildDialogIncomePill('₹0', 0, selectedIncome, (v) => setDialogState(() => selectedIncome = v)),
+                      const SizedBox(width: 6),
+                      _buildDialogIncomePill('< ₹25k', 25000, selectedIncome, (v) => setDialogState(() => selectedIncome = v)),
+                      const SizedBox(width: 6),
+                      _buildDialogIncomePill('₹1L', 100000, selectedIncome, (v) => setDialogState(() => selectedIncome = v)),
+                      const SizedBox(width: 6),
+                      _buildDialogIncomePill('₹2.5L', 250000, selectedIncome, (v) => setDialogState(() => selectedIncome = v)),
+                      const SizedBox(width: 6),
+                      _buildDialogIncomePill('₹5L+', 500000, selectedIncome, (v) => setDialogState(() => selectedIncome = v)),
+                    ],
+                  ),
+                ),
+                Slider(
+                  value: selectedIncome,
+                  min: 0,
+                  max: 800000,
+                  divisions: 32,
+                  activeColor: DesignTokens.primary,
+                  onChanged: (v) => setDialogState(() => selectedIncome = v),
+                ),
+                if (selectedIncome <= 25000)
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: DesignTokens.mintBg,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text(
+                      '✓ Qualifies for 100% full fee waiver and maximum need-based scholarships.',
+                      style: TextStyle(fontSize: 12, color: DesignTokens.mintText, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(ctx);
+                final finalTribe = tribeController.text.trim();
+                await auth.updateDemographics(
+                  socialCategory: selectedCategory,
+                  tribe: finalTribe,
+                  familyIncome: selectedIncome,
+                );
+                if (context.mounted) {
+                  context.read<OpportunitiesProvider>().evaluateStudentEligibility();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Demographics & quota eligibility updated!')),
+                  );
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDialogIncomePill(String label, double val, double currentVal, ValueChanged<double> onSelect) {
+    final isSel = (currentVal == val);
+    return InkWell(
+      onTap: () => onSelect(val),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: isSel ? DesignTokens.primary : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: isSel ? DesignTokens.primary : DesignTokens.border),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: isSel ? Colors.white : DesignTokens.textPrimary,
+            fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
+          ),
+        ),
       ),
     );
   }

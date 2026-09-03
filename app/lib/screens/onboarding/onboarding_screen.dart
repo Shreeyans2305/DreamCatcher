@@ -343,10 +343,15 @@ class OnboardingScreen extends StatelessWidget {
 
         // Caste / Social Category
         Text(
-          'Social Category (for quota eligibility)',
+          'Social Category & Caste (for quota eligibility)',
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
+        Text(
+          'Used to identify reserved scholarships, coaching fee waivers, and state quotas.',
+          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textSecondary),
+        ),
+        const SizedBox(height: 10),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -358,26 +363,218 @@ class OnboardingScreen extends StatelessWidget {
             );
           }).toList(),
         ),
+        const SizedBox(height: 16),
+
+        // Tribal Community / Tribe Affiliation
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: provider.socialCategory == 'ST' || provider.tribe.isNotEmpty
+                ? DesignTokens.primaryLight
+                : Colors.white,
+            borderRadius: BorderRadius.circular(DesignTokens.radiusCard),
+            border: Border.all(
+              color: provider.socialCategory == 'ST' || provider.tribe.isNotEmpty
+                  ? DesignTokens.primary.withValues(alpha: 0.5)
+                  : DesignTokens.border,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.diversity_3_rounded,
+                    size: 20,
+                    color: DesignTokens.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Tribe / Indigenous Community (Optional)',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: DesignTokens.textPrimary,
+                      ),
+                    ),
+                  ),
+                  if (provider.tribe.isNotEmpty)
+                    InkWell(
+                      onTap: () => provider.setTribe(''),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Text(
+                          'Clear',
+                          style: GoogleFonts.inter(fontSize: 12, color: DesignTokens.primary, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Crucial for Ministry of Tribal Affairs (MoTA), Eklavya, and PVTG schemes.',
+                style: GoogleFonts.inter(fontSize: 12, color: DesignTokens.textSecondary),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  'Bhil',
+                  'Gond',
+                  'Santhal',
+                  'Munda',
+                  'Oraon',
+                  'Bodo',
+                  'Warli',
+                  'Khasi',
+                  'Garo',
+                  'PVTG',
+                ].map((t) {
+                  final isSel = provider.tribe.toLowerCase() == t.toLowerCase();
+                  return ChoiceChip(
+                    label: Text(t),
+                    selected: isSel,
+                    selectedColor: DesignTokens.primary,
+                    backgroundColor: Colors.white,
+                    labelStyle: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
+                      color: isSel ? Colors.white : DesignTokens.textPrimary,
+                    ),
+                    side: BorderSide(
+                      color: isSel ? DesignTokens.primary : DesignTokens.border,
+                    ),
+                    onSelected: (sel) {
+                      provider.setTribe(sel ? t : '');
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                initialValue: provider.tribe,
+                key: ValueKey(provider.tribe),
+                style: GoogleFonts.inter(fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Or enter custom tribe / PVTG name...',
+                  hintStyle: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textMuted),
+                  prefixIcon: const Icon(Icons.edit_outlined, size: 18),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
+                    borderSide: BorderSide(color: DesignTokens.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
+                    borderSide: BorderSide(color: DesignTokens.border),
+                  ),
+                ),
+                onChanged: provider.setTribe,
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 20),
 
         // Family Income Bracket
-        Text(
-          'Annual Family Income: ₹${provider.familyIncome.toStringAsFixed(0)}',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Annual Family Income',
+              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: provider.familyIncome <= 25000
+                    ? DesignTokens.mintBg
+                    : DesignTokens.primaryLight,
+                borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+              ),
+              child: Text(
+                provider.familyIncome == 0
+                    ? '₹0 (Nil Income)'
+                    : provider.familyIncome <= 25000
+                        ? '₹${provider.familyIncome.toStringAsFixed(0)} (Under ₹25k)'
+                        : '₹${(provider.familyIncome / 1000).toStringAsFixed(0)}k / year',
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: provider.familyIncome <= 25000
+                      ? DesignTokens.mintText
+                      : DesignTokens.primary,
+                ),
+              ),
+            ),
+          ],
         ),
+        const SizedBox(height: 8),
+        // Quick one-tap income pills
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              _buildIncomePill('₹0 (Nil)', 0, provider),
+              const SizedBox(width: 8),
+              _buildIncomePill('< ₹25,000', 25000, provider),
+              const SizedBox(width: 8),
+              _buildIncomePill('₹1 Lakh', 100000, provider),
+              const SizedBox(width: 8),
+              _buildIncomePill('₹2.5 Lakh', 250000, provider),
+              const SizedBox(width: 8),
+              _buildIncomePill('₹5 Lakh+', 500000, provider),
+            ],
+          ),
+        ),
+        const SizedBox(height: 4),
         Slider(
           value: provider.familyIncome,
-          min: 25000,
-          max: 1000000,
-          divisions: 39,
+          min: 0,
+          max: 800000,
+          divisions: 32,
           activeColor: DesignTokens.primary,
-          label: '₹${(provider.familyIncome / 1000).round()}k',
+          label: provider.familyIncome == 0
+              ? '₹0 (Nil)'
+              : '₹${(provider.familyIncome / 1000).round()}k',
           onChanged: provider.setFamilyIncome,
         ),
-        Text(
-          'Income under ₹2.5L qualifies for maximum need-based financial aid.',
-          style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textMuted),
-        ),
+        if (provider.familyIncome <= 25000)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: DesignTokens.mintBg,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: DesignTokens.mintText.withValues(alpha: 0.3)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.verified_rounded, size: 18, color: DesignTokens.mintText),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '100% Free Tuition & Maximum Need-Based Aid qualify under ₹25k income.',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: DesignTokens.mintText,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          Text(
+            'Income under ₹2.5L qualifies for maximum need-based financial aid.',
+            style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textMuted),
+          ),
       ],
     );
   }
@@ -722,6 +919,32 @@ class OnboardingScreen extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIncomePill(String label, double val, OnboardingProvider provider) {
+    final isSelected = (provider.familyIncome == val);
+    return InkWell(
+      onTap: () => provider.setFamilyIncome(val),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? DesignTokens.primary : Colors.white,
+          borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+          border: Border.all(
+            color: isSelected ? DesignTokens.primary : DesignTokens.border,
+          ),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            color: isSelected ? Colors.white : DesignTokens.textPrimary,
           ),
         ),
       ),

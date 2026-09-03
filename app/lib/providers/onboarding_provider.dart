@@ -19,7 +19,8 @@ class OnboardingProvider extends ChangeNotifier {
   LocationItem? _selectedLocation;
   String _ruralUrban = 'rural';
   String _socialCategory = 'General';
-  double _familyIncome = 150000;
+  String _tribe = '';
+  double _familyIncome = 0;
 
   String _educationLevel = 'secondary';
   String _informalLearningDescription = '';
@@ -66,6 +67,7 @@ class OnboardingProvider extends ChangeNotifier {
   }
   String get ruralUrban => _ruralUrban;
   String get socialCategory => _socialCategory;
+  String get tribe => _tribe;
   double get familyIncome => _familyIncome;
   String get educationLevel => _educationLevel;
   String get informalLearningDescription => _informalLearningDescription;
@@ -122,6 +124,11 @@ class OnboardingProvider extends ChangeNotifier {
 
   void setSocialCategory(String val) {
     _socialCategory = val;
+    notifyListeners();
+  }
+
+  void setTribe(String val) {
+    _tribe = val;
     notifyListeners();
   }
 
@@ -235,14 +242,21 @@ class OnboardingProvider extends ChangeNotifier {
         preferredLanguage: _preferredLanguage,
       );
 
-      // 2. Add Education Record (formal + informal learning description)
+      // 2. Add Education Record (formal + informal learning description + real demographics)
+      final demographicsPayload = [
+        'Category: $_socialCategory',
+        if (_tribe.isNotEmpty) 'Tribe: $_tribe',
+        'Income: ₹${_familyIncome.toInt()}',
+        'Area: $_ruralUrban',
+        if (_informalLearningDescription.trim().isNotEmpty)
+          'Practical Learning: ${_informalLearningDescription.trim()}',
+      ].join(' | ');
+
       try {
         await _apiClient.addStudentEducation(
           student.id,
           educationLevel: _educationLevel,
-          description: _informalLearningDescription.trim().isNotEmpty
-              ? _informalLearningDescription.trim()
-              : null,
+          description: demographicsPayload,
         );
       } catch (e) {
         debugPrint('Error adding education: $e');
@@ -284,6 +298,12 @@ class OnboardingProvider extends ChangeNotifier {
 
       // 7. Store in AuthProvider
       await _authProvider.setCurrentStudent(fullProfile);
+      await _authProvider.updateDemographics(
+        socialCategory: _socialCategory,
+        tribe: _tribe,
+        familyIncome: _familyIncome,
+        ruralUrban: _ruralUrban,
+      );
 
       _isSubmitting = false;
       notifyListeners();
