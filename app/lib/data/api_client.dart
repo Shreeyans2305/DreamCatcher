@@ -314,4 +314,55 @@ class DreamCatcherApiClient {
     }
     return [];
   }
+
+  // ---------------------------------------------------------------------------
+  // AI Assistant & Guidance
+  // ---------------------------------------------------------------------------
+  Future<Map<String, dynamic>> sendAssistantMessage({
+    required String studentId,
+    required String message,
+    String? language,
+    String? sessionId,
+  }) async {
+    final payload = <String, dynamic>{
+      'student_id': studentId,
+      'message': message,
+    };
+    if (language != null) payload['language'] = language;
+    if (sessionId != null) payload['session_id'] = sessionId;
+
+    final res = await _post('/assistant/chat', payload);
+    return res as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> extractSkillsFromText(String description) async {
+    final payload = {'description': description};
+    final res = await _post('/assistant/extract-skills', payload);
+    return res as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> createChatSession({
+    required String studentId,
+    String? title,
+  }) async {
+    final payload = <String, dynamic>{
+      'student_id': studentId,
+    };
+    if (title != null) payload['title'] = title;
+    final res = await _post('/assistant/sessions', payload);
+    return res as Map<String, dynamic>;
+  }
+
+  Future<List<Map<String, dynamic>>> listChatSessions(String studentId) async {
+    final res = await _get('/assistant/sessions', {'student_id': studentId});
+    if (res is List) {
+      return res.map((e) => e as Map<String, dynamic>).toList();
+    }
+    return [];
+  }
+
+  Future<Map<String, dynamic>> getChatSession(String sessionId) async {
+    final res = await _get('/assistant/sessions/$sessionId');
+    return res as Map<String, dynamic>;
+  }
 }

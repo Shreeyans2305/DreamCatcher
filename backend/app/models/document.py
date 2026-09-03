@@ -110,7 +110,7 @@ class DocumentChunk(UUIDPrimaryKeyMixin, Base):
     )
     chunk_text: Mapped[str] = mapped_column(Text, nullable=False)
     embedding: Mapped[list[float] | None] = mapped_column(
-        Vector(settings.vector_dim),  # type: ignore[arg-type]
+        _VECTOR_TYPE,  # type: ignore[arg-type]
         nullable=True,
         comment=f"pgvector embedding of dimension {settings.vector_dim}",
     )

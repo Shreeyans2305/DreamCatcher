@@ -47,13 +47,14 @@ class DreamCatcherApp extends StatelessWidget {
           update: (_, client, auth, previous) =>
               previous ?? OpportunitiesProvider(client, auth),
         ),
-        ChangeNotifierProxyProvider2<AuthProvider, OpportunitiesProvider, ChatProvider>(
+        ChangeNotifierProxyProvider3<DreamCatcherApiClient, AuthProvider, OpportunitiesProvider, ChatProvider>(
           create: (context) => ChatProvider(
+            context.read<DreamCatcherApiClient>(),
             context.read<AuthProvider>(),
             context.read<OpportunitiesProvider>(),
           ),
-          update: (_, auth, opps, previous) =>
-              previous ?? ChatProvider(auth, opps),
+          update: (_, client, auth, opps, previous) =>
+              previous ?? ChatProvider(client, auth, opps),
         ),
       ],
       child: MaterialApp(

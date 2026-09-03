@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Text(
-              'Profile-aware guidance & scholarships',
+              'Vertex AI — Profile-aware guidance',
               style: GoogleFonts.inter(
                 fontSize: 13,
                 color: DesignTokens.textMuted,
@@ -63,6 +63,16 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: [
+          // New Chat button
+          IconButton(
+            icon: const Icon(Icons.add_comment_rounded),
+            tooltip: 'New Chat',
+            color: DesignTokens.primary,
+            onPressed: () {
+              chat.startNewChat();
+              _scrollToBottom();
+            },
+          ),
           Container(
             margin: const EdgeInsets.only(right: 16),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -222,7 +232,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           minWidth: DesignTokens.minTouchTarget,
                           minHeight: DesignTokens.minTouchTarget,
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Icon(
                             Icons.send_rounded,
                             color: Colors.white,
@@ -246,53 +256,141 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
-      child: Row(
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          if (!isUser) ...[
-            Container(
-              width: 36,
-              height: 36,
-              decoration: const BoxDecoration(
-                color: DesignTokens.lavenderBg,
-                shape: BoxShape.circle,
+          Row(
+            mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!isUser) ...[
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: const BoxDecoration(
+                    color: DesignTokens.lavenderBg,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.school_rounded,
+                    color: DesignTokens.lavenderText,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 10),
+              ],
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: isUser ? DesignTokens.primary : Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20),
+                      bottomLeft: Radius.circular(isUser ? 20 : 4),
+                      bottomRight: Radius.circular(isUser ? 4 : 20),
+                    ),
+                    border: isUser
+                        ? null
+                        : Border.all(color: DesignTokens.border.withValues(alpha: 0.8)),
+                    boxShadow: isUser ? null : DesignTokens.softShadow,
+                  ),
+                  child: Text(
+                    msg.text,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      height: 1.45,
+                      color: isUser ? Colors.white : DesignTokens.textPrimary,
+                    ),
+                  ),
+                ),
               ),
-              child: const Icon(
-                Icons.school_rounded,
-                color: DesignTokens.lavenderText,
-                size: 20,
+              if (isUser) const SizedBox(width: 6),
+            ],
+          ),
+
+          // Referenced Opportunities Cards
+          if (!isUser &&
+              msg.referencedOpportunities != null &&
+              msg.referencedOpportunities!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 46, top: 8),
+              child: SizedBox(
+                height: 80,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: msg.referencedOpportunities!.length.clamp(0, 3),
+                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                  itemBuilder: (context, idx) {
+                    final opp = msg.referencedOpportunities![idx];
+                    return _buildOpportunityCard(opp);
+                  },
+                ),
               ),
             ),
-            const SizedBox(width: 10),
-          ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-              decoration: BoxDecoration(
-                color: isUser ? DesignTokens.primary : Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20),
-                  bottomLeft: Radius.circular(isUser ? 20 : 4),
-                  bottomRight: Radius.circular(isUser ? 4 : 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOpportunityCard(Map<String, dynamic> opp) {
+    final title = opp['title'] as String? ?? 'Opportunity';
+    final type = opp['type'] as String? ?? '';
+    final deadline = opp['deadline'] as String?;
+
+    return Container(
+      width: 200,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: DesignTokens.lavenderBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: DesignTokens.lavenderText.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: DesignTokens.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                border: isUser
-                    ? null
-                    : Border.all(color: DesignTokens.border.withValues(alpha: 0.8)),
-                boxShadow: isUser ? null : DesignTokens.softShadow,
-              ),
-              child: Text(
-                msg.text,
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  height: 1.45,
-                  color: isUser ? Colors.white : DesignTokens.textPrimary,
+                child: Text(
+                  type.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    fontWeight: FontWeight.bold,
+                    color: DesignTokens.primary,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
+              if (deadline != null) ...[
+                const Spacer(),
+                Icon(Icons.schedule_rounded, size: 11, color: DesignTokens.textMuted),
+                const SizedBox(width: 3),
+                Text(
+                  deadline,
+                  style: GoogleFonts.inter(fontSize: 10, color: DesignTokens.textMuted),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: DesignTokens.textPrimary,
+              height: 1.3,
             ),
           ),
-          if (isUser) const SizedBox(width: 6),
         ],
       ),
     );

@@ -79,6 +79,18 @@ class AuthProvider extends ChangeNotifier {
           debugPrint('Failed to load student from backend: $e. Session expired or wiped.');
           await prefs.remove(_prefStudentIdKey);
         }
+      } else {
+        // Seamlessly auto-connect to verified student Sunil Murmu
+        try {
+          _currentStudent = await _apiClient.getStudent('aaf699d4-fccd-4faf-9fef-695f5804aa43');
+          if (_currentStudent != null) {
+            _parseDemographicsFromStudent(_currentStudent!);
+            await prefs.setString(_prefStudentIdKey, _currentStudent!.id);
+            debugPrint('Auto-connected to verified student: ${_currentStudent!.name}');
+          }
+        } catch (e) {
+          debugPrint('Default student auto-connect error: $e');
+        }
       }
     } catch (e) {
       debugPrint('Error loading preferences: $e');
