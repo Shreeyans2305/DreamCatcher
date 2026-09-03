@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import DreamCatcherWind from '../components/ui/DreamCatcherWind';
 import { 
-  Compass, 
-  ShieldCheck, 
-  User, 
-  Key, 
-  Phone, 
-  Building2, 
-  MapPin, 
-  Globe, 
+  Mail, 
+  Lock, 
   Eye, 
   EyeOff, 
-  ArrowRight, 
-  CheckCircle2, 
-  Award, 
+  User, 
+  Globe, 
+  Zap, 
   Sparkles,
-  Zap,
-  GraduationCap
+  Compass
 } from 'lucide-react';
 
 export default function AuthPageView({ onLoginSuccess }) {
@@ -29,7 +23,7 @@ export default function AuthPageView({ onLoginSuccess }) {
   const [rememberMe, setRememberMe] = useState(true);
 
   // Login form state
-  const [loginId, setLoginId] = useState('DC-VOL-2026-00042');
+  const [loginEmail, setLoginEmail] = useState('DC-VOL-2026-00042');
   const [loginPassword, setLoginPassword] = useState('password123');
 
   // Register form state
@@ -46,14 +40,14 @@ export default function AuthPageView({ onLoginSuccess }) {
   });
 
   const roleOptions = [
-    { value: 'teacher', label: t('auth.role_teacher') },
-    { value: 'govt_officer', label: t('auth.role_govt') },
-    { value: 'ngo_staff', label: t('auth.role_ngo') }
+    { value: 'teacher', label: t('auth.role_teacher') || 'Government School Teacher' },
+    { value: 'govt_officer', label: t('auth.role_govt') || 'Block / Taluka Education Officer' },
+    { value: 'ngo_staff', label: t('auth.role_ngo') || 'Field Volunteer / Counselor' }
   ];
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    login(loginId, loginPassword);
+    login(loginEmail, loginPassword);
     if (onLoginSuccess) onLoginSuccess();
   };
 
@@ -73,315 +67,236 @@ export default function AuthPageView({ onLoginSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F1EC] text-[#2A1517] font-indic flex flex-col justify-between selection:bg-[#3D2123] selection:text-[#F8F1EC]">
+    <div className="min-h-screen bg-[#EBDDD9] text-[#1C1C1C] flex items-center justify-center p-3 sm:p-6 lg:p-10 relative overflow-hidden font-sans">
       
-      {/* Top Navigation Bar */}
-      <header className="w-full bg-[#3D2123] text-white px-4 sm:px-8 py-3.5 shadow-md flex items-center justify-between border-b border-[#2A1517]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-[#EBD1C6] text-[#3D2123] flex items-center justify-center font-bold shadow-sm">
-            <Compass className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-base sm:text-lg tracking-tight font-indic text-[#F8F1EC]">
-                {t('brand')}
-              </span>
-              <span className="bg-[#EBD1C6]/20 text-[#EBD1C6] text-[10px] px-2 py-0.5 rounded font-bold border border-[#EBD1C6]/30">
-                Govt / Field Portal
-              </span>
-            </div>
-          </div>
-        </div>
+      {/* Windy atmosphere with floating feathers drifting across the canvas */}
+      <DreamCatcherWind showDreamcatchers={false} featherCount={18} windSpeed={1.1} opacity={0.7} />
 
-        {/* Language Selector */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center bg-[#2A1517] border border-[#EBD1C6]/30 rounded-lg px-2.5 py-1.5 text-xs">
-            <Globe className="w-3.5 h-3.5 text-[#EBD1C6] mr-1.5 shrink-0" />
-            <select
-              value={uiLanguage}
-              onChange={(e) => setLanguage(e.target.value)}
-              aria-label="Portal Language Selection"
-              className="bg-transparent text-[#F8F1EC] font-semibold cursor-pointer focus:outline-none font-indic"
-            >
-              {languageOptions.map(opt => (
-                <option key={opt.code} value={opt.code} className="text-[#3D2123] bg-[#F8F1EC] font-indic">
-                  {opt.nativeLabel} ({opt.code.toUpperCase()})
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Full-Screen Split Card Container */}
-      <main className="flex-1 flex items-center justify-center p-3 sm:p-6 lg:p-10">
-        <div className="bg-white rounded-3xl shadow-2xl max-w-5xl w-full overflow-hidden border border-[#EBD1C6] grid grid-cols-1 lg:grid-cols-12 min-h-[620px]">
+      {/* Main Authentication Card */}
+      <div className="relative z-10 w-full max-w-5xl bg-[#F4EFE6] rounded-[28px] sm:rounded-[32px] shadow-[0_24px_60px_rgba(80,50,40,0.14)] border border-[#DECBC7] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
+        
+        {/* ========================================================= */}
+        {/* LEFT COLUMN: AUTHENTICATION FORM (Warm Linen / Rice Paper)*/}
+        {/* ========================================================= */}
+        <div className="lg:col-span-6 p-7 sm:p-10 lg:p-14 flex flex-col justify-between bg-[#F4EFE6] z-10">
           
-          {/* ============================================================ */}
-          {/* LEFT COLUMN: HERO SHOWCASE (Mahogany & Rose Sand)           */}
-          {/* ============================================================ */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-[#3D2123] via-[#2A1517] to-[#3D2123] text-white p-6 sm:p-10 flex flex-col justify-between relative overflow-hidden">
-            
-            {/* Subtle Clean Accents */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#EBD1C6]/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#A83E28]/10 rounded-full blur-xl pointer-events-none" />
-
-            {/* Top Branding & Mission */}
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 bg-[#EBD1C6]/15 text-[#EBD1C6] text-xs px-3 py-1 rounded-full border border-[#EBD1C6]/30 font-bold mb-4 font-indic">
-                <Sparkles className="w-3.5 h-3.5 text-[#EBD1C6]" />
-                <span>Multilingual Guidance Platform</span>
+          <div>
+            {/* Top Bar: DreamCatcher Logo & Minimal Language Switcher */}
+            <div className="flex items-center justify-between mb-8 sm:mb-10">
+              <div className="flex items-center gap-2">
+                <span className="font-serif-zen text-2xl font-semibold tracking-tight text-[#1F1F1F]">
+                  • DreamCatcher
+                </span>
+                <span className="text-[10px] bg-[#EAE2D5] text-[#585149] px-2 py-0.5 rounded-full font-serif-zen font-medium border border-[#D5CCBD] hidden sm:inline">
+                  National Mission
+                </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight font-indic text-[#F8F1EC] mb-3">
-                Guiding Every Dream, Across Every Village.
-              </h2>
-              <p className="text-xs sm:text-sm text-[#F8F1EC]/85 leading-relaxed font-indic">
-                Empowering field volunteers, teachers, and officers to deliver rapid career counseling, vocational matching, and welfare scholarship eligibility to rural students.
-              </p>
-            </div>
-
-            {/* Center Verified Stats Card */}
-            <div className="my-6 relative z-10">
-              <div className="bg-[#2A1517]/90 border border-[#EBD1C6]/30 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#EBD1C6]/20 text-[#EBD1C6] flex items-center justify-center font-bold">
-                    <GraduationCap className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-white font-indic">Public Welfare Delivery</div>
-                    <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" />
-                      <span>Direct Scholarship Matching & DBT</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#4E5458]/60 text-xs">
-                  <div className="bg-[#3D2123] p-2.5 rounded-xl border border-[#4E5458]">
-                    <span className="text-[10px] text-[#EBD1C6] block uppercase font-bold">Students Guided</span>
-                    <span className="text-base font-extrabold text-white">45,000+</span>
-                  </div>
-                  <div className="bg-[#3D2123] p-2.5 rounded-xl border border-[#4E5458]">
-                    <span className="text-[10px] text-[#EBD1C6] block uppercase font-bold">Active Camps</span>
-                    <span className="text-base font-extrabold text-white">3,400+</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Proof Quote */}
-            <div className="relative z-10 pt-3 border-t border-[#4E5458]/60">
-              <p className="text-xs text-[#EBD1C6] italic font-indic">
-                "DreamCatcher helped our village school connect 40+ 10th-grade students to Govt ITI and Polytechnic seats in a single afternoon."
-              </p>
-              <div className="mt-2 text-[11px] text-[#EBD1C6]/80 font-semibold font-indic">
-                — Anand Kulkarni, ZP High School Teacher, Satara
-              </div>
-            </div>
-
-          </div>
-
-          {/* ============================================================ */}
-          {/* RIGHT COLUMN: INTERACTIVE FORM (Sign In / Register)         */}
-          {/* ============================================================ */}
-          <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white">
-            
-            <div>
-              {/* Segmented Pill Switcher */}
-              <div className="flex bg-[#F8F1EC] p-1.5 rounded-2xl mb-6 max-w-sm border border-[#EBD1C6] shadow-inner">
-                <button
-                  type="button"
-                  onClick={() => setMode('login')}
-                  className={`flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all font-indic touch-target ${
-                    mode === 'login'
-                      ? 'bg-[#3D2123] text-white shadow-md'
-                      : 'text-[#4E5458] hover:text-[#2A1517]'
-                  }`}
+              {/* Minimalist Language Switcher */}
+              <div className="flex items-center bg-[#ECE4D8] border border-[#DDD3C5] rounded-full px-2.5 py-1 text-xs">
+                <Globe className="w-3 h-3 text-[#7B7165] mr-1 shrink-0" />
+                <select
+                  value={uiLanguage}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  aria-label="Portal Language"
+                  className="bg-transparent text-[#2D2823] font-medium text-[11px] cursor-pointer focus:outline-none"
                 >
-                  {t('auth.login_title')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode('register')}
-                  className={`flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all font-indic touch-target ${
-                    mode === 'register'
-                      ? 'bg-[#3D2123] text-white shadow-md'
-                      : 'text-[#4E5458] hover:text-[#2A1517]'
-                  }`}
-                >
-                  {t('auth.register_title')}
-                </button>
+                  {languageOptions.map(opt => (
+                    <option key={opt.code} value={opt.code} className="text-[#1F1F1F] bg-[#F4EFE6]">
+                      {opt.nativeLabel}
+                    </option>
+                  ))}
+                </select>
               </div>
+            </div>
 
-              {/* Form Title & Subtitle */}
-              <div className="mb-6">
-                <h1 className="text-2xl font-extrabold text-[#3D2123] font-indic">
-                  {mode === 'login' ? 'Field Volunteer Sign In' : 'Field Volunteer Registration'}
+            {/* ===================================================== */}
+            {/* SIGN IN VIEW                                          */}
+            {/* ===================================================== */}
+            {mode === 'login' ? (
+              <div className="animate-in fade-in duration-300">
+                {/* Headers */}
+                <h1 className="font-serif-zen text-3xl sm:text-4xl text-[#1F1F1F] font-medium tracking-tight mb-2">
+                  Welcome back!
                 </h1>
-                <p className="text-xs sm:text-sm text-[#4E5458] font-indic mt-1">
-                  {mode === 'login'
-                    ? 'Enter your unique Volunteer ID or registered mobile number to access camp registries.'
-                    : 'Register as a teacher, government officer, or NGO staff to begin organizing guidance camps.'}
+                <p className="font-serif-zen text-sm sm:text-base text-[#6B6256] italic mb-8">
+                  Where every village dream is caught and guided.
                 </p>
-              </div>
 
-              {/* ---------------------------------------------------- */}
-              {/* SIGN IN FORM                                         */}
-              {/* ---------------------------------------------------- */}
-              {mode === 'login' ? (
                 <form onSubmit={handleLoginSubmit} className="space-y-4">
-                  
-                  {/* ID / Phone Input */}
+                  {/* Email / ID Field */}
                   <div>
-                    <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1.5 font-indic">
-                      {t('header.volunteer_id')} / Mobile Number
+                    <label className="block font-serif-zen text-sm font-medium text-[#38332C] mb-1.5">
+                      Email or Volunteer ID
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-[#4E5458] absolute left-3.5 top-3.5" />
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8C8276]">
+                        <Mail className="w-4 h-4" />
+                      </div>
                       <input
                         type="text"
                         required
-                        value={loginId}
-                        onChange={(e) => setLoginId(e.target.value)}
-                        placeholder="e.g. DC-VOL-2026-00042 or 9822014589"
-                        className="w-full pl-10 pr-3 py-3 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium font-indic bg-[#F8F1EC]/40"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        placeholder="Enter your email or Volunteer ID"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-transparent border border-[#D5CCBD] rounded-[6px] text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Password Input */}
+                  {/* Password Field */}
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider font-indic">
-                        {t('auth.password')}
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => alert('Default demo password is: password123')}
-                        className="text-xs text-[#A83E28] hover:underline font-semibold font-indic"
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
+                    <label className="block font-serif-zen text-sm font-medium text-[#38332C] mb-1.5">
+                      Password
+                    </label>
                     <div className="relative">
-                      <Key className="w-4 h-4 text-[#4E5458] absolute left-3.5 top-3.5" />
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8C8276]">
+                        <Lock className="w-4 h-4" />
+                      </div>
                       <input
                         type={showPassword ? 'text' : 'password'}
                         required
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className="w-full pl-10 pr-10 py-3 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium bg-[#F8F1EC]/40"
+                        placeholder="•••••"
+                        className="w-full pl-9 pr-9 py-2.5 bg-transparent border border-[#D5CCBD] rounded-[6px] text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-3.5 text-[#4E5458] hover:text-[#2A1517] p-0.5"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#8C8276] hover:text-[#222222] cursor-pointer"
+                        aria-label="Toggle password visibility"
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
 
-                  {/* Remember Me */}
-                  <div className="flex items-center justify-between pt-1">
-                    <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-[#4E5458] font-indic">
+                  {/* Remember Me & Forgot Password */}
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <label className="flex items-center gap-2 cursor-pointer text-[#6B6256] select-none hover:text-[#1F1F1F]">
                       <input
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                        className="h-4 w-4 rounded border-[#EBD1C6] text-[#3D2123] focus:ring-[#3D2123]"
+                        className="w-3.5 h-3.5 rounded-[3px] border-[#C5BBAA] text-[#222222] focus:ring-0 cursor-pointer accent-[#222222]"
                       />
-                      <span>Remember this session on this device</span>
+                      <span>Remember me</span>
                     </label>
-                  </div>
-
-                  {/* Sign In Button */}
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 bg-[#3D2123] hover:bg-[#2A1517] text-white font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all touch-target mt-3 font-indic"
-                  >
-                    <span>{t('auth.login_btn')}</span>
-                    <ArrowRight className="w-4 h-4 text-[#EBD1C6]" />
-                  </button>
-
-                  {/* Quick Demo One-Click Sign In */}
-                  <div className="pt-2">
                     <button
                       type="button"
-                      onClick={handleQuickDemoLogin}
-                      className="w-full py-2.5 bg-[#EBD1C6]/30 hover:bg-[#EBD1C6]/60 text-[#3D2123] border border-[#EBD1C6] rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-colors font-indic touch-target"
+                      onClick={() => alert('Demo password is: password123')}
+                      className="text-[#6B6256] hover:text-[#1F1F1F] underline underline-offset-2 transition-colors cursor-pointer"
                     >
-                      <Zap className="w-4 h-4 text-[#A83E28]" />
-                      <span>⚡ Quick Demo Sign In as Anand Kulkarni (Satara)</span>
+                      Forgot password?
                     </button>
                   </div>
 
+                  {/* Primary Dark Button: Log in */}
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-[6px] text-sm font-medium tracking-wide transition-all shadow-xs active:scale-[0.99] cursor-pointer"
+                    >
+                      Log in
+                    </button>
+                  </div>
+
+                  {/* One-Click Quick Demo Pill */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={handleQuickDemoLogin}
+                      className="w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-[#D5CCBD] hover:border-[#222222] rounded-[6px] text-xs text-[#524B43] hover:text-[#1F1F1F] transition-all bg-white/20 hover:bg-white/50 cursor-pointer"
+                    >
+                      <Zap className="w-3.5 h-3.5 text-[#C49F5A]" />
+                      <span>Quick Demo Sign In (Anand Kulkarni, Satara)</span>
+                    </button>
+                  </div>
                 </form>
-              ) : (
-                /* ---------------------------------------------------- */
-                /* SIGN UP / REGISTRATION FORM                          */
-                /* ---------------------------------------------------- */
-                <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
-                  
-                  {/* Full Name */}
+              </div>
+            ) : (
+              /* ===================================================== */
+              /* SIGN UP / REGISTRATION VIEW                           */
+              /* ===================================================== */
+              <div className="animate-in fade-in duration-300">
+                <h1 className="font-serif-zen text-3xl sm:text-4xl text-[#1F1F1F] font-medium tracking-tight mb-2">
+                  Begin your journey.
+                </h1>
+                <p className="font-serif-zen text-sm sm:text-base text-[#6B6256] italic mb-6">
+                  Join our national circle of rural counselors.
+                </p>
+
+                <form onSubmit={handleRegisterSubmit} className="space-y-3">
                   <div>
-                    <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                      {t('auth.full_name')} *
+                    <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                      Full Name
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-[#4E5458] absolute left-3 top-3" />
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8C8276]">
+                        <User className="w-3.5 h-3.5" />
+                      </div>
                       <input
                         type="text"
                         required
                         value={registerData.full_name}
                         onChange={(e) => setRegisterData({ ...registerData, full_name: e.target.value })}
                         placeholder="e.g. Ramesh Govind Patil"
-                        className="w-full pl-9 pr-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium font-indic"
+                        className="w-full pl-9 pr-3.5 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Role Category */}
                   <div>
-                    <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                      {t('auth.role_type')} *
+                    <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                      Role / Department
                     </label>
                     <select
                       value={registerData.role_type}
                       onChange={(e) => setRegisterData({ ...registerData, role_type: e.target.value })}
-                      className="w-full px-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-indic bg-white"
+                      className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all cursor-pointer"
                     >
                       {roleOptions.map(r => (
-                        <option key={r.value} value={r.value}>{r.label}</option>
+                        <option key={r.value} value={r.value} className="bg-[#F4EFE6] text-[#1F1F1F]">
+                          {r.label}
+                        </option>
                       ))}
                     </select>
                   </div>
 
-                  {/* Organization */}
-                  <div>
-                    <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                      {t('auth.org_name')} *
-                    </label>
-                    <div className="relative">
-                      <Building2 className="w-4 h-4 text-[#4E5458] absolute left-3 top-3" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div>
+                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                        Organization / School
+                      </label>
                       <input
                         type="text"
                         required
                         value={registerData.organization_name}
                         onChange={(e) => setRegisterData({ ...registerData, organization_name: e.target.value })}
-                        placeholder="e.g. ZP High School / Taluka Education Office"
-                        className="w-full pl-9 pr-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium font-indic"
+                        placeholder="ZP High School"
+                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                        District
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={registerData.district}
+                        onChange={(e) => setRegisterData({ ...registerData, district: e.target.value })}
+                        placeholder="e.g. Satara"
+                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Mobile & District */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                        {t('auth.phone')} *
+                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                        Mobile Number
                       </label>
                       <input
                         type="tel"
@@ -389,43 +304,12 @@ export default function AuthPageView({ onLoginSuccess }) {
                         value={registerData.phone_number}
                         onChange={(e) => setRegisterData({ ...registerData, phone_number: e.target.value })}
                         placeholder="10-digit mobile"
-                        className="w-full px-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium"
+                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                        {t('camps.district')} *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={registerData.district}
-                        onChange={(e) => setRegisterData({ ...registerData, district: e.target.value })}
-                        placeholder="e.g. Satara / Pune"
-                        className="w-full px-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium font-indic"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Preferred Language & Password */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                        {t('auth.preferred_ui_lang')}
-                      </label>
-                      <select
-                        value={registerData.preferred_ui_language}
-                        onChange={(e) => setRegisterData({ ...registerData, preferred_ui_language: e.target.value })}
-                        className="w-full px-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-indic bg-white"
-                      >
-                        {languageOptions.map(l => (
-                          <option key={l.code} value={l.code}>{l.nativeLabel} ({l.code.toUpperCase()})</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#3D2123] uppercase tracking-wider mb-1 font-indic">
-                        {t('auth.password')} *
+                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                        Password
                       </label>
                       <input
                         type="password"
@@ -433,64 +317,89 @@ export default function AuthPageView({ onLoginSuccess }) {
                         value={registerData.password}
                         onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
                         placeholder="••••••••"
-                        className="w-full px-3 py-2 text-sm border border-[#EBD1C6] rounded-xl focus:ring-2 focus:ring-[#3D2123] font-medium"
+                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Submit Registration Button */}
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 bg-[#A83E28] hover:bg-[#8F3320] text-white font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all touch-target mt-3 font-indic"
-                  >
-                    <Award className="w-4 h-4 text-white" />
-                    <span>{t('auth.register_btn')}</span>
-                  </button>
-
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-[6px] text-sm font-medium tracking-wide transition-all shadow-xs active:scale-[0.99] cursor-pointer"
+                    >
+                      Create account
+                    </button>
+                  </div>
                 </form>
-              )}
+              </div>
+            )}
+          </div>
 
-            </div>
+          {/* Thin Hairline Divider & Bottom Mode Switcher */}
+          <div className="mt-8 pt-4 border-t border-[#E3D9CA] text-xs text-[#6B6256] flex items-center justify-between">
+            {mode === 'login' ? (
+              <p>
+                Don't have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => setMode('register')}
+                  className="font-semibold text-[#1F1F1F] hover:underline cursor-pointer ml-1"
+                >
+                  Sign up
+                </button>
+              </p>
+            ) : (
+              <p>
+                Already have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => setMode('login')}
+                  className="font-semibold text-[#1F1F1F] hover:underline cursor-pointer ml-1"
+                >
+                  Log in
+                </button>
+              </p>
+            )}
 
-            {/* Bottom Switcher */}
-            <div className="pt-4 mt-2 border-t border-[#EBD1C6]/40 text-center text-xs text-[#4E5458] font-indic">
-              {mode === 'login' ? (
-                <span>
-                  New volunteer coordinator?{' '}
-                  <button
-                    type="button"
-                    onClick={() => setMode('register')}
-                    className="font-bold text-[#3D2123] hover:underline"
-                  >
-                    Create an Account
-                  </button>
-                </span>
-              ) : (
-                <span>
-                  Already have a Volunteer ID?{' '}
-                  <button
-                    type="button"
-                    onClick={() => setMode('login')}
-                    className="font-bold text-[#3D2123] hover:underline"
-                  >
-                    Sign In here
-                  </button>
-                </span>
-              )}
-            </div>
-
+            <span className="text-[11px] text-[#A39B8E] hidden sm:inline">
+              UX4G Public Standard
+            </span>
           </div>
 
         </div>
-      </main>
 
-      {/* Field Footer */}
-      <footer className="w-full bg-[#2A1517] text-[#EBD1C6]/80 border-t border-[#3D2123] py-3.5 px-4 text-center text-xs font-indic">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>DreamCatcher — Multilingual Public AI Career Guidance Field Platform</span>
-          <span className="text-[#EBD1C6]/60">Offline-Ready PWA • UX4G Indic Design Standard</span>
+        {/* ========================================================= */}
+        {/* RIGHT COLUMN: DREAMCATCHER WATERCOLOR ARTWORK & WIND      */}
+        {/* ========================================================= */}
+        <div className="hidden lg:block lg:col-span-6 relative min-h-[550px] overflow-hidden">
+          {/* Main Watercolor Artwork Image */}
+          <img
+            src="/dreamcatcher_wind.jpg"
+            alt="DreamCatcher floating in the morning breeze over river landscape"
+            className="w-full h-full object-cover object-center transform scale-[1.02] transition-transform duration-1000 ease-out hover:scale-100"
+          />
+
+          {/* Seamless Feathered Gradient Mask (Left to Right Blend from Card Cream) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F4EFE6] via-[#F4EFE6]/50 via-20% to-transparent pointer-events-none" />
+
+          {/* Edge Softening */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F4EFE6]/30 via-transparent to-[#F4EFE6]/20 pointer-events-none" />
+
+          {/* Swaying Dreamcatchers and Fluttering Wind Feathers Animation */}
+          <DreamCatcherWind showDreamcatchers={true} featherCount={14} windSpeed={1.2} opacity={0.9} />
+
+          {/* Poetic Mission Caption */}
+          <div className="absolute bottom-6 right-6 text-right z-10 pointer-events-none bg-white/40 backdrop-blur-xs px-3.5 py-2 rounded-xl border border-white/40 shadow-xs">
+            <span className="font-serif-zen italic text-xs text-[#332C24] block font-medium">
+              "Catching every village dream, guiding every child."
+            </span>
+            <span className="text-[10px] text-[#5C5245] uppercase tracking-wider font-semibold">
+              DreamCatcher • Govt Field Guidance
+            </span>
+          </div>
         </div>
-      </footer>
+
+      </div>
 
     </div>
   );

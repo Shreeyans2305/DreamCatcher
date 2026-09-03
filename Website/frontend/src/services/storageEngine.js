@@ -127,7 +127,18 @@ export const storageEngine = {
 
   getIntakeDraft() {
     const raw = localStorage.getItem(STORAGE_KEYS.DRAFT_INTAKE);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && parsed.data ? parsed.data : parsed;
+    } catch (e) {
+      console.warn('Failed to parse intake draft:', e);
+      return null;
+    }
+  },
+
+  loadIntakeDraft() {
+    return this.getIntakeDraft();
   },
 
   clearIntakeDraft() {

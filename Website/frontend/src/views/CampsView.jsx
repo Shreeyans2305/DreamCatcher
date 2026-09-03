@@ -19,22 +19,24 @@ export default function CampsView({ onSelectIntakeForCamp }) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       
       {/* Header & New Camp CTA */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="card-soft p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white">
         <div>
-          <div className="flex items-center gap-2">
-            <Tent className="w-6 h-6 text-[#173F6B]" />
-            <h1 className="text-xl font-bold text-slate-900 font-indic">{t('camps.title')}</h1>
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-[12px] bg-amber-50 text-amber-600 flex items-center justify-center">
+              <Tent className="w-5 h-5" />
+            </div>
+            <h1 className="text-xl font-black text-neutral-900 tracking-tight">{t('camps.title')}</h1>
           </div>
-          <p className="text-xs text-slate-600 font-indic mt-1">
+          <p className="text-xs text-neutral-500 mt-1 font-normal">
             {t('camps.subtitle')}
           </p>
         </div>
 
         <button
           onClick={() => setIsCreateCampModalOpen(true)}
-          className="px-5 py-3 bg-[#173F6B] hover:bg-[#0D2E50] text-white text-xs font-bold rounded-xl shadow flex items-center justify-center gap-2 transition-colors touch-target font-indic self-start sm:self-auto"
+          className="btn-pill-black px-5 py-2.5 text-xs font-semibold gap-2 self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4 text-amber-400" />
+          <Plus className="w-4 h-4 text-white" />
           <span>{t('camps.new_camp')}</span>
         </button>
       </div>
@@ -50,10 +52,10 @@ export default function CampsView({ onSelectIntakeForCamp }) {
           <button
             key={filter.id}
             onClick={() => setStatusFilter(filter.id)}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors font-indic touch-target ${
+            className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               statusFilter === filter.id
-                ? 'bg-[#173F6B] text-white shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-black/[0.04]'
             }`}
           >
             {filter.label}

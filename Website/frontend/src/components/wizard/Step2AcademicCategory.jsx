@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { GraduationCap, Award, Info } from 'lucide-react';
+import { GraduationCap, Award } from 'lucide-react';
 
 export default function Step2AcademicCategory({ formData, updateFormData }) {
   const { t } = useLanguage();
@@ -38,12 +38,12 @@ export default function Step2AcademicCategory({ formData, updateFormData }) {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       
       {/* Education Level Selection */}
       <div>
-        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-indic flex items-center gap-1.5">
-          <GraduationCap className="w-4 h-4 text-[#173F6B]" />
+        <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <GraduationCap className="w-4 h-4 text-neutral-900" />
           <span>{t('wizard.class_grade')} *</span>
         </label>
         
@@ -55,10 +55,10 @@ export default function Step2AcademicCategory({ formData, updateFormData }) {
                 key={opt.value}
                 type="button"
                 onClick={() => handleEduSelect(opt)}
-                className={`text-left p-3 rounded-lg border text-xs font-semibold transition-all font-indic touch-target ${
+                className={`text-left p-3 rounded-[14px] text-xs font-semibold transition-all touch-target cursor-pointer ${
                   isSelected
-                    ? 'bg-[#173F6B] text-white border-[#173F6B] shadow-sm'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    ? 'bg-[#111111] text-white shadow-xs'
+                    : 'bg-white text-neutral-700 border border-black/[0.06] hover:bg-neutral-50'
                 }`}
               >
                 {opt.label}
@@ -70,13 +70,13 @@ export default function Step2AcademicCategory({ formData, updateFormData }) {
 
       {/* Caste / Category Selection */}
       <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-indic flex items-center gap-1.5">
-            <Award className="w-4 h-4 text-amber-600" />
+        <div className="flex items-center justify-between mb-1">
+          <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider flex items-center gap-1.5">
+            <Award className="w-4 h-4 text-neutral-900" />
             <span>{t('wizard.category')} *</span>
           </label>
         </div>
-        <p className="text-[11px] text-slate-500 mb-2 font-indic">{t('wizard.category_hint')}</p>
+        <p className="text-[11px] text-neutral-500 mb-2.5 font-normal">{t('wizard.category_hint')}</p>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {categoryOptions.map((cat) => {
@@ -86,10 +86,10 @@ export default function Step2AcademicCategory({ formData, updateFormData }) {
                 key={cat.value}
                 type="button"
                 onClick={() => handleCatSelect(cat)}
-                className={`text-left p-3 rounded-lg border text-xs font-semibold transition-all font-indic touch-target ${
+                className={`text-left p-3 rounded-[14px] text-xs font-semibold transition-all touch-target cursor-pointer ${
                   isSelected
-                    ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    ? 'bg-[#111111] text-white shadow-xs'
+                    : 'bg-white text-neutral-700 border border-black/[0.06] hover:bg-neutral-50'
                 }`}
               >
                 {cat.label}

@@ -1,89 +1,132 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { useCampOperations } from '../context/CampOperationsContext';
 import OperationalKpiGrid from '../components/dashboard/OperationalKpiGrid';
 import IntakeTrendChart from '../components/dashboard/IntakeTrendChart';
 import RegionalReachChart from '../components/dashboard/RegionalReachChart';
 import StudentDirectoryTable from '../components/students/StudentDirectoryTable';
-import { UserPlus, Tent, Sparkles, MapPin, ArrowRight } from 'lucide-react';
+import { UserPlus, Tent, Sparkles, MapPin, ArrowRight, BarChart3, Users, CheckCircle2 } from 'lucide-react';
 
 export default function DashboardView({ onNavigateTab, onSelectStudentForCase, onLaunchGuidance }) {
   const { t } = useLanguage();
+  const { volunteer } = useAuth();
   const { activeCamp, students, triggerSyncFlush } = useCampOperations();
+  const [dashboardTab, setDashboardTab] = useState('directory'); // 'directory' | 'analytics'
+
+  const firstName = volunteer?.full_name ? volunteer.full_name.split(' ')[0] : 'Counselor';
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
       
-      {/* Top Banner / Quick Action Launcher */}
-      <div className="bg-gradient-to-r from-[#173F6B] to-[#0D2E50] rounded-2xl text-white p-6 shadow-md border border-[#0D2E50]">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                Field Deployment Active
-              </span>
-              <span className="text-sky-200 text-xs font-indic">
-                Anchor: {activeCamp?.camp_name}
-              </span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold font-indic">
-              Welcome to DreamCatcher Field Portal
-            </h1>
-            <p className="text-xs sm:text-sm text-sky-100/90 font-indic mt-1 max-w-2xl">
-              Conduct high-speed student intake (under 60 seconds) and connect rural students to multilingual AI career counseling in Marathi, Hindi, Gujarati, or English.
-            </p>
+      {/* 1. Minimal Unified Government Field Header */}
+      <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] bg-[#EAE2D5] text-[#4A4238] font-semibold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-[#D5CCBD]">
+              🇮🇳 Official Guidance Camp
+            </span>
+            <span className="text-xs text-[#7A6F62] flex items-center gap-1 font-medium">
+              <MapPin className="w-3 h-3 text-[#7A6F62]" />
+              {activeCamp?.camp_name || 'Satara Rural Camp'} ({activeCamp?.village_town || 'Satara'})
+            </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => onNavigateTab('intake')}
-              className="px-5 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all font-indic touch-target"
-            >
-              <UserPlus className="w-4 h-4 text-slate-950" />
-              <span>{t('nav.intake')}</span>
-            </button>
-            <button
-              onClick={() => onNavigateTab('camps')}
-              className="px-4 py-3 bg-sky-900/80 hover:bg-sky-800 text-white font-bold text-xs rounded-xl border border-sky-400/30 flex items-center justify-center gap-1.5 transition-colors font-indic touch-target"
-            >
-              <Tent className="w-4 h-4 text-amber-400" />
-              <span>{t('nav.camps')}</span>
-            </button>
-          </div>
+          <h1 className="font-serif-zen text-2xl sm:text-3xl font-semibold text-[#1F1F1F] tracking-tight">
+            Welcome, {firstName}
+          </h1>
+
+          <p className="text-xs sm:text-sm text-[#6B6256] font-normal">
+            National Field Counselor Dashboard • {students.length} students recorded in this camp registry.
+          </p>
         </div>
+
+        {/* Minimal High-Priority Action Buttons */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => onNavigateTab('intake')}
+            className="px-5 py-2.5 bg-[#222222] hover:bg-[#111111] text-white text-xs font-medium rounded-full transition-all shadow-xs flex items-center gap-2 cursor-pointer hover:scale-105"
+          >
+            <UserPlus className="w-4 h-4" />
+            <span>New Student Intake</span>
+          </button>
+
+          <button
+            onClick={() => onNavigateTab('camps')}
+            className="px-4 py-2.5 bg-[#F4EFE6] hover:bg-white text-[#2D2823] border border-[#DDD3C5] text-xs font-medium rounded-full transition-all cursor-pointer shadow-xs"
+          >
+            <Tent className="w-3.5 h-3.5 text-[#7A6F62]" />
+            <span>Switch Camp</span>
+          </button>
+        </div>
+
       </div>
 
-      {/* Operational KPI Grid */}
+      {/* 2. Operational KPI Metrics (Clean Minimal Grid) */}
       <OperationalKpiGrid
         onNewIntake={() => onNavigateTab('intake')}
         onSyncNow={triggerSyncFlush}
       />
 
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <IntakeTrendChart />
-        <RegionalReachChart students={students} />
-      </div>
+      {/* 3. Streamlined Clean View Switcher (Directory vs Analytics) */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between border-b border-[#E5DED4] pb-2">
+          
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setDashboardTab('directory')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                dashboardTab === 'directory'
+                  ? 'bg-[#222222] text-white shadow-xs'
+                  : 'text-[#665D52] hover:text-[#1F1F1F] hover:bg-[#F4EFE6]'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Camp Student Registry ({students.length})</span>
+            </button>
 
-      {/* Student Registry Snippet */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900 font-indic">
-            {t('dashboard.recent_students')}
-          </h2>
+            <button
+              onClick={() => setDashboardTab('analytics')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                dashboardTab === 'analytics'
+                  ? 'bg-[#222222] text-white shadow-xs'
+                  : 'text-[#665D52] hover:text-[#1F1F1F] hover:bg-[#F4EFE6]'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Intake & Regional Trends</span>
+            </button>
+          </div>
+
           <button
             onClick={() => onNavigateTab('directory')}
-            className="text-xs font-bold text-[#173F6B] hover:underline flex items-center gap-1 font-indic"
+            className="text-xs text-[#524B43] hover:text-[#1F1F1F] hover:underline flex items-center gap-1 cursor-pointer font-medium"
           >
-            <span>{t('dashboard.view_all')}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>Full Directory</span>
+            <ArrowRight className="w-3 h-3" />
           </button>
         </div>
 
-        <StudentDirectoryTable
-          onSelectStudentForCase={onSelectStudentForCase}
-          onLaunchGuidance={onLaunchGuidance}
-        />
+        {/* Tab 1: Clean Minimal Student Directory */}
+        {dashboardTab === 'directory' ? (
+          <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-2 sm:p-4 shadow-xs overflow-hidden">
+            <StudentDirectoryTable
+              onSelectStudentForCase={onSelectStudentForCase}
+              onLaunchGuidance={onLaunchGuidance}
+            />
+          </div>
+        ) : (
+          /* Tab 2: Clean Analytics Row */
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 animate-in fade-in duration-200">
+            <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 shadow-xs">
+              <IntakeTrendChart />
+            </div>
+            <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 shadow-xs">
+              <RegionalReachChart students={students} />
+            </div>
+          </div>
+        )}
       </div>
 
     </div>

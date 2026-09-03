@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { UserPlus, X, Award, CheckCircle2 } from 'lucide-react';
+import { X, Award } from 'lucide-react';
 
 export default function RegisterView() {
   const { isRegisterModalOpen, setIsRegisterModalOpen, setIsLoginModalOpen, register } = useAuth();
@@ -23,9 +23,9 @@ export default function RegisterView() {
   if (!isRegisterModalOpen) return null;
 
   const roleOptions = [
-    { value: 'teacher', label: t('auth.role_teacher') },
-    { value: 'govt_officer', label: t('auth.role_govt') },
-    { value: 'ngo_staff', label: t('auth.role_ngo') }
+    { value: 'teacher', label: t('auth.role_teacher') || 'School Teacher' },
+    { value: 'govt_officer', label: t('auth.role_govt') || 'Government Officer' },
+    { value: 'ngo_staff', label: t('auth.role_ngo') || 'NGO Staff / Field Volunteer' }
   ];
 
   const handleSubmit = (e) => {
@@ -38,32 +38,33 @@ export default function RegisterView() {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 my-8">
+    <div className="fixed inset-0 bg-[#251D1B]/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-[#F4EFE6] rounded-[24px] shadow-2xl max-w-lg w-full overflow-hidden border border-[#DECBC7] my-8">
         
         {/* Header */}
-        <div className="bg-[#173F6B] text-white p-5 flex items-center justify-between">
+        <div className="p-6 border-b border-[#E3D9CA] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <UserPlus className="w-6 h-6 text-amber-400" />
-            <h2 className="text-lg font-bold font-indic">{t('auth.register_title')}</h2>
+            <span className="font-serif-zen text-2xl font-semibold tracking-tight text-[#1F1F1F]">
+              •SW
+            </span>
+            <div>
+              <h2 className="font-serif-zen text-xl font-medium text-[#1F1F1F]">Begin your journey</h2>
+              <p className="font-serif-zen text-xs text-[#6B6256] italic">Where dreams take root and blossom.</p>
+            </div>
           </div>
           <button 
             onClick={() => setIsRegisterModalOpen(false)}
-            className="text-sky-200 hover:text-white p-1 rounded-md"
+            className="text-[#7A6F62] hover:text-[#1F1F1F] p-1.5 rounded-full hover:bg-[#ECE4D8] transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <p className="text-xs text-slate-600 font-indic">
-            {t('auth.register_subtitle')}
-          </p>
-
+        <form onSubmit={handleSubmit} className="p-6 space-y-3.5">
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-              {t('auth.full_name')} *
+            <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+              Full Name *
             </label>
             <input
               type="text"
@@ -71,28 +72,28 @@ export default function RegisterView() {
               value={formData.full_name}
               onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
               placeholder="e.g. Anand Govind Kulkarni"
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+              className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-              {t('auth.role_type')} *
+            <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+              Role Type *
             </label>
             <select
               value={formData.role_type}
               onChange={(e) => setFormData({ ...formData, role_type: e.target.value })}
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-indic bg-white"
+              className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all cursor-pointer"
             >
               {roleOptions.map(r => (
-                <option key={r.value} value={r.value}>{r.label}</option>
+                <option key={r.value} value={r.value} className="bg-[#F4EFE6]">{r.label}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-              {t('auth.org_name')} *
+            <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+              Organization / School *
             </label>
             <input
               type="text"
@@ -100,89 +101,89 @@ export default function RegisterView() {
               value={formData.organization_name}
               onChange={(e) => setFormData({ ...formData, organization_name: e.target.value })}
               placeholder="e.g. Zilla Parishad High School, Shindewadi"
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+              className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-                {t('auth.phone')} *
+              <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                Mobile Number *
               </label>
               <input
                 type="tel"
                 required
                 value={formData.phone_number}
                 onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                placeholder="10-digit mobile number"
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                placeholder="10-digit mobile"
+                className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-                {t('camps.district')} *
+              <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                District *
               </label>
               <input
                 type="text"
                 required
                 value={formData.district}
                 onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                placeholder="e.g. Satara / Pune"
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                placeholder="e.g. Satara"
+                className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-                {t('auth.preferred_ui_lang')}
+              <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                Preferred Language
               </label>
               <select
                 value={formData.preferred_ui_language}
                 onChange={(e) => setFormData({ ...formData, preferred_ui_language: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-indic bg-white"
+                className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all cursor-pointer"
               >
                 {languageOptions.map(l => (
-                  <option key={l.code} value={l.code}>{l.nativeLabel} ({l.code.toUpperCase()})</option>
+                  <option key={l.code} value={l.code} className="bg-[#F4EFE6]">{l.nativeLabel}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
-                {t('auth.password')} *
+              <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
+                Password *
               </label>
               <input
                 type="password"
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                placeholder="Create secure password"
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                placeholder="••••••••"
+                className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm rounded-lg shadow-md flex items-center justify-center gap-2 transition-colors touch-target mt-4"
+            className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-[6px] text-sm font-medium tracking-wide transition-all shadow-xs cursor-pointer mt-3"
           >
-            <Award className="w-4 h-4 text-slate-950" />
-            <span className="font-indic">{t('auth.register_btn')}</span>
+            Create account
           </button>
 
-          <div className="text-center pt-2">
+          <div className="text-center pt-2 text-xs text-[#6B6256]">
+            Already have an account?{' '}
             <button
               type="button"
               onClick={() => {
                 setIsRegisterModalOpen(false);
                 setIsLoginModalOpen(true);
               }}
-              className="text-xs text-[#173F6B] hover:underline font-semibold font-indic"
+              className="font-semibold text-[#1F1F1F] hover:underline cursor-pointer"
             >
-              {t('auth.have_account')}
+              Log in
             </button>
           </div>
         </form>

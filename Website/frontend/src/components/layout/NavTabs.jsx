@@ -27,9 +27,9 @@ export default function NavTabs({ activeTab, onSelectTab }) {
   ];
 
   return (
-    <nav className="bg-white border-b border-[#EBD1C6] sticky top-16 z-30 shadow-xs">
+    <nav className="bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#E5DED4] sticky top-16 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex space-x-1 sm:space-x-4 overflow-x-auto py-2 scrollbar-none">
+        <div className="flex space-x-1.5 sm:space-x-2 overflow-x-auto py-2.5 scrollbar-none">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -37,17 +37,17 @@ export default function NavTabs({ activeTab, onSelectTab }) {
               <button
                 key={tab.id}
                 onClick={() => onSelectTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all touch-target ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#3D2123] text-[#F8F1EC] shadow-sm'
-                    : 'text-[#4E5458] hover:text-[#3D2123] hover:bg-[#F8F1EC]'
-                } ${tab.highlight && !isActive ? 'border border-[#EBD1C6] text-[#A83E28] bg-[#F8F1EC]' : ''}`}
+                    ? 'bg-[#222222] text-[#FAF7F2] shadow-xs'
+                    : 'text-[#665D52] hover:text-[#1F1F1F] hover:bg-[#F4EFE6]'
+                } ${tab.highlight && !isActive ? 'border border-[#DDD3C5] text-[#1F1F1F] bg-[#F4EFE6]/60' : ''}`}
               >
-                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#EBD1C6]' : 'text-[#4E5458]'}`} />
-                <span className="font-indic">{tab.label}</span>
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#FAF7F2]' : 'text-[#8C8276]'}`} />
+                <span className="font-serif-zen font-medium">{tab.label}</span>
                 {tab.badge && (
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    isActive ? 'bg-[#EBD1C6] text-[#3D2123] font-bold' : 'bg-[#F8F1EC] text-[#3D2123] border border-[#EBD1C6]'
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-serif-zen ${
+                    isActive ? 'bg-[#3A3530] text-[#FAF7F2]' : 'bg-[#EAE2D5] text-[#3A3530] border border-[#DDD3C5]'
                   }`}>
                     {tab.badge}
                   </span>

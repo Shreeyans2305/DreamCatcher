@@ -3,7 +3,6 @@ import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CampOperationsProvider, useCampOperations } from './context/CampOperationsContext';
 import AppHeader from './components/layout/AppHeader';
-import NavTabs from './components/layout/NavTabs';
 import SyncStatusBar from './components/layout/SyncStatusBar';
 import LandingPageView from './views/LandingPageView';
 import AuthPageView from './views/AuthPageView';
@@ -44,7 +43,7 @@ function AppContent() {
       <div className="relative">
         <button
           onClick={() => setViewMode('landing')}
-          className="fixed top-4 left-4 z-50 bg-white/90 hover:bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-lg shadow border border-slate-300 transition-all flex items-center gap-1 font-indic"
+          className="fixed top-4 left-4 z-50 bg-[#F4EFE6]/90 backdrop-blur-xs hover:bg-white text-[#2B2520] border border-[#DECBC7] px-4 py-2 rounded-full text-xs font-medium shadow-sm flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
         >
           <span>← Back to Home</span>
         </button>
@@ -66,13 +65,14 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-indic">
+    <div className="min-h-screen flex flex-col bg-[#F7F4EE] text-[#1C1C1C]">
       
-      {/* Global Application Header with Home Navigation */}
-      <AppHeader onNavigateHome={() => setViewMode('landing')} />
-
-      {/* Primary Navigation Tabs */}
-      <NavTabs activeTab={activeTab} onSelectTab={setActiveTab} />
+      {/* Single Unified Floating iOS Glass Navbar */}
+      <AppHeader
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        onNavigateHome={() => setViewMode('landing')}
+      />
 
       {/* Sync Warning / Offline Banner */}
       <SyncStatusBar />
@@ -129,10 +129,10 @@ function AppContent() {
       <VolunteerCredentialModal />
 
       {/* Field Footer */}
-      <footer className="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 font-indic">
+      <footer className="bg-white border-t border-black/[0.04] py-4 text-center text-xs text-neutral-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>DreamCatcher — Multilingual Public AI Career Guidance Field Platform</span>
-          <span className="text-slate-400">Offline-Ready PWA • UX4G Indic Design Standard</span>
+          <span className="text-neutral-400">Offline-Ready PWA • UX4G Indic Design Standard</span>
         </div>
       </footer>
 

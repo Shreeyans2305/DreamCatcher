@@ -19,58 +19,65 @@ export default function OperationalKpiGrid({ onNewIntake, onSyncNow }) {
       value: totalStudents,
       subtext: `${studentsWithNotes} fully completed guidance sessions`,
       icon: Users,
-      color: 'text-[#173F6B]',
-      bgColor: 'bg-sky-50 border-sky-200'
+      badgeBg: 'bg-indigo-50 text-indigo-600',
     },
     {
       title: 'Field Camps Completed',
       value: `${completedCamps} / ${totalCamps}`,
       subtext: 'Across Satara & Patan rural blocks',
       icon: CalendarCheck,
-      color: 'text-emerald-700',
-      bgColor: 'bg-emerald-50 border-emerald-200'
+      badgeBg: 'bg-emerald-50 text-emerald-600',
     },
     {
       title: 'Pending Guidance Follow-up',
       value: pendingGuidance,
       subtext: 'Registered students awaiting AI counseling',
       icon: AlertCircle,
-      color: 'text-amber-700',
-      bgColor: 'bg-amber-50 border-amber-200'
+      badgeBg: 'bg-amber-50 text-amber-600',
     },
     {
       title: t('dashboard.kpi_pending_sync'),
       value: syncQueue.length,
       subtext: syncQueue.length === 0 ? 'All local records synced' : 'Click to flush to cloud',
       icon: CloudUpload,
-      color: syncQueue.length > 0 ? 'text-amber-600' : 'text-slate-600',
-      bgColor: syncQueue.length > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-50 border-slate-200',
+      badgeBg: syncQueue.length > 0 ? 'bg-rose-50 text-rose-600' : 'bg-neutral-100 text-neutral-600',
       action: syncQueue.length > 0 ? onSyncNow : null
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {kpis.map((kpi, idx) => {
         const Icon = kpi.icon;
         return (
           <div
             key={idx}
             onClick={kpi.action || undefined}
-            className={`rounded-xl border p-4 sm:p-5 shadow-xs transition-all ${kpi.bgColor} ${
-              kpi.action ? 'cursor-pointer hover:shadow-md' : ''
+            className={`bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-2.5 shadow-xs transition-all ${
+              kpi.action ? 'cursor-pointer hover:border-[#222222]' : ''
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-slate-700 font-indic">{kpi.title}</span>
-              <Icon className={`w-5 h-5 ${kpi.color}`} />
+            <div className="flex items-center justify-between">
+              <div className={`w-9 h-9 rounded-xl ${kpi.badgeBg} flex items-center justify-center shrink-0`}>
+                <Icon className="w-4 h-4" />
+              </div>
+              {kpi.action && (
+                <span className="text-[10px] font-semibold bg-[#FAF0EE] text-[#8E3A32] border border-[#E8C2BA] px-2 py-0.5 rounded-full">
+                  Action
+                </span>
+              )}
             </div>
-            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-indic">
-              {kpi.value}
+            <div>
+              <div className="font-serif-zen text-2xl sm:text-3xl font-bold text-[#1F1F1F] tracking-tight tabular-nums">
+                {kpi.value}
+              </div>
+              <div className="text-xs font-semibold text-[#38332C] mt-1">
+                {kpi.title}
+              </div>
+              <p className="text-[11px] text-[#7A6F62] mt-0.5 leading-normal">
+                {kpi.subtext}
+              </p>
             </div>
-            <p className="text-[11px] text-slate-600 font-medium font-indic mt-1">
-              {kpi.subtext}
-            </p>
           </div>
         );
       })}

@@ -17,16 +17,16 @@ export default function RegionalReachChart({ students }) {
     value: countsByGrade[key]
   }));
 
-  const COLORS = ['#173F6B', '#D97706', '#059669', '#7C3AED', '#DC2626', '#475569'];
+  const COLORS = ['#111111', '#2563EB', '#059669', '#7C3AED', '#D97706', '#E11D48'];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+    <div className="card-soft p-5 bg-white">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="font-bold text-sm text-slate-900 font-indic">
+          <h3 className="font-bold text-sm text-neutral-900">
             Student Intake Breakdown
           </h3>
-          <p className="text-[11px] text-slate-500 font-indic">
+          <p className="text-[11px] text-neutral-500 font-normal">
             Distribution by educational stage and aspiration track
           </p>
         </div>
@@ -50,16 +50,17 @@ export default function RegionalReachChart({ students }) {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: '#0F172A',
-                borderRadius: '8px',
+                backgroundColor: '#111111',
+                borderRadius: '10px',
                 color: '#FFFFFF',
                 fontSize: '12px',
-                border: 'none'
+                border: 'none',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
               }}
             />
             <Legend
               wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
-              formatter={(value) => <span className="text-slate-700 font-indic">{value}</span>}
+              formatter={(value) => <span className="text-neutral-700">{value}</span>}
             />
           </PieChart>
         </ResponsiveContainer>

@@ -4,10 +4,11 @@ import { motion } from "framer-motion";
 export const SlideTabs = ({ 
   tabs = [
     { label: "Our Mission", href: "#mission" },
-    { label: "Tri-Modal Platform", href: "#tri-modal" },
+    { label: "Core Tenets", href: "#tenets" },
+    { label: "Pathways", href: "#pathways" },
     { label: "Live AI Demo", href: "#simulator" },
     { label: "Ground Impact", href: "#impact" },
-    { label: "Scholarships DB", href: "#scholarships" }
+    { label: "Scholarships", href: "#scholarships" }
   ],
   activeIndex = 0,
   onTabSelect
@@ -52,7 +53,7 @@ export const SlideTabs = ({
           });
         }
       }}
-      className="relative flex items-center rounded-full border border-[#EBD1C6]/25 bg-[#2A1517]/90 p-1 backdrop-blur-md shadow-inner"
+      className="relative flex items-center rounded-full border border-black/[0.05] bg-neutral-100/90 p-1 backdrop-blur-sm"
     >
       {tabs.map((tab, i) => (
         <Tab
@@ -77,7 +78,7 @@ export const SlideTabs = ({
 
 const Tab = React.forwardRef(({ children, setPosition, onClick, href, isSelected }, ref) => {
   const content = (
-    <span className="relative z-10 block cursor-pointer px-3.5 py-1.5 text-xs font-bold tracking-wide transition-colors font-indic select-none whitespace-nowrap">
+    <span className="relative z-10 block cursor-pointer px-3.5 py-1.5 text-xs font-semibold tracking-tight transition-colors select-none whitespace-nowrap nav-link-animated">
       {children}
     </span>
   );
@@ -98,7 +99,7 @@ const Tab = React.forwardRef(({ children, setPosition, onClick, href, isSelected
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       className={`relative z-10 rounded-full transition-colors flex items-center justify-center ${
-        isSelected ? 'text-[#3D2123]' : 'text-[#EBD1C6]/85 hover:text-white'
+        isSelected ? 'text-white' : 'text-neutral-600 hover:text-black'
       }`}
     >
       {href ? (
@@ -125,7 +126,7 @@ const Cursor = ({ position }) => {
         stiffness: 450,
         damping: 32,
       }}
-      className="absolute z-0 h-7 sm:h-8 rounded-full bg-[#EBD1C6] shadow-sm pointer-events-none"
+      className="absolute z-0 h-7 sm:h-8 rounded-full bg-[#111111] shadow-xs pointer-events-none"
     />
   );
 };

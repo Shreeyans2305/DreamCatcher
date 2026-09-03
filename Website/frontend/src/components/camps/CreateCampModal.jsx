@@ -25,18 +25,23 @@ export default function CreateCampModal() {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 my-8">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-white rounded-[20px] shadow-2xl max-w-lg w-full overflow-hidden border border-black/[0.05] my-8">
         
         {/* Header */}
-        <div className="bg-[#173F6B] text-white p-5 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <Tent className="w-6 h-6 text-amber-400" />
-            <h2 className="text-lg font-bold font-indic">{t('camps.create_modal_title')}</h2>
+        <div className="p-5 sm:p-6 border-b border-black/[0.05] bg-white flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-[12px] bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+              <Tent className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-neutral-900">{t('camps.create_modal_title')}</h2>
+              <p className="text-xs text-neutral-500 font-normal">Organize a new school / village career guidance hub</p>
+            </div>
           </div>
           <button 
             onClick={() => setIsCreateCampModalOpen(false)}
-            className="text-sky-200 hover:text-white p-1 rounded-md"
+            className="text-neutral-400 hover:text-black p-1.5 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -45,7 +50,7 @@ export default function CreateCampModal() {
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
+            <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
               {t('camps.camp_name')} *
             </label>
             <input
@@ -54,13 +59,13 @@ export default function CreateCampModal() {
               value={formData.camp_name}
               onChange={(e) => setFormData({ ...formData, camp_name: e.target.value })}
               placeholder="e.g. Dahiwadi High School Career Guidance Camp"
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+              className="w-full px-4 py-2.5 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                 {t('camps.village')} *
               </label>
               <input
@@ -69,12 +74,12 @@ export default function CreateCampModal() {
                 value={formData.village_town}
                 onChange={(e) => setFormData({ ...formData, village_town: e.target.value })}
                 placeholder="e.g. Dahiwadi"
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                className="w-full px-4 py-2.5 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                 {t('camps.district')} *
               </label>
               <input
@@ -83,14 +88,14 @@ export default function CreateCampModal() {
                 value={formData.district}
                 onChange={(e) => setFormData({ ...formData, district: e.target.value })}
                 placeholder="e.g. Satara"
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                className="w-full px-4 py-2.5 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                 {t('camps.date')} *
               </label>
               <input
@@ -98,41 +103,41 @@ export default function CreateCampModal() {
                 required
                 value={formData.scheduled_date}
                 onChange={(e) => setFormData({ ...formData, scheduled_date: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                className="w-full px-4 py-2 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                 Start Time
               </label>
               <input
                 type="time"
                 value={formData.start_time}
                 onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                className="w-full px-4 py-2 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-indic">
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                 End Time
               </label>
               <input
                 type="time"
                 value={formData.end_time}
                 onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#173F6B] font-medium"
+                className="w-full px-4 py-2 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-[#173F6B] hover:bg-[#0D2E50] text-white font-bold text-sm rounded-lg shadow-md flex items-center justify-center gap-2 transition-colors touch-target mt-4"
+            className="btn-pill-black w-full py-3 text-sm font-semibold gap-2 mt-4 shadow-sm"
           >
-            <Plus className="w-4 h-4 text-amber-400" />
-            <span className="font-indic">{t('camps.save_camp')}</span>
+            <Plus className="w-4 h-4 text-white" />
+            <span>{t('camps.save_camp')}</span>
           </button>
         </form>
 

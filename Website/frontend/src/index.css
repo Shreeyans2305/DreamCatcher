@@ -2,61 +2,78 @@
 
 @layer base {
   :root {
+    --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+    --font-primary: 'Inter', 'Mukta', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
     --font-indic: 'Mukta', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
     
-    /* Custom User Palette Tokens */
-    --color-mahogany: #3D2123;
-    --color-mahogany-deep: #2A1517;
-    --color-mahogany-light: #522E31;
-    --color-slate-gray: #4E5458;
-    --color-slate-muted: #6B7277;
-    --color-rose-sand: #EBD1C6;
-    --color-rose-sand-subtle: #F5E8E2;
-    --color-linen-base: #F8F1EC;
-    --color-terracotta: #A83E28;
-    --color-cedar: #285B43;
+    /* Serene Japanese Zen / Linen Aesthetic Tokens */
+    --bg-canvas: #F7F4EE;
+    --bg-card: #FCFAF7;
+    --bg-parchment: #F4EFE6;
+    --bg-blush-frame: #EEDCD8;
+    --text-primary: #1C1C1C;
+    --text-secondary: #585149;
+    --text-muted: #8C8276;
+    --border-subtle: #E5DED4;
+    --border-warm: rgba(80, 60, 40, 0.12);
+    --accent-ink: #1C1C1C;
+    --accent-sakura: #E5978B;
+    --accent-sakura-light: #FAF0EE;
+    --accent-sage: #5B7065;
+    --accent-gold: #C49F5A;
+    --radius-card: 22px;
   }
 
   html {
-    font-family: var(--font-indic);
+    font-family: var(--font-primary);
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    background-color: var(--bg-canvas);
   }
 
   body {
     min-height: 100vh;
-    color: #2A1517;
-    background-color: var(--color-linen-base);
-    line-height: 1.75;
+    color: var(--text-primary);
+    background-color: var(--bg-canvas);
+    line-height: 1.6;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom high-contrast scrollbars for field tables */
+  /* Sleek modern minimalist scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #F8F1EC;
+    background: #F7F6F4;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #4E5458;
-    border-radius: 3px;
+    background: #D1D5DB;
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #3D2123;
+    background: #9CA3AF;
   }
 
   /* Accessible focus indicators */
   :focus-visible {
-    outline: 2px solid #3D2123;
+    outline: 2px solid #111111;
     outline-offset: 2px;
   }
 }
 
-/* Custom Indic Typography & Touch ergonomics */
+/* Typography Helpers */
+.font-serif-zen {
+  font-family: var(--font-serif);
+}
+
+.font-sans-clean {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
 .font-indic {
   font-family: 'Mukta', 'Noto Sans Gujarati', system-ui, sans-serif;
 }
@@ -65,10 +82,234 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Touch friendly minimum touch target */
+/* Zen Japanese Editorial Aesthetics */
+.card-zen {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 20px -2px rgba(60, 45, 30, 0.04), 0 1px 3px rgba(60, 45, 30, 0.02);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-zen:hover {
+  box-shadow: 0 12px 32px -4px rgba(60, 45, 30, 0.08), 0 2px 6px rgba(60, 45, 30, 0.03);
+}
+
+.btn-ink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #222222;
+  color: #FFFFFF;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.btn-ink:hover {
+  background-color: #0F0F0F;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.btn-ink:active {
+  transform: translateY(0px) scale(0.99);
+}
+
+.btn-sakura {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-sakura-light);
+  color: #8E3A32;
+  border: 1px solid rgba(229, 151, 139, 0.35);
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-sakura:hover {
+  background-color: #F8E5E1;
+  border-color: rgba(229, 151, 139, 0.6);
+  transform: translateY(-1px);
+}
+
+.input-zen {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #D5CCBE;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: #1C1C1C;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.input-zen:focus {
+  outline: none;
+  border-color: #222222;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(34, 34, 34, 0.08);
+}
+
+.input-zen::placeholder {
+  color: #A39B8E;
+}
+
+/* Touch ergonomics */
 .touch-target {
-  min-height: 48px;
-  min-width: 48px;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Card & Pill Utility Classes matching companion mobile app */
+.card-soft {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-card, 18px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-soft:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Contrast Black Highlight Card (Notion/Tumblr card pattern) */
+.card-contrast-black {
+  background-color: #111111;
+  color: #FFFFFF;
+  border-radius: var(--radius-card, 18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-contrast-black:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -4px rgba(0, 0, 0, 0.3);
+}
+
+/* Distinct Colorful Icon Badges (Like Stripe/Notion/Shopify app logos) */
+.badge-blue {
+  background-color: #EFF6FF;
+  color: #2563EB;
+}
+
+.badge-rose {
+  background-color: #FFF1F2;
+  color: #E11D48;
+}
+
+.badge-emerald {
+  background-color: #ECFDF5;
+  color: #059669;
+}
+
+.badge-purple {
+  background-color: #F5F3FF;
+  color: #7C3AED;
+}
+
+.badge-amber {
+  background-color: #FFFBEB;
+  color: #D97706;
+}
+
+.badge-teal {
+  background-color: #F0FDFA;
+  color: #0D9488;
+}
+
+/* Button Pill Utilities */
+.btn-pill-black {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #111111;
+  color: #FFFFFF;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-pill-black:hover {
+  background-color: #262626;
+  transform: scale(1.02);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+.btn-pill-black:active {
+  transform: scale(0.98);
+}
+
+.btn-pill-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+  color: #111111;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.btn-pill-secondary:hover {
+  background-color: #F9FAFB;
+  border-color: rgba(0, 0, 0, 0.18);
+  transform: scale(1.02);
+}
+
+.btn-pill-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Animated Nav Link Hover Underline */
+.nav-link-animated {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-link-animated::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #111111;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link-animated:hover::after {
+  transform: scaleX(1);
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @keyframes pulse-subtle {

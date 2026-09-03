@@ -13,13 +13,13 @@ export default function IntakeTrendChart({ data }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+    <div className="card-soft p-5 bg-white">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="font-bold text-sm text-slate-900 font-indic">
+          <h3 className="font-bold text-sm text-neutral-900">
             {t('dashboard.monthly_trend')}
           </h3>
-          <p className="text-[11px] text-slate-500 font-indic">
+          <p className="text-[11px] text-neutral-500 font-normal">
             Students reached across volunteer-organized guidance camps
           </p>
         </div>
@@ -28,19 +28,20 @@ export default function IntakeTrendChart({ data }) {
       <div className="h-56 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-            <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#64748B' }} />
-            <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+            <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#6B7280' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: '#6B7280' }} axisLine={false} tickLine={false} />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#0F172A',
-                borderRadius: '8px',
+                backgroundColor: '#111111',
+                borderRadius: '10px',
                 color: '#FFFFFF',
                 fontSize: '12px',
-                border: 'none'
+                border: 'none',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
               }}
             />
-            <Bar dataKey="students" fill="#173F6B" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="students" fill="#111111" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -10,97 +10,105 @@ import {
   UserPlus, 
   ChevronRight, 
   ChevronLeft, 
-  Sparkles, 
   Save, 
-  CheckCircle, 
+  Sparkles, 
   AlertCircle 
 } from 'lucide-react';
 
 const INITIAL_FORM = {
   full_name: '',
-  age_years: '15',
-  date_of_birth: '',
-  student_contact_number: '',
-  guardian_contact_number: '',
-  village_location: 'Shindewadi',
+  age_years: '',
+  gender: 'male',
+  parent_guardian_phone: '',
+  village_location: '',
   education_level: 'grade_10',
-  education_level_label: 'Class 10th (SSC Aspirant)',
   category: 'cat_obc',
-  category_label: 'OBC (Other Backward Classes)',
+  annual_family_income_inr: '',
+  aspirations: '',
   preferred_language: 'mr',
-  aspirations: 'Government ITI Electrician or Polytechnic Computer Diploma',
-  consent: true
+  has_smartphone_access: false
 };
 
 export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
   const { t } = useLanguage();
-  const { enrollStudent, activeCamp } = useCampOperations();
+  const { activeCamp, registerNewStudent } = useCampOperations();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [draftNotice, setDraftNotice] = useState(false);
 
-  // Restore draft if exists on mount
+  // Restore draft if available
   useEffect(() => {
-    const savedDraft = storageEngine.getIntakeDraft();
-    if (savedDraft?.data?.full_name) {
-      setFormData(savedDraft.data);
-      setDraftNotice(true);
-      setTimeout(() => setDraftNotice(false), 4500);
+    try {
+      const getDraft = storageEngine.loadIntakeDraft || storageEngine.getIntakeDraft;
+      const draft = typeof getDraft === 'function' ? getDraft.call(storageEngine) : null;
+      if (draft && draft.full_name) {
+        setFormData(draft);
+        setDraftNotice(true);
+      }
+    } catch (err) {
+      console.warn('Could not restore draft:', err);
     }
   }, []);
 
+  // Auto-save draft on step navigation
   const updateFormData = (fields) => {
     setFormData(prev => {
       const updated = { ...prev, ...fields };
-      // Debounced draft autosave
       storageEngine.saveIntakeDraft(updated);
       return updated;
     });
   };
 
-  const steps = [
-    { num: 1, label: t('wizard.step1') },
-    { num: 2, label: t('wizard.step2') },
-    { num: 3, label: t('wizard.step3') },
-    { num: 4, label: t('wizard.step4') }
-  ];
-
   const handleNext = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (currentStep < 4) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep(s => s + 1);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep(s => s - 1);
     }
   };
 
-  const handleSaveAndLaunch = () => {
-    const committedStudent = enrollStudent(formData);
-    setFormData(INITIAL_FORM);
-    setCurrentStep(1);
-    onLaunchGuidance(committedStudent);
+  const finalizeStudent = () => {
+    const newStudent = registerNewStudent({
+      ...formData,
+      camp_id: activeCamp?.camp_id || 'CAMP-DEFAULT',
+      age_years: parseInt(formData.age_years, 10) || 15,
+      annual_family_income_inr: parseInt(formData.annual_family_income_inr, 10) || 0
+    });
+    storageEngine.clearIntakeDraft();
+    return newStudent;
   };
 
   const handleSaveOnly = () => {
-    enrollStudent(formData);
-    setFormData(INITIAL_FORM);
-    setCurrentStep(1);
+    finalizeStudent();
     if (onSavedOnly) onSavedOnly();
   };
 
+  const handleSaveAndLaunch = () => {
+    const created = finalizeStudent();
+    if (onLaunchGuidance) onLaunchGuidance(created);
+  };
+
+  const steps = [
+    { num: 1, label: t('wizard.step_basic') },
+    { num: 2, label: t('wizard.step_academic') },
+    { num: 3, label: t('wizard.step_aspiration') },
+    { num: 4, label: t('wizard.step_review') }
+  ];
+
   return (
-    <div className="max-w-3xl mx-auto py-6 px-4 sm:px-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-5">
       
       {/* Draft Restored Banner */}
       {draftNotice && (
-        <div className="mb-4 bg-amber-50 border border-amber-300 rounded-lg p-3 text-xs text-amber-900 flex items-center justify-between shadow-xs">
-          <div className="flex items-center gap-2 font-indic font-medium">
-            <AlertCircle className="w-4 h-4 text-amber-600" />
+        <div className="bg-amber-50 border border-amber-200 rounded-[14px] p-3 text-xs text-amber-900 flex items-center justify-between shadow-xs">
+          <div className="flex items-center gap-2 font-medium">
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
             <span>{t('wizard.draft_restored')}</span>
           </div>
           <button
@@ -109,39 +117,42 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
               setFormData(INITIAL_FORM);
               setDraftNotice(false);
             }}
-            className="text-xs font-bold text-amber-800 underline"
+            className="text-xs font-bold text-amber-800 underline cursor-pointer"
           >
             Reset Form
           </button>
         </div>
       )}
 
-      <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+      <div className="card-soft bg-white overflow-hidden shadow-sm">
         
         {/* Header with Active Camp & Wizard Title */}
-        <div className="bg-[#173F6B] text-white p-5 sm:p-6 border-b border-[#0D2E50]">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <div className="flex items-center gap-2">
-                <UserPlus className="w-6 h-6 text-amber-400" />
-                <h1 className="text-xl font-bold font-indic">{t('wizard.title')}</h1>
+        <div className="p-5 sm:p-6 border-b border-black/[0.05] bg-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-[12px] bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold shrink-0">
+                <UserPlus className="w-5 h-5" />
               </div>
-              <p className="text-xs text-sky-100/90 mt-1 font-indic">{t('wizard.subtitle')}</p>
+              <div>
+                <h1 className="text-xl font-black text-neutral-900 tracking-tight">{t('wizard.title')}</h1>
+                <p className="text-xs text-neutral-500 mt-0.5 font-normal">{t('wizard.subtitle')}</p>
+              </div>
             </div>
-            <div className="bg-[#0D2E50] px-3 py-1 rounded-md text-xs font-semibold text-amber-300 border border-sky-400/30 self-start sm:self-auto font-indic">
+
+            <div className="bg-neutral-100 px-3 py-1 rounded-full text-xs font-semibold text-neutral-700 border border-black/[0.04] self-start sm:self-auto">
               Camp: {activeCamp?.camp_name}
             </div>
           </div>
 
-          {/* Stepper Progress Bar */}
+          {/* Stepper Progress Bar (Solid Black for completed, Neutral for pending) */}
           <div className="grid grid-cols-4 gap-2 mt-6">
             {steps.map((s) => (
-              <div key={s.num} className="space-y-1">
+              <div key={s.num} className="space-y-1.5">
                 <div className={`h-1.5 rounded-full transition-all ${
-                  currentStep >= s.num ? 'bg-amber-400' : 'bg-sky-950/60'
+                  currentStep >= s.num ? 'bg-[#111111]' : 'bg-neutral-200'
                 }`} />
-                <span className={`text-[11px] font-bold font-indic hidden sm:block ${
-                  currentStep === s.num ? 'text-amber-300' : 'text-sky-200/60'
+                <span className={`text-[11px] font-semibold hidden sm:block ${
+                  currentStep === s.num ? 'text-neutral-900 font-bold' : 'text-neutral-400'
                 }`}>
                   {s.label}
                 </span>
@@ -165,15 +176,15 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
             <Step4ReviewAndLaunch formData={formData} />
           )}
 
-          {/* Bottom Action Area (Sticky / Ergonomic) */}
-          <div className="mt-8 pt-4 border-t border-slate-200 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Bottom Action Area (Pill Buttons) */}
+          <div className="mt-8 pt-4 border-t border-black/[0.05] flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
             
             {/* Back Button */}
             {currentStep > 1 ? (
               <button
                 type="button"
                 onClick={handleBack}
-                className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors touch-target font-indic"
+                className="btn-pill-secondary px-5 py-2.5 text-xs font-semibold gap-1.5"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>{t('wizard.back')}</span>
@@ -185,27 +196,27 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
               {currentStep < 4 ? (
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-6 py-3 bg-[#173F6B] hover:bg-[#0D2E50] text-white text-sm font-bold rounded-lg shadow flex items-center justify-center gap-1.5 transition-colors touch-target font-indic"
+                  className="btn-pill-black px-6 py-2.5 text-xs font-semibold gap-1.5"
                 >
                   <span>{t('wizard.next')}</span>
-                  <ChevronRight className="w-4 h-4 text-amber-400" />
+                  <ChevronRight className="w-4 h-4 text-white" />
                 </button>
               ) : (
                 <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={handleSaveOnly}
-                    className="w-full sm:w-auto px-4 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors touch-target font-indic"
+                    className="btn-pill-secondary px-5 py-2.5 text-xs font-semibold gap-1.5 w-full sm:w-auto"
                   >
-                    <Save className="w-4 h-4 text-slate-600" />
+                    <Save className="w-3.5 h-3.5 text-neutral-600" />
                     <span>{t('wizard.save_only')}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleSaveAndLaunch}
-                    className="w-full sm:w-auto px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 text-sm font-bold rounded-lg shadow-md flex items-center justify-center gap-2 transition-colors touch-target font-indic"
+                    className="btn-pill-black px-6 py-2.5 text-xs font-semibold gap-2 w-full sm:w-auto shadow-md"
                   >
-                    <Sparkles className="w-4 h-4 text-slate-950" />
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
                     <span>{t('wizard.save_launch')}</span>
                   </button>
                 </div>
