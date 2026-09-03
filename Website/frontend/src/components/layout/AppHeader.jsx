@@ -82,10 +82,10 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
         </div>
 
         {/* ========================================================= */}
-        {/* 2. CENTER: MINIMAL FLOATING NAVIGATION TABS (iOS Glass)   */}
+        {/* 2. CENTER: CLEAN UNIFIED NAVIGATION TABS (No nested box)  */}
         {/* ========================================================= */}
         {onSelectTab && (
-          <nav className="hidden md:flex items-center gap-0.5 bg-black/[0.04] p-0.5 rounded-full border border-black/[0.03]">
+          <nav className="hidden md:flex items-center gap-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -93,17 +93,17 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
                 <button
                   key={tab.id}
                   onClick={() => onSelectTab(tab.id)}
-                  className={`relative flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
+                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[#141414] text-white shadow-xs'
-                      : 'text-[#5C554B] hover:text-[#111111] hover:bg-white/80'
+                      ? 'text-[#141414] bg-black/[0.08] shadow-2xs font-black'
+                      : 'text-[#61574C] hover:text-[#111111] hover:bg-black/[0.04]'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#7A6F62]'}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#141414]' : 'text-[#7A6F62]'}`} />
                   <span className="font-display">{tab.label}</span>
                   {tab.badge && (
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isActive ? 'bg-[#333333] text-white' : 'bg-[#EAE2D5] text-[#333333]'
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                      isActive ? 'bg-[#141414] text-white' : 'bg-[#EAE2D5] text-[#333333]'
                     }`}>
                       {tab.badge}
                     </span>
@@ -119,15 +119,15 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
         {/* ========================================================= */}
         <div className="flex items-center gap-1.5 shrink-0">
           
-          {/* Active Camp Dropdown Chip */}
+          {/* Active Camp Dropdown Item */}
           <div className="relative">
             <button
               onClick={() => setCampMenuOpen(!campMenuOpen)}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/80 hover:bg-white border border-[#D8CFC2] text-xs text-[#2D2823] transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs text-[#2D2823] hover:text-black hover:bg-black/[0.04] transition-all cursor-pointer font-bold"
               title="Switch active camp location"
             >
-              <MapPin className="w-3 h-3 text-[#DE482B]" />
-              <span className="font-bold text-[11px] max-w-[90px] truncate">
+              <MapPin className="w-3.5 h-3.5 text-[#DE482B]" />
+              <span className="font-display text-[11px] max-w-[90px] truncate">
                 {activeCamp?.village_town || 'Satara'}
               </span>
               <ChevronDown className="w-2.5 h-2.5 text-[#7A6F62] opacity-70" />

@@ -5,8 +5,9 @@ import { isSupabaseConfigured } from '../services/supabaseClient';
 import { generateGovernmentId, generateTemporaryPassword, PREAPPROVED_NGOS } from '../utils/credentialGenerator';
 import { sendAdminCredentialEmail } from '../services/emailService';
 import DreamCatcherWind from '../components/ui/DreamCatcherWind';
+import DreamCatcherIcon from '../components/ui/DreamCatcherIcon';
 import { 
-  Compass, Mail, Lock, User, Building, MapPin, Phone, 
+  Mail, Lock, User, Building, MapPin, Phone, 
   ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, HeartHandshake, Key, Copy
 } from 'lucide-react';
 
@@ -170,25 +171,16 @@ export default function AuthPageView({ onLoginSuccess }) {
         <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-between relative bg-[#F4EFE6]">
           
           <div>
-            {/* Top Brand Pill Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#222222] text-[#F4EFE6] flex items-center justify-center font-bold shadow-sm">
-                  <Compass className="w-5 h-5 text-[#F4EFE6]" />
+            {/* Top Brand Header with DreamCatcher Logo */}
+            <div className="flex items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#161616] text-[#FAF7F2] flex items-center justify-center p-1.5 shadow-sm">
+                  <DreamCatcherIcon className="w-6 h-6 text-[#FAF7F2]" />
                 </div>
-                <div>
-                  <span className="font-serif-zen text-base font-bold text-[#1F1F1F] block leading-none">
-                    DreamCatcher
-                  </span>
-                  <span className="text-[10px] text-[#6B6256] uppercase tracking-wider font-semibold">
-                    Field Officer Portal
-                  </span>
-                </div>
+                <span className="font-display font-black text-2xl tracking-tight text-[#141414]">
+                  DreamCatcher
+                </span>
               </div>
-
-              <span className="text-[10px] bg-[#E3D9CA] text-[#38332C] px-2.5 py-1 rounded-full font-bold border border-[#D5CCBD]">
-                {isSupabaseConfigured() ? 'Live Supabase' : 'Offline Sandbox'}
-              </span>
             </div>
 
             {/* Title & Description */}

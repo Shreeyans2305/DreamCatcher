@@ -3,8 +3,9 @@ import { useAdminAuth } from '../context/AdminAuthContext';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { generateGovernmentId, generateTemporaryPassword, PREAPPROVED_NGOS } from '../utils/credentialGenerator';
 import { sendAdminCredentialEmail } from '../services/emailService';
+import DreamCatcherIcon from '../components/ui/DreamCatcherIcon';
 import { 
-  Compass, Lock, Mail, ArrowRight, ShieldCheck, UserCheck, 
+  Lock, Mail, ArrowRight, ShieldCheck, UserCheck, 
   AlertCircle, Building2, MapPin, Phone, User, HeartHandshake, Key, CheckCircle2, Copy 
 } from 'lucide-react';
 
@@ -171,24 +172,16 @@ export default function AdminLoginView({ onBackToHome, onLoginSuccess }) {
         <div className="text-center mb-6">
           <div 
             onClick={onBackToHome}
-            className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#EBD1C6] text-[#3D2123] mb-3 shadow-xl cursor-pointer hover:scale-105 transition-transform"
+            className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#161616] text-[#FAF7F2] mb-3 shadow-xl cursor-pointer hover:scale-105 transition-transform p-2"
           >
-            <Compass className="w-8 h-8 text-[#3D2123]" />
+            <DreamCatcherIcon className="w-10 h-10 text-[#FAF7F2]" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8F1EC]">
-            DreamCatcher Field Portal
+            DreamCatcher
           </h1>
           <p className="text-xs sm:text-sm text-[#EBD1C6]/75 mt-1">
             Government Officers & Partner NGO Coordinators
           </p>
-
-          {/* Database indicator badge */}
-          <div className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-[11px] font-bold border border-[#EBD1C6]/30 bg-[#2A1517]/80 text-[#EBD1C6]">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>
-              {isSupabaseConfigured() ? 'Live Supabase DB Connected' : 'Local Sandbox Mode'}
-            </span>
-          </div>
         </div>
 
         {/* Issued Credentials Overlay Card (Post Signup) */}

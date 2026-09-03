@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { TrendingUp } from 'lucide-react';
 
 export default function IntakeTrendChart({ data }) {
   const { t } = useLanguage();
@@ -13,35 +14,49 @@ export default function IntakeTrendChart({ data }) {
   ];
 
   return (
-    <div className="card-soft p-5 bg-white">
-      <div className="flex items-center justify-between mb-4">
+    <div className="glass-card rounded-3xl p-6 sm:p-7 shadow-xs">
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="font-bold text-sm text-neutral-900">
-            {t('dashboard.monthly_trend')}
-          </h3>
-          <p className="text-[11px] text-neutral-500 font-normal">
-            Students reached across volunteer-organized guidance camps
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-display font-black text-base text-[#141414]">
+              {t('dashboard.monthly_trend', 'Student Intake Velocity')}
+            </h3>
+            <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+              <TrendingUp className="w-3 h-3" />
+              +38% vs Q2
+            </span>
+          </div>
+          <p className="text-xs text-[#6B6256] font-medium">
+            Active counseling registrations across field camps
           </p>
         </div>
       </div>
 
-      <div className="h-56 w-full">
+      <div className="h-60 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-            <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#6B7280' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: '#6B7280' }} axisLine={false} tickLine={false} />
+            <defs>
+              <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#181818" stopOpacity={1} />
+                <stop offset="100%" stopColor="#383838" stopOpacity={0.85} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#EAE3D7" />
+            <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#7A6F62', fontWeight: 600 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: '#7A6F62', fontWeight: 600 }} axisLine={false} tickLine={false} />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#111111',
-                borderRadius: '10px',
+                backgroundColor: 'rgba(20, 20, 20, 0.95)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '16px',
                 color: '#FFFFFF',
                 fontSize: '12px',
-                border: 'none',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                fontWeight: 600,
+                border: '1px solid rgba(255,255,255,0.15)',
+                boxShadow: '0 12px 32px rgba(0,0,0,0.25)'
               }}
             />
-            <Bar dataKey="students" fill="#111111" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="students" fill="url(#barGradient)" radius={[8, 8, 2, 2]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
