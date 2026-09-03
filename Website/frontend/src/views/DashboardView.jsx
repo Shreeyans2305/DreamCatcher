@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { useCampOperations } from '../context/CampOperationsContext';
 import OperationalKpiGrid from '../components/dashboard/OperationalKpiGrid';
 import IntakeTrendChart from '../components/dashboard/IntakeTrendChart';
 import RegionalReachChart from '../components/dashboard/RegionalReachChart';
-import StudentDirectoryTable from '../components/students/StudentDirectoryTable';
 import { UserPlus, Tent, Sparkles, MapPin, ArrowRight, BarChart3, Users, CheckCircle2 } from 'lucide-react';
 
 export default function DashboardView({ onNavigateTab, onSelectStudentForCase, onLaunchGuidance }) {
   const { t } = useLanguage();
   const { volunteer } = useAuth();
   const { activeCamp, students, triggerSyncFlush } = useCampOperations();
-  const [dashboardTab, setDashboardTab] = useState('directory'); // 'directory' | 'analytics'
 
   const firstName = volunteer?.full_name ? volunteer.full_name.split(' ')[0] : 'Counselor';
 
@@ -66,34 +64,15 @@ export default function DashboardView({ onNavigateTab, onSelectStudentForCase, o
         onSyncNow={triggerSyncFlush}
       />
 
-      {/* 3. Streamlined Clean View Switcher (Directory vs Analytics) */}
+      {/* 3. Streamlined Clean Trends Analytics */}
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b border-[#E5DED4] pb-2">
           
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setDashboardTab('directory')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                dashboardTab === 'directory'
-                  ? 'bg-[#222222] text-white shadow-xs'
-                  : 'text-[#665D52] hover:text-[#1F1F1F] hover:bg-[#F4EFE6]'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" />
-              <span>{t('dashboard.camp_registry_tab', 'Camp Student Registry')} ({students.length})</span>
-            </button>
-
-            <button
-              onClick={() => setDashboardTab('analytics')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                dashboardTab === 'analytics'
-                  ? 'bg-[#222222] text-white shadow-xs'
-                  : 'text-[#665D52] hover:text-[#1F1F1F] hover:bg-[#F4EFE6]'
-              }`}
-            >
-              <BarChart3 className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5 text-sm font-bold text-[#141414] font-display">
+              <BarChart3 className="w-4 h-4 text-[#DE482B]" />
               <span>{t('dashboard.trends_tab', 'Intake & Regional Trends')}</span>
-            </button>
+            </div>
           </div>
 
           <button
@@ -105,25 +84,15 @@ export default function DashboardView({ onNavigateTab, onSelectStudentForCase, o
           </button>
         </div>
 
-        {/* Tab 1: Clean Minimal Student Directory */}
-        {dashboardTab === 'directory' ? (
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-2 sm:p-4 shadow-xs overflow-hidden">
-            <StudentDirectoryTable
-              onSelectStudentForCase={onSelectStudentForCase}
-              onLaunchGuidance={onLaunchGuidance}
-            />
+        {/* Analytics Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 animate-in fade-in duration-200">
+          <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 shadow-xs">
+            <IntakeTrendChart />
           </div>
-        ) : (
-          /* Tab 2: Clean Analytics Row */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 animate-in fade-in duration-200">
-            <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 shadow-xs">
-              <IntakeTrendChart />
-            </div>
-            <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 shadow-xs">
-              <RegionalReachChart students={students} />
-            </div>
+          <div className="bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-5 shadow-xs">
+            <RegionalReachChart students={students} />
           </div>
-        )}
+        </div>
       </div>
 
     </div>

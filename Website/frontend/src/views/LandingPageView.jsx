@@ -225,26 +225,8 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 text-left"
+          className="grid grid-cols-2 max-w-lg mx-auto gap-4 text-left"
         >
-          <div className="glass-card p-5 rounded-2xl">
-            <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
-              {t('landing.stat_students', '45,000+')}
-            </span>
-            <span className="text-xs sm:text-sm font-bold text-[#61574C]">
-              {t('landing.stat_students_label', 'Students Guided Personally')}
-            </span>
-          </div>
-
-          <div className="glass-card p-5 rounded-2xl">
-            <span className="font-display font-black text-3xl sm:text-4xl text-[#DE482B] block mb-1">
-              {t('landing.stat_camps', '3,400+')}
-            </span>
-            <span className="text-xs sm:text-sm font-bold text-[#61574C]">
-              {t('landing.stat_camps_label', 'Village Camps Conducted')}
-            </span>
-          </div>
-
           <div className="glass-card p-5 rounded-2xl">
             <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
               {t('landing.stat_langs', '4 Languages')}
@@ -255,7 +237,7 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
           </div>
 
           <div className="glass-card p-5 rounded-2xl">
-            <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
+            <span className="font-display font-black text-3xl sm:text-4xl text-[#DE482B] block mb-1">
               {t('landing.stat_free', '100% Free')}
             </span>
             <span className="text-xs sm:text-sm font-bold text-[#61574C]">
