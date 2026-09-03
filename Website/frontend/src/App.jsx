@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AdminAuthProvider } from './context/AdminAuthContext';
 import { CampOperationsProvider, useCampOperations } from './context/CampOperationsContext';
 import AppHeader from './components/layout/AppHeader';
 import SyncStatusBar from './components/layout/SyncStatusBar';
 import LandingPageView from './views/LandingPageView';
 import AuthPageView from './views/AuthPageView';
+import AdminLoginView from './views/AdminLoginView';
 import DashboardView from './views/DashboardView';
 import CampsView from './views/CampsView';
 import DirectoryView from './views/DirectoryView';
@@ -15,7 +17,7 @@ import StudentCaseDrawer from './components/students/StudentCaseDrawer';
 import VolunteerCredentialModal from './components/auth/VolunteerCredentialModal';
 
 function AppContent() {
-  // Top-level View Router: 'landing' (Default Home) | 'auth' (Full-screen Login/Signup) | 'portal' (Authenticated App)
+  // Top-level View Router: 'landing' (Default Home) | 'auth' (Volunteer Auth) | 'admin-login' (Admin Auth) | 'portal' (Authenticated App)
   const [viewMode, setViewMode] = useState('landing');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [drawerStudent, setDrawerStudent] = useState(null);
@@ -31,13 +33,23 @@ function AppContent() {
   if (viewMode === 'landing') {
     return (
       <LandingPageView
-        onEnterAuth={() => setViewMode('auth')}
+        onEnterAuth={() => setViewMode('admin-login')}
         onEnterPortal={() => setViewMode('portal')}
       />
     );
   }
 
-  // 2. Full-Screen Auth View (Login / Register)
+  // 2. Admin Login View (Supabase Auth / Demo Admin Login)
+  if (viewMode === 'admin-login') {
+    return (
+      <AdminLoginView
+        onBackToHome={() => setViewMode('landing')}
+        onLoginSuccess={() => setViewMode('portal')}
+      />
+    );
+  }
+
+  // 3. Legacy Auth View Fallback
   if (viewMode === 'auth' || !isAuthenticated) {
     return (
       <div className="relative">
@@ -52,7 +64,7 @@ function AppContent() {
     );
   }
 
-  // 3. Authenticated Volunteer Field Portal
+  // 4. Authenticated Volunteer Field Portal
   const handleLaunchGuidance = (student) => {
     setSelectedStudentForGuidance(student);
     setActiveTab('guidance');
@@ -143,11 +155,13 @@ function AppContent() {
 export default function App() {
   return (
     <LanguageProvider>
-      <AuthProvider>
-        <CampOperationsProvider>
-          <AppContent />
-        </CampOperationsProvider>
-      </AuthProvider>
+      <AdminAuthProvider>
+        <AuthProvider>
+          <CampOperationsProvider>
+            <AppContent />
+          </CampOperationsProvider>
+        </AuthProvider>
+      </AdminAuthProvider>
     </LanguageProvider>
   );
 }
