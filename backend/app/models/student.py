@@ -77,6 +77,9 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     documents: Mapped[list["StudentDocument"]] = relationship(  # noqa: F821
         back_populates="student", cascade="all, delete-orphan"
     )
+    chat_sessions: Mapped[list["ChatSession"]] = relationship(  # noqa: F821
+        back_populates="student", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Student {self.name} ({self.id})>"

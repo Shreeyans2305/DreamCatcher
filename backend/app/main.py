@@ -1,11 +1,12 @@
 """
-DreamCatcher — FastAPI Application Entry Point (Phase 2: Complete CRUD API)
+DreamCatcher — FastAPI Application Entry Point (Phase 3: AI Integration)
 
 Provides REST endpoints for:
 - Reference catalogues (languages, locations, skills, interests, institutions, organizations)
 - Students (profiles, education, skills, interests, aspirations, eligibility discovery)
 - Opportunities (scholarships, courses, entrance exams, internships, rules, eligibility evaluation)
 - Careers (career paths, pathways, requirements, skill-based matching)
+- AI Assistant (Vertex AI-powered chat, RAG, skill extraction, conversation history)
 - System health checks
 """
 from fastapi import FastAPI
@@ -23,7 +24,7 @@ app = FastAPI(
     version=settings.app_version,
     description=(
         "DreamCatcher — Multilingual AI guidance counselor for students in rural India. "
-        "Phase 2: Complete CRUD API & Deterministic Rule Engine."
+        "Phase 3: Vertex AI Integration, RAG Pipeline & Conversation History."
     ),
     docs_url="/docs",
     redoc_url="/redoc",

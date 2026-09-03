@@ -42,6 +42,9 @@ from app.models.source import Source, VerificationLog
 # RAG / Knowledge
 from app.models.document import OpportunityDocument, DocumentChunk
 
+# Chat / Conversation
+from app.models.conversation import ChatSession, ChatMessage
+
 __all__ = [
     # Localization
     "Language",
@@ -82,4 +85,7 @@ __all__ = [
     # RAG / Knowledge
     "OpportunityDocument",
     "DocumentChunk",
+    # Chat / Conversation
+    "ChatSession",
+    "ChatMessage",
 ]

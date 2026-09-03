@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../data/api_client.dart';
 import 'auth_provider.dart';
 import 'opportunities_provider.dart';
 
@@ -8,6 +9,7 @@ class ChatMessage {
   final bool isUser;
   final DateTime timestamp;
   final List<String>? actionSuggestions;
+  final List<Map<String, dynamic>>? referencedOpportunities;
 
   ChatMessage({
     required this.id,
@@ -15,37 +17,41 @@ class ChatMessage {
     required this.isUser,
     required this.timestamp,
     this.actionSuggestions,
+    this.referencedOpportunities,
   });
 }
 
 class ChatProvider extends ChangeNotifier {
+  final DreamCatcherApiClient _apiClient;
   final AuthProvider _authProvider;
   final OpportunitiesProvider _oppsProvider;
 
   final List<ChatMessage> _messages = [];
   bool _isTyping = false;
+  String? _sessionId;
 
-  ChatProvider(this._authProvider, this._oppsProvider) {
+  ChatProvider(this._apiClient, this._authProvider, this._oppsProvider) {
     _initWelcomeMessage();
   }
 
   List<ChatMessage> get messages => List.unmodifiable(_messages);
   bool get isTyping => _isTyping;
+  String? get sessionId => _sessionId;
 
   void _initWelcomeMessage() {
     final student = _authProvider.currentStudent;
-    final name = student?.name ?? 'there';
+    final name = student?.name.split(' ').first ?? 'there';
     final district = student?.location?.district ?? 'your district';
 
     final aspiration = student?.aspirations.isNotEmpty == true
         ? student!.aspirations.first.aspirationText
         : null;
 
-    String welcomeText = 'Namaste, $name! 🙏 I am your DreamCatcher AI Career Counselor.';
+    String welcomeText = 'Namaste, $name! 🙏 I am your DreamCatcher AI Career Counselor, powered by Vertex AI.';
     if (aspiration != null) {
-      welcomeText += ' I noticed your dream is to become **$aspiration**. I can help you find suitable scholarships, entrance exams, and vocational programs.';
+      welcomeText += ' I see your ambition is to become **$aspiration**. I can help you find government scholarships, free vocational courses, and entrance exams.';
     } else {
-      welcomeText += ' Tell me what career or scholarship you are exploring, or ask any question about opportunities in $district.';
+      welcomeText += ' Ask me about scholarships, admission deadlines, or courses available near $district.';
     }
 
     _messages.add(
@@ -77,32 +83,90 @@ class ChatProvider extends ChangeNotifier {
     _isTyping = true;
     notifyListeners();
 
-    // Simulate natural response latency
-    await Future.delayed(const Duration(milliseconds: 700));
+    try {
+      final student = _authProvider.currentStudent;
+      if (student != null) {
+        final res = await _apiClient.sendAssistantMessage(
+          studentId: student.id,
+          message: text.trim(),
+          language: student.preferredLanguage,
+          sessionId: _sessionId,
+        );
 
-    final reply = await _generateProfileAwareResponse(text.trim());
+        final reply = res['reply'] as String? ?? 'I am here to guide you.';
+        final suggestions = (res['suggested_actions'] as List?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            ['Show matched opportunities', 'What skills should I learn next?'];
 
-    _messages.add(
-      ChatMessage(
-        id: 'msg_${DateTime.now().millisecondsSinceEpoch + 1}',
-        text: reply,
-        isUser: false,
-        timestamp: DateTime.now(),
-        actionSuggestions: [
-          'Show matched opportunities',
-          'What skills should I learn next?',
-        ],
-      ),
-    );
+        // Track session ID for multi-turn context
+        final newSessionId = res['session_id'] as String?;
+        if (newSessionId != null) {
+          _sessionId = newSessionId;
+        }
 
-    _isTyping = false;
+        // Parse referenced opportunities
+        final refs = (res['referenced_opportunities'] as List?)
+            ?.map((e) => e as Map<String, dynamic>)
+            .toList();
+
+        _messages.add(
+          ChatMessage(
+            id: 'msg_${DateTime.now().millisecondsSinceEpoch + 1}',
+            text: reply,
+            isUser: false,
+            timestamp: DateTime.now(),
+            actionSuggestions: suggestions,
+            referencedOpportunities: refs,
+          ),
+        );
+      } else {
+        // Fallback if no student is active
+        final reply = await _generateProfileAwareResponse(text.trim());
+        _messages.add(
+          ChatMessage(
+            id: 'msg_${DateTime.now().millisecondsSinceEpoch + 1}',
+            text: reply,
+            isUser: false,
+            timestamp: DateTime.now(),
+            actionSuggestions: [
+              'Show matched opportunities',
+              'What skills should I learn next?',
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error from AI Assistant endpoint: $e. Using local reasoning.');
+      final fallbackReply = await _generateProfileAwareResponse(text.trim());
+      _messages.add(
+        ChatMessage(
+          id: 'msg_${DateTime.now().millisecondsSinceEpoch + 1}',
+          text: fallbackReply,
+          isUser: false,
+          timestamp: DateTime.now(),
+          actionSuggestions: [
+            'Which scholarships can I get?',
+            'What skills should I build next?',
+          ],
+        ),
+      );
+    } finally {
+      _isTyping = false;
+      notifyListeners();
+    }
+  }
+
+  /// Start a fresh conversation — clears messages and resets session
+  void startNewChat() {
+    _messages.clear();
+    _sessionId = null;
+    _initWelcomeMessage();
     notifyListeners();
   }
 
   // =========================================================================
-  // Profile-Aware Response Generator
-  // TODO: replace with real LLM endpoint (e.g., Vertex AI / DreamCatcher RAG stream)
-  // Structure: swap this single function with a streaming or POST call to the backend LLM service.
+  // Profile-Aware Local Fallback Response Generator
   // =========================================================================
   Future<String> _generateProfileAwareResponse(String query) async {
     final student = _authProvider.currentStudent;

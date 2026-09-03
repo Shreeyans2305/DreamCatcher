@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     app_host: str = "0.0.0.0"
     app_port: int = 8000
     app_name: str = "DreamCatcher"
-    app_version: str = "0.1.0"
+    app_version: str = "0.2.0"
 
     # Database
     database_url: str = (
@@ -30,10 +30,17 @@ class Settings(BaseSettings):
     )
 
     # pgvector — embedding dimension
-    # 1536 = OpenAI ada-002 compatible (default)
-    # 768  = BERT / sentence-transformers (768-dim)
+    # 768  = Vertex AI text-embedding-004 (default)
+    # 1536 = OpenAI ada-002 compatible
     # 384  = all-MiniLM-L6-v2
-    vector_dim: int = 1536
+    vector_dim: int = 768
+
+    # Vertex AI & Generative Models
+    use_vertex_ai: bool = True
+    gcp_project_id: str = "dreamcatcher-507515"
+    gcp_location: str = "us-central1"
+    gemini_model: str = "gemini-2.5-flash"
+    embedding_model: str = "text-embedding-004"
 
 
 @lru_cache()
