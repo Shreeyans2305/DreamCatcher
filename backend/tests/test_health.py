@@ -8,7 +8,7 @@ def test_root(client):
     assert response.status_code == 200
     data = response.json()
     assert data["project"] == "DreamCatcher"
-    assert data["phase"] == 1
+    assert data["phase"] == 2
 
 
 def test_health(client):

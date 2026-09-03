@@ -104,10 +104,10 @@ class Opportunity(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     # 1:1 specializations
-    scholarship: Mapped["Scholarship"] = relationship(back_populates="opportunity", uselist=False)  # noqa: F821
-    course: Mapped["Course"] = relationship(back_populates="opportunity", uselist=False)  # noqa: F821
-    entrance_exam: Mapped["EntranceExam"] = relationship(back_populates="opportunity", uselist=False)  # noqa: F821
-    internship: Mapped["Internship"] = relationship(back_populates="opportunity", uselist=False)  # noqa: F821
+    scholarship: Mapped["Scholarship"] = relationship(back_populates="opportunity", uselist=False, cascade="all, delete-orphan", passive_deletes=True)  # noqa: F821
+    course: Mapped["Course"] = relationship(back_populates="opportunity", uselist=False, cascade="all, delete-orphan", passive_deletes=True)  # noqa: F821
+    entrance_exam: Mapped["EntranceExam"] = relationship(back_populates="opportunity", uselist=False, cascade="all, delete-orphan", passive_deletes=True)  # noqa: F821
+    internship: Mapped["Internship"] = relationship(back_populates="opportunity", uselist=False, cascade="all, delete-orphan", passive_deletes=True)  # noqa: F821
 
     def __repr__(self) -> str:
         return f"<Opportunity [{self.type}] {self.title}>"

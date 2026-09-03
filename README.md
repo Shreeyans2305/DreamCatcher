@@ -703,7 +703,7 @@ gs://dreamcatcher-prod/students/{student_id}/documents/{doc_id}.pdf
 | Phase | What Gets Built |
 |-------|----------------|
 | **Phase 1** ✅ | Database foundation, migrations, seed data, health API |
-| Phase 2 | Complete CRUD API (FastAPI routers, schemas, repositories) |
+| **Phase 2** ✅ | Complete CRUD API (FastAPI routers, schemas, repositories) |
 | Phase 3 | Authentication & authorization (JWT, role-based access) |
 | Phase 4 | Opportunity ingestion pipeline (web scraping, PDF parsing) |
 | Phase 5 | Embedding generation & RAG pipeline |

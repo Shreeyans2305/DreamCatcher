@@ -68,7 +68,7 @@ def clear_database(db):
     db.commit()
 
 
-def seed():
+def seed(skip_students: bool = False):
     db = SessionLocal()
     try:
         print("🌱 Seeding DreamCatcher database with Rural Opportunities...")
@@ -1156,119 +1156,122 @@ def seed():
         db.flush()
 
         # ── 14. Benchmark Students ─────────────────────────────────────────
-        print("  → 14. Rural Student Personas (Priya, Arjun, Meena)")
+        if not skip_students:
+            print("  → 14. Rural Student Personas (Priya, Arjun, Meena)")
 
-        # Student 1: Priya — rural Maharashtra girl interested in tech/software
-        student_priya = Student(
-            name="Priya Shinde", date_of_birth=date(2006, 3, 15),
-            gender=Gender.FEMALE, phone="+919876543201",
-            preferred_language="mr", location_id=loc_mh_nashik_rural.id,
-            profile_completeness=0.85,
-        )
-        # Student 2: Arjun — rural UP boy interested in farming & modern agri
-        student_arjun = Student(
-            name="Arjun Yadav", date_of_birth=date(2005, 8, 22),
-            gender=Gender.MALE, phone="+919876543202",
-            preferred_language="hi", location_id=loc_up_varanasi_rural.id,
-            profile_completeness=0.75,
-        )
-        # Student 3: Meena — rural Rajasthan girl looking for fast livelihood & teaching
-        student_meena = Student(
-            name="Meena Bhati", date_of_birth=date(2007, 1, 10),
-            gender=Gender.FEMALE, phone="+919876543203",
-            preferred_language="hi", location_id=loc_rj_barmer_rural.id,
-            profile_completeness=0.70,
-        )
+            # Student 1: Priya — rural Maharashtra girl interested in tech/software
+            student_priya = Student(
+                name="Priya Shinde", date_of_birth=date(2006, 3, 15),
+                gender=Gender.FEMALE, phone="+919876543201",
+                preferred_language="mr", location_id=loc_mh_nashik_rural.id,
+                profile_completeness=0.85,
+            )
+            # Student 2: Arjun — rural UP boy interested in farming & modern agri
+            student_arjun = Student(
+                name="Arjun Yadav", date_of_birth=date(2005, 8, 22),
+                gender=Gender.MALE, phone="+919876543202",
+                preferred_language="hi", location_id=loc_up_varanasi_rural.id,
+                profile_completeness=0.75,
+            )
+            # Student 3: Meena — rural Rajasthan girl looking for fast livelihood & teaching
+            student_meena = Student(
+                name="Meena Bhati", date_of_birth=date(2007, 1, 10),
+                gender=Gender.FEMALE, phone="+919876543203",
+                preferred_language="hi", location_id=loc_rj_barmer_rural.id,
+                profile_completeness=0.70,
+            )
 
-        db.add_all([student_priya, student_arjun, student_meena])
-        db.flush()
+            db.add_all([student_priya, student_arjun, student_meena])
+            db.flush()
 
-        # Priya's Education
-        edu_priya_10 = StudentEducation(
-            student_id=student_priya.id, institution_name="Zilla Parishad High School, Pimpalgaon",
-            education_level=EducationLevel.SECONDARY, curriculum="State Board",
-            board="Maharashtra State Board", field_of_study="General",
-            start_date=date(2019, 6, 1), end_date=date(2021, 5, 31),
-            status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.95,
-        )
-        edu_priya_12 = StudentEducation(
-            student_id=student_priya.id, institution_name="Nashik Junior College",
-            education_level=EducationLevel.SENIOR_SECONDARY, curriculum="State Board",
-            board="Maharashtra State Board", field_of_study="Science (PCM)",
-            start_date=date(2021, 6, 1), status=EducationStatus.COMPLETED,
-            source=DataSource.MARKSHEET, confidence=1.0,
-        )
-        # Arjun's Education
-        edu_arjun_10 = StudentEducation(
-            student_id=student_arjun.id, institution_name="Government High School, Rampur Khas",
-            education_level=EducationLevel.SECONDARY, curriculum="State Board",
-            board="Uttar Pradesh Board", start_date=date(2019, 7, 1), end_date=date(2021, 5, 31),
-            status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
-        )
-        edu_arjun_12 = StudentEducation(
-            student_id=student_arjun.id, institution_name="Inter College, Pindra",
-            education_level=EducationLevel.SENIOR_SECONDARY, curriculum="State Board",
-            board="Uttar Pradesh Board", field_of_study="Agriculture / Biology",
-            start_date=date(2021, 7, 1), end_date=date(2023, 5, 31),
-            status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
-        )
-        # Meena's Education
-        edu_meena_10 = StudentEducation(
-            student_id=student_meena.id, institution_name="Government Secondary School, Kharchia",
-            education_level=EducationLevel.SECONDARY, curriculum="State Board",
-            board="Rajasthan Board", start_date=date(2020, 7, 1), end_date=date(2022, 5, 31),
-            status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
-        )
-        edu_meena_12 = StudentEducation(
-            student_id=student_meena.id, institution_name="Government Senior Secondary School, Chohtan",
-            education_level=EducationLevel.SENIOR_SECONDARY, curriculum="State Board",
-            board="Rajasthan Board", field_of_study="Arts",
-            start_date=date(2022, 7, 1), end_date=date(2024, 5, 31),
-            status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
-        )
+            # Priya's Education
+            edu_priya_10 = StudentEducation(
+                student_id=student_priya.id, institution_name="Zilla Parishad High School, Pimpalgaon",
+                education_level=EducationLevel.SECONDARY, curriculum="State Board",
+                board="Maharashtra State Board", field_of_study="General",
+                start_date=date(2019, 6, 1), end_date=date(2021, 5, 31),
+                status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.95,
+            )
+            edu_priya_12 = StudentEducation(
+                student_id=student_priya.id, institution_name="Nashik Junior College",
+                education_level=EducationLevel.SENIOR_SECONDARY, curriculum="State Board",
+                board="Maharashtra State Board", field_of_study="Science (PCM)",
+                start_date=date(2021, 6, 1), status=EducationStatus.COMPLETED,
+                source=DataSource.MARKSHEET, confidence=1.0,
+            )
+            # Arjun's Education
+            edu_arjun_10 = StudentEducation(
+                student_id=student_arjun.id, institution_name="Government High School, Rampur Khas",
+                education_level=EducationLevel.SECONDARY, curriculum="State Board",
+                board="Uttar Pradesh Board", start_date=date(2019, 7, 1), end_date=date(2021, 5, 31),
+                status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
+            )
+            edu_arjun_12 = StudentEducation(
+                student_id=student_arjun.id, institution_name="Inter College, Pindra",
+                education_level=EducationLevel.SENIOR_SECONDARY, curriculum="State Board",
+                board="Uttar Pradesh Board", field_of_study="Agriculture / Biology",
+                start_date=date(2021, 7, 1), end_date=date(2023, 5, 31),
+                status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
+            )
+            # Meena's Education
+            edu_meena_10 = StudentEducation(
+                student_id=student_meena.id, institution_name="Government Secondary School, Kharchia",
+                education_level=EducationLevel.SECONDARY, curriculum="State Board",
+                board="Rajasthan Board", start_date=date(2020, 7, 1), end_date=date(2022, 5, 31),
+                status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
+            )
+            edu_meena_12 = StudentEducation(
+                student_id=student_meena.id, institution_name="Government Senior Secondary School, Chohtan",
+                education_level=EducationLevel.SENIOR_SECONDARY, curriculum="State Board",
+                board="Rajasthan Board", field_of_study="Arts",
+                start_date=date(2022, 7, 1), end_date=date(2024, 5, 31),
+                status=EducationStatus.COMPLETED, source=DataSource.MARKSHEET, confidence=0.9,
+            )
 
-        db.add_all([edu_priya_10, edu_priya_12, edu_arjun_10, edu_arjun_12, edu_meena_10, edu_meena_12])
-        db.flush()
+            db.add_all([edu_priya_10, edu_priya_12, edu_arjun_10, edu_arjun_12, edu_meena_10, edu_meena_12])
+            db.flush()
 
-        # Priya's Marks
-        db.add_all([
-            StudentSubject(student_education_id=edu_priya_12.id, subject="Mathematics", marks=92, maximum_marks=100, percentage=92.0, grade="A1", source=DataSource.MARKSHEET),
-            StudentSubject(student_education_id=edu_priya_12.id, subject="Physics", marks=85, maximum_marks=100, percentage=85.0, grade="A2", source=DataSource.MARKSHEET),
-            StudentSubject(student_education_id=edu_priya_12.id, subject="Chemistry", marks=88, maximum_marks=100, percentage=88.0, grade="A1", source=DataSource.MARKSHEET),
-            StudentSubject(student_education_id=edu_arjun_12.id, subject="Agriculture", marks=84, maximum_marks=100, percentage=84.0, grade="A", source=DataSource.MARKSHEET),
-            StudentSubject(student_education_id=edu_meena_12.id, subject="Hindi Literature", marks=81, maximum_marks=100, percentage=81.0, grade="A", source=DataSource.MARKSHEET),
-        ])
-        db.flush()
+            # Priya's Marks
+            db.add_all([
+                StudentSubject(student_education_id=edu_priya_12.id, subject="Mathematics", marks=92, maximum_marks=100, percentage=92.0, grade="A1", source=DataSource.MARKSHEET),
+                StudentSubject(student_education_id=edu_priya_12.id, subject="Physics", marks=85, maximum_marks=100, percentage=85.0, grade="A2", source=DataSource.MARKSHEET),
+                StudentSubject(student_education_id=edu_priya_12.id, subject="Chemistry", marks=88, maximum_marks=100, percentage=88.0, grade="A1", source=DataSource.MARKSHEET),
+                StudentSubject(student_education_id=edu_arjun_12.id, subject="Agriculture", marks=84, maximum_marks=100, percentage=84.0, grade="A", source=DataSource.MARKSHEET),
+                StudentSubject(student_education_id=edu_meena_12.id, subject="Hindi Literature", marks=81, maximum_marks=100, percentage=81.0, grade="A", source=DataSource.MARKSHEET),
+            ])
+            db.flush()
 
-        # Student Skills
-        db.add_all([
-            StudentSkill(student_id=student_priya.id, skill_id=skill_python.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
-            StudentSkill(student_id=student_priya.id, skill_id=skill_math.id, proficiency=ProficiencyLevel.ADVANCED, source=DataSource.MARKSHEET),
-            StudentSkill(student_id=student_priya.id, skill_id=skill_computer_basic.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
-            StudentSkill(student_id=student_arjun.id, skill_id=skill_crop_mgmt.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
-            StudentSkill(student_id=student_arjun.id, skill_id=skill_communication.id, proficiency=ProficiencyLevel.BEGINNER, source=DataSource.STUDENT_REPORTED),
-            StudentSkill(student_id=student_meena.id, skill_id=skill_teaching.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
-            StudentSkill(student_id=student_meena.id, skill_id=skill_computer_basic.id, proficiency=ProficiencyLevel.BEGINNER, source=DataSource.STUDENT_REPORTED),
-        ])
-        db.flush()
+            # Student Skills
+            db.add_all([
+                StudentSkill(student_id=student_priya.id, skill_id=skill_python.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
+                StudentSkill(student_id=student_priya.id, skill_id=skill_math.id, proficiency=ProficiencyLevel.ADVANCED, source=DataSource.MARKSHEET),
+                StudentSkill(student_id=student_priya.id, skill_id=skill_computer_basic.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
+                StudentSkill(student_id=student_arjun.id, skill_id=skill_crop_mgmt.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
+                StudentSkill(student_id=student_arjun.id, skill_id=skill_communication.id, proficiency=ProficiencyLevel.BEGINNER, source=DataSource.STUDENT_REPORTED),
+                StudentSkill(student_id=student_meena.id, skill_id=skill_teaching.id, proficiency=ProficiencyLevel.INTERMEDIATE, source=DataSource.STUDENT_REPORTED),
+                StudentSkill(student_id=student_meena.id, skill_id=skill_computer_basic.id, proficiency=ProficiencyLevel.BEGINNER, source=DataSource.STUDENT_REPORTED),
+            ])
+            db.flush()
 
-        # Student Interests
-        db.add_all([
-            StudentInterest(student_id=student_priya.id, interest_id=int_computers.id, strength=0.95, source=DataSource.STUDENT_REPORTED),
-            StudentInterest(student_id=student_priya.id, interest_id=int_science.id, strength=0.85, source=DataSource.STUDENT_REPORTED),
-            StudentInterest(student_id=student_arjun.id, interest_id=int_agriculture.id, strength=0.98, source=DataSource.STUDENT_REPORTED),
-            StudentInterest(student_id=student_meena.id, interest_id=int_teaching.id, strength=0.90, source=DataSource.STUDENT_REPORTED),
-            StudentInterest(student_id=student_meena.id, interest_id=int_healthcare.id, strength=0.75, source=DataSource.STUDENT_REPORTED),
-        ])
-        db.flush()
+            # Student Interests
+            db.add_all([
+                StudentInterest(student_id=student_priya.id, interest_id=int_computers.id, strength=0.95, source=DataSource.STUDENT_REPORTED),
+                StudentInterest(student_id=student_priya.id, interest_id=int_science.id, strength=0.85, source=DataSource.STUDENT_REPORTED),
+                StudentInterest(student_id=student_arjun.id, interest_id=int_agriculture.id, strength=0.98, source=DataSource.STUDENT_REPORTED),
+                StudentInterest(student_id=student_meena.id, interest_id=int_teaching.id, strength=0.90, source=DataSource.STUDENT_REPORTED),
+                StudentInterest(student_id=student_meena.id, interest_id=int_healthcare.id, strength=0.75, source=DataSource.STUDENT_REPORTED),
+            ])
+            db.flush()
 
-        # Student Aspirations
-        db.add_all([
-            StudentAspiration(student_id=student_priya.id, priority=1, aspiration_text="I want to become a software engineer or data specialist, study at a good college with scholarship support.", target_career_id=career_swe.id, source=DataSource.STUDENT_REPORTED),
-            StudentAspiration(student_id=student_arjun.id, priority=1, aspiration_text="I want to pursue B.Sc. Agriculture, become an Agricultural Extension Officer and help farmers in our district improve crop yields.", target_career_id=career_agri_ext.id, source=DataSource.STUDENT_REPORTED),
-            StudentAspiration(student_id=student_meena.id, priority=1, aspiration_text="Main D.El.Ed karke gaon ke primary school mein teacher banna chahti hoon taaki ladkiyon ko padha sakun.", target_career_id=career_teacher.id, source=DataSource.STUDENT_REPORTED),
-        ])
-        db.flush()
+            # Student Aspirations
+            db.add_all([
+                StudentAspiration(student_id=student_priya.id, priority=1, aspiration_text="I want to become a software engineer or data specialist, study at a good college with scholarship support.", target_career_id=career_swe.id, source=DataSource.STUDENT_REPORTED),
+                StudentAspiration(student_id=student_arjun.id, priority=1, aspiration_text="I want to pursue B.Sc. Agriculture, become an Agricultural Extension Officer and help farmers in our district improve crop yields.", target_career_id=career_agri_ext.id, source=DataSource.STUDENT_REPORTED),
+                StudentAspiration(student_id=student_meena.id, priority=1, aspiration_text="Main D.El.Ed karke gaon ke primary school mein teacher banna chahti hoon taaki ladkiyon ko padha sakun.", target_career_id=career_teacher.id, source=DataSource.STUDENT_REPORTED),
+            ])
+            db.flush()
+        else:
+            print("  ⏩ Skipping student personas as requested (--skip-students)")
 
         db.commit()
         print("\n✅ Seeding complete!")
@@ -1284,7 +1287,10 @@ def seed():
         print(f"   Courses      : {len(course_opps)} (ITI Trades, Polytechnics, B.Sc. Agri, ANM, GNM, D.El.Ed, IGNOU)")
         print(f"   Exams        : {len(exam_opps)} (JNVST 75% rural quota, ICAR AIEEA, JEE + SATHEE, NEET, SSC GD)")
         print(f"   Internships  : {len(internship_opps)} (SBI Youth for India, Gandhi Fellowship, PRADAN, NAPS, RAWE)")
-        print(f"   Students     : 3 rural personas (Priya, Arjun, Meena)")
+        if not skip_students:
+            print(f"   Students     : 3 rural personas (Priya, Arjun, Meena)")
+        else:
+            print(f"   Students     : Skipped (0 students seeded)")
 
     except Exception as e:
         db.rollback()
@@ -1295,4 +1301,6 @@ def seed():
 
 
 if __name__ == "__main__":
-    seed()
+    import sys
+    skip = "--skip-students" in sys.argv
+    seed(skip_students=skip)
