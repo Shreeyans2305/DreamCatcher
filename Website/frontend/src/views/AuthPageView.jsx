@@ -1,375 +1,473 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useAdminAuth } from '../context/AdminAuthContext';
+import { isSupabaseConfigured } from '../services/supabaseClient';
+import { generateGovernmentId, generateTemporaryPassword, PREAPPROVED_NGOS } from '../utils/credentialGenerator';
+import { sendAdminCredentialEmail } from '../services/emailService';
 import DreamCatcherWind from '../components/ui/DreamCatcherWind';
-import DreamCatcherIcon from '../components/ui/DreamCatcherIcon';
 import { 
-  Mail, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  User, 
-  Globe, 
-  Zap, 
-  Sparkles,
-  Compass
+  Compass, Mail, Lock, User, Building, MapPin, Phone, 
+  ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, HeartHandshake, Key, Copy
 } from 'lucide-react';
 
 export default function AuthPageView({ onLoginSuccess }) {
-  const { login, register } = useAuth();
-  const { t, uiLanguage, setLanguage, languageOptions } = useLanguage();
+  const { login: legacyLogin, register: legacyRegister } = useAuth();
+  const { signIn: supabaseSignIn, signUp: supabaseSignUp, loading: adminLoading } = useAdminAuth();
 
   const [mode, setMode] = useState('login'); // 'login' | 'register'
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [issuedCredentials, setIssuedCredentials] = useState(null);
+  const [copied, setCopied] = useState(false);
 
-  // Login form state
-  const [loginEmail, setLoginEmail] = useState('DC-VOL-2026-00042');
-  const [loginPassword, setLoginPassword] = useState('password123');
-
-  // Register form state
-  const [registerData, setRegisterData] = useState({
-    full_name: '',
-    role_type: 'teacher',
-    role_label: 'Government School Teacher',
-    organization_name: '',
-    phone_number: '',
-    district: 'Satara',
-    state: 'Maharashtra',
-    preferred_ui_language: 'mr',
+  // Login Form Data
+  const [loginData, setLoginData] = useState({
+    email_or_phone: '',
     password: ''
   });
 
-  const roleOptions = [
-    { value: 'teacher', label: t('auth.role_teacher') || 'Government School Teacher' },
-    { value: 'govt_officer', label: t('auth.role_govt') || 'Block / Taluka Education Officer' },
-    { value: 'ngo_staff', label: t('auth.role_ngo') || 'Field Volunteer / Counselor' }
-  ];
+  // Register Form Data
+  const [registerData, setRegisterData] = useState({
+    full_name: '',
+    email: '',
+    phone_number: '',
+    role_type: 'government_officer', // 'government_officer' | 'ngo_volunteer' | 'school_teacher'
+    ngoCode: 'PRATHAM',
+    customNgoName: '',
+    organization_name: 'School Education Department, MH',
+    district: 'Satara',
+    state: 'Maharashtra',
+    password: '',
+    autoGeneratePassword: true
+  });
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    login(loginEmail, loginPassword);
-    if (onLoginSuccess) onLoginSuccess();
-  };
+  // Live Auto-Generated ID Preview
+  const [liveGeneratedId, setLiveGeneratedId] = useState('');
 
-  const handleQuickDemoLogin = () => {
-    login('DC-VOL-2026-00042', 'password123');
-    if (onLoginSuccess) onLoginSuccess();
-  };
-
-  const handleRegisterSubmit = (e) => {
-    e.preventDefault();
-    const selectedRole = roleOptions.find(r => r.value === registerData.role_type);
-    register({
-      ...registerData,
-      role_label: selectedRole?.label || 'Volunteer'
+  useEffect(() => {
+    const generated = generateGovernmentId({
+      entityType: registerData.role_type,
+      ngoCode: registerData.ngoCode,
+      customNgoName: registerData.customNgoName,
+      state: registerData.state,
+      district: registerData.district
     });
-    if (onLoginSuccess) onLoginSuccess();
+    setLiveGeneratedId(generated);
+  }, [registerData.role_type, registerData.ngoCode, registerData.customNgoName, registerData.state, registerData.district]);
+
+  const handleRoleChange = (roleVal) => {
+    setRegisterData(prev => {
+      let org = prev.organization_name;
+      if (roleVal === 'ngo_volunteer') org = 'Pratham Education Foundation';
+      else if (roleVal === 'school_teacher') org = 'Zilla Parishad High School';
+      else org = 'School Education Department, MH';
+      return { ...prev, role_type: roleVal, organization_name: org };
+    });
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setIsSubmitting(true);
+
+    try {
+      if (isSupabaseConfigured()) {
+        await supabaseSignIn(loginData.email_or_phone, loginData.password);
+      }
+      legacyLogin(loginData.email_or_phone, loginData.password);
+      if (onLoginSuccess) onLoginSuccess();
+    } catch (err) {
+      setErrorMessage(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setIsSubmitting(true);
+
+    try {
+      if (!registerData.full_name || !registerData.email) {
+        throw new Error('Please enter your full name and email.');
+      }
+
+      const officialBadgeId = liveGeneratedId;
+      const passwordToUse = registerData.autoGeneratePassword
+        ? generateTemporaryPassword()
+        : registerData.password;
+
+      if (!passwordToUse || passwordToUse.length < 6) {
+        throw new Error('Password must be at least 6 characters.');
+      }
+
+      if (isSupabaseConfigured()) {
+        await supabaseSignUp({
+          email: registerData.email,
+          password: passwordToUse,
+          government_id: officialBadgeId,
+          name: registerData.full_name,
+          mobile_number: registerData.phone_number || '9876543210',
+          organization_name: registerData.organization_name,
+          district: registerData.district,
+          state: registerData.state
+        });
+      } else {
+        await legacyRegister({
+          ...registerData,
+          government_id: officialBadgeId,
+          password: passwordToUse
+        });
+      }
+
+      // Dispatch credential email
+      await sendAdminCredentialEmail({
+        email: registerData.email,
+        name: registerData.full_name,
+        government_id: officialBadgeId,
+        temp_password: passwordToUse,
+        district: registerData.district,
+        state: registerData.state,
+        entityType: registerData.role_type,
+        organization_name: registerData.organization_name
+      });
+
+      // Show credentials overlay modal
+      setIssuedCredentials({
+        badgeId: officialBadgeId,
+        password: passwordToUse,
+        email: registerData.email,
+        name: registerData.full_name
+      });
+
+    } catch (err) {
+      setErrorMessage(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="min-h-screen bg-[#EBDDD9] text-[#1C1C1C] flex items-center justify-center p-3 sm:p-6 lg:p-10 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#EFEADF] text-[#222222] font-indic selection:bg-[#3D2123] selection:text-white flex items-center justify-center p-3 sm:p-6 lg:p-10 relative overflow-hidden">
       
-      {/* Windy atmosphere with floating feathers drifting across the canvas */}
-      <DreamCatcherWind showDreamcatchers={false} featherCount={18} windSpeed={1.1} opacity={0.7} />
+      {/* Background Subtle Accent Watermarks */}
+      <div className="absolute top-10 left-10 w-72 h-72 bg-[#E3D9CA]/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#D5CCBD]/30 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Main Authentication Card */}
-      <div className="relative z-10 w-full max-w-5xl bg-[#F4EFE6] rounded-[28px] sm:rounded-[32px] shadow-[0_24px_60px_rgba(80,50,40,0.14)] border border-[#DECBC7] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
+      {/* Main Split-Screen Canvas Card */}
+      <div className="w-full max-w-5xl bg-[#F4EFE6] border border-[#DECBC7] rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 relative z-10 my-auto">
         
         {/* ========================================================= */}
-        {/* LEFT COLUMN: AUTHENTICATION FORM (Warm Linen / Rice Paper)*/}
+        {/* LEFT COLUMN: AUTHENTICATION FORM (JANAK UI)               */}
         {/* ========================================================= */}
-        <div className="lg:col-span-6 p-7 sm:p-10 lg:p-14 flex flex-col justify-between bg-[#F4EFE6] z-10">
+        <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-between relative bg-[#F4EFE6]">
           
           <div>
-            {/* Top Bar: DreamCatcher Logo & Minimal Language Switcher */}
-            <div className="flex items-center justify-between mb-8 sm:mb-10">
+            {/* Top Brand Pill Header */}
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#161616] text-[#FAF7F2] flex items-center justify-center p-1 shadow-sm">
-                  <DreamCatcherIcon className="w-5 h-5 text-[#FAF7F2]" />
+                <div className="w-9 h-9 rounded-xl bg-[#222222] text-[#F4EFE6] flex items-center justify-center font-bold shadow-sm">
+                  <Compass className="w-5 h-5 text-[#F4EFE6]" />
                 </div>
-                <span className="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-[#141414]">
-                  DreamCatcher
-                </span>
+                <div>
+                  <span className="font-serif-zen text-base font-bold text-[#1F1F1F] block leading-none">
+                    DreamCatcher
+                  </span>
+                  <span className="text-[10px] text-[#6B6256] uppercase tracking-wider font-semibold">
+                    Field Officer Portal
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center bg-[#ECE4D8] border border-[#DDD3C5] rounded-full px-2.5 py-1 text-xs mr-6">
-                <Globe className="w-3 h-3 text-[#7A6F62] mr-1.5 shrink-0" />
-                <select
-                  value={uiLanguage}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  aria-label="Portal Language"
-                  className="bg-transparent text-[#2D2823] font-bold text-[11px] cursor-pointer focus:outline-none uppercase"
-                >
-                  {languageOptions.map(opt => (
-                    <option key={opt.code} value={opt.code} className="text-[#1F1F1F] bg-[#F4EFE6]">
-                      {opt.code.toUpperCase()}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <span className="text-[10px] bg-[#E3D9CA] text-[#38332C] px-2.5 py-1 rounded-full font-bold border border-[#D5CCBD]">
+                {isSupabaseConfigured() ? 'Live Supabase' : 'Offline Sandbox'}
+              </span>
             </div>
 
-            {/* ===================================================== */}
-            {/* SIGN IN VIEW                                          */}
-            {/* ===================================================== */}
-            {mode === 'login' ? (
-              <div className="animate-in fade-in duration-300">
-                {/* Headers */}
-                <h1 className="font-display font-black text-3xl sm:text-4xl text-[#141414] tracking-tight mb-2">
-                  Welcome back!
-                </h1>
-                <p className="text-sm sm:text-base text-[#5C554B] font-medium mb-8">
-                  Where every village dream is caught and guided.
-                </p>
+            {/* Title & Description */}
+            <div className="mb-6">
+              <h2 className="font-serif-zen text-2xl sm:text-3xl font-bold text-[#1F1F1F] tracking-tight">
+                {mode === 'login' ? 'Officer & Volunteer Sign In' : 'Register Official Credentials'}
+              </h2>
+              <p className="text-xs sm:text-sm text-[#5C5245] mt-1">
+                {mode === 'login' 
+                  ? 'Access student records, camp triaging, and AI guidance'
+                  : 'Provision official Govt Officer, NGO Volunteer, or Teacher Badge'}
+              </p>
+            </div>
 
-                <form onSubmit={handleLoginSubmit} className="space-y-4">
-                  {/* Email / ID Field */}
+            {/* Issued Credentials Overlay (Post Signup) */}
+            {issuedCredentials ? (
+              <div className="bg-white border-2 border-emerald-600/40 rounded-2xl p-5 shadow-lg space-y-4 animate-in fade-in zoom-in duration-300">
+                <div className="flex items-center gap-2.5 text-emerald-800">
+                  <CheckCircle2 className="w-6 h-6 shrink-0 text-emerald-600" />
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-[#524B41] mb-1.5">
-                      Email or Volunteer ID
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8C8276]">
-                        <Mail className="w-4 h-4" />
-                      </div>
-                      <input
-                        type="text"
-                        required
-                        value={loginEmail}
-                        onChange={(e) => setLoginEmail(e.target.value)}
-                        placeholder="Enter your email or Volunteer ID"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-transparent border border-[#D5CCBD] rounded-[6px] text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
-                      />
-                    </div>
+                    <h3 className="text-sm font-extrabold font-serif-zen">Credentials Provisioned!</h3>
+                    <p className="text-xs text-neutral-600">Email sent to <strong>{issuedCredentials.email}</strong></p>
                   </div>
+                </div>
 
-                  {/* Password Field */}
-                  <div>
-                    <label className="block font-serif-zen text-sm font-medium text-[#38332C] mb-1.5">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8C8276]">
-                        <Lock className="w-4 h-4" />
-                      </div>
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        required
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        placeholder="•••••"
-                        className="w-full pl-9 pr-9 py-2.5 bg-transparent border border-[#D5CCBD] rounded-[6px] text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#8C8276] hover:text-[#222222] cursor-pointer"
-                        aria-label="Toggle password visibility"
-                      >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
+                <div className="bg-[#F8F5EE] border border-[#DECBC7] rounded-xl p-3.5 space-y-2 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-[#5C5245]">Official Badge ID:</span>
+                    <span className="font-mono font-extrabold text-[#A83E28]">{issuedCredentials.badgeId}</span>
                   </div>
+                  <div className="flex justify-between items-center border-t border-[#DECBC7]/60 pt-2">
+                    <span className="font-bold text-[#5C5245]">Temporary Password:</span>
+                    <span className="font-mono font-extrabold text-[#222222]">{issuedCredentials.password}</span>
+                  </div>
+                </div>
 
-                  {/* Remember Me & Forgot Password */}
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <label className="flex items-center gap-2 cursor-pointer text-[#6B6256] select-none hover:text-[#1F1F1F]">
-                      <input
-                        type="checkbox"
-                        checked={rememberMe}
-                        onChange={(e) => setRememberMe(e.target.checked)}
-                        className="w-3.5 h-3.5 rounded-[3px] border-[#C5BBAA] text-[#222222] focus:ring-0 cursor-pointer accent-[#222222]"
-                      />
-                      <span>Remember me</span>
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => alert('Demo password is: password123')}
-                      className="text-[#6B6256] hover:text-[#1F1F1F] underline underline-offset-2 transition-colors cursor-pointer"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(`Badge ID: ${issuedCredentials.badgeId}\nPassword: ${issuedCredentials.password}`)}
+                    className="flex-1 py-2 bg-[#F4EFE6] border border-[#D5CCBD] text-[#222222] font-bold text-xs rounded-lg flex items-center justify-center gap-1 hover:bg-[#E3D9CA] cursor-pointer"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>{copied ? 'Copied!' : 'Copy Info'}</span>
+                  </button>
 
-                  {/* Primary Dark Button: Log in */}
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-[6px] text-sm font-medium tracking-wide transition-all shadow-xs active:scale-[0.99] cursor-pointer"
-                    >
-                      Log in
-                    </button>
-                  </div>
-
-                  {/* One-Click Quick Demo Pill */}
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      onClick={handleQuickDemoLogin}
-                      className="w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-[#D5CCBD] hover:border-[#222222] rounded-[6px] text-xs text-[#524B43] hover:text-[#1F1F1F] transition-all bg-white/20 hover:bg-white/50 cursor-pointer"
-                    >
-                      <Zap className="w-3.5 h-3.5 text-[#C49F5A]" />
-                      <span>Quick Demo Sign In (Anand Kulkarni, Satara)</span>
-                    </button>
-                  </div>
-                </form>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginData({ email_or_phone: issuedCredentials.email, password: issuedCredentials.password });
+                      setIssuedCredentials(null);
+                      setMode('login');
+                    }}
+                    className="flex-1 py-2 bg-[#222222] hover:bg-[#111111] text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1 cursor-pointer shadow-xs"
+                  >
+                    <span>Log in now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             ) : (
-              /* ===================================================== */
-              /* SIGN UP / REGISTRATION VIEW                           */
-              /* ===================================================== */
-              <div className="animate-in fade-in duration-300">
-                <h1 className="font-serif-zen text-3xl sm:text-4xl text-[#1F1F1F] font-medium tracking-tight mb-2">
-                  Begin your journey.
-                </h1>
-                <p className="font-serif-zen text-sm sm:text-base text-[#6B6256] italic mb-6">
-                  Join our national circle of rural counselors.
-                </p>
+              <>
+                {/* Error Banner */}
+                {errorMessage && (
+                  <div className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-xl text-xs flex items-center gap-2 font-medium">
+                    <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
 
-                <form onSubmit={handleRegisterSubmit} className="space-y-3">
-                  <div>
-                    <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8C8276]">
-                        <User className="w-3.5 h-3.5" />
+                {/* 1. LOGIN FORM */}
+                {mode === 'login' ? (
+                  <form onSubmit={handleLoginSubmit} className="space-y-4">
+                    <div>
+                      <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                        Email Address or Badge ID
+                      </label>
+                      <div className="relative">
+                        <Mail className="w-4 h-4 text-[#8C8275] absolute left-3 top-2.5" />
+                        <input
+                          type="text"
+                          required
+                          value={loginData.email_or_phone}
+                          onChange={(e) => setLoginData({ ...loginData, email_or_phone: e.target.value })}
+                          placeholder="anand.kulkarni@gov.in / GOV-MH-SAT-2026-0842"
+                          className="w-full pl-9 pr-3.5 py-2.5 bg-transparent border border-[#D5CCBD] rounded-xl text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all font-indic"
+                        />
                       </div>
+                    </div>
+
+                    <div>
+                      <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                        Password
+                      </label>
+                      <div className="relative">
+                        <Lock className="w-4 h-4 text-[#8C8275] absolute left-3 top-2.5" />
+                        <input
+                          type="password"
+                          required
+                          value={loginData.password}
+                          onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                          placeholder="••••••••"
+                          className="w-full pl-9 pr-3.5 py-2.5 bg-transparent border border-[#D5CCBD] rounded-xl text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all font-indic"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || adminLoading}
+                      className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 mt-2 font-indic"
+                    >
+                      <span>{isSubmitting ? 'Authenticating...' : 'Sign In to Portal'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </form>
+                ) : (
+                  /* 2. REGISTER FORM */
+                  <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
+                    
+                    {/* Organization Role Selector */}
+                    <div>
+                      <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                        Select Role / Category *
+                      </label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleRoleChange('government_officer')}
+                          className={`py-2 px-1 rounded-lg text-xs font-bold border transition-all cursor-pointer text-center ${
+                            registerData.role_type === 'government_officer'
+                              ? 'bg-[#222222] text-white border-[#222222] shadow-xs'
+                              : 'bg-transparent border-[#D5CCBD] text-[#38332C] hover:bg-white/50'
+                          }`}
+                        >
+                          Govt Officer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleRoleChange('ngo_volunteer')}
+                          className={`py-2 px-1 rounded-lg text-xs font-bold border transition-all cursor-pointer text-center ${
+                            registerData.role_type === 'ngo_volunteer'
+                              ? 'bg-[#222222] text-white border-[#222222] shadow-xs'
+                              : 'bg-transparent border-[#D5CCBD] text-[#38332C] hover:bg-white/50'
+                          }`}
+                        >
+                          NGO Volunteer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleRoleChange('school_teacher')}
+                          className={`py-2 px-1 rounded-lg text-xs font-bold border transition-all cursor-pointer text-center ${
+                            registerData.role_type === 'school_teacher'
+                              ? 'bg-[#222222] text-white border-[#222222] shadow-xs'
+                              : 'bg-transparent border-[#D5CCBD] text-[#38332C] hover:bg-white/50'
+                          }`}
+                        >
+                          ZP Teacher
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* NGO Partner Select if NGO Volunteer */}
+                    {registerData.role_type === 'ngo_volunteer' && (
+                      <div>
+                        <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                          Select Partner NGO *
+                        </label>
+                        <select
+                          value={registerData.ngoCode}
+                          onChange={(e) => setRegisterData({ ...registerData, ngoCode: e.target.value })}
+                          className="w-full px-3 py-2 bg-white/70 border border-[#D5CCBD] rounded-xl text-xs text-[#1F1F1F] focus:outline-none focus:border-[#222222] cursor-pointer"
+                        >
+                          {PREAPPROVED_NGOS.map(n => (
+                            <option key={n.id} value={n.id}>{n.name} ({n.id})</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Live Generated Badge Preview Banner */}
+                    <div className="p-2.5 bg-white/70 border border-[#DECBC7] rounded-xl flex items-center justify-between text-xs">
+                      <span className="font-bold text-[#5C5245]">Auto Badge ID:</span>
+                      <span className="font-mono font-extrabold text-[#A83E28]">{liveGeneratedId}</span>
+                    </div>
+
+                    {/* Full Name */}
+                    <div>
+                      <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                        Full Name *
+                      </label>
                       <input
                         type="text"
                         required
                         value={registerData.full_name}
                         onChange={(e) => setRegisterData({ ...registerData, full_name: e.target.value })}
-                        placeholder="e.g. Ramesh Govind Patil"
-                        className="w-full pl-9 pr-3.5 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
+                        placeholder="Anand Kulkarni"
+                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-xl text-xs text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40"
                       />
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
-                      Role / Department
-                    </label>
-                    <select
-                      value={registerData.role_type}
-                      onChange={(e) => setRegisterData({ ...registerData, role_type: e.target.value })}
-                      className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all cursor-pointer"
-                    >
-                      {roleOptions.map(r => (
-                        <option key={r.value} value={r.value} className="bg-[#F4EFE6] text-[#1F1F1F]">
-                          {r.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                    {/* Email & Mobile */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <div>
+                        <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={registerData.email}
+                          onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                          placeholder="officer@gov.in"
+                          className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-xl text-xs text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-serif-zen text-xs font-semibold text-[#38332C] mb-1">
+                          District *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={registerData.district}
+                          onChange={(e) => setRegisterData({ ...registerData, district: e.target.value })}
+                          placeholder="Satara"
+                          className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-xl text-xs text-[#1F1F1F] focus:outline-none focus:border-[#222222] focus:bg-white/40"
+                        />
+                      </div>
+                    </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div>
-                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
-                        Organization / School
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={registerData.organization_name}
-                        onChange={(e) => setRegisterData({ ...registerData, organization_name: e.target.value })}
-                        placeholder="ZP High School"
-                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
-                        District
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={registerData.district}
-                        onChange={(e) => setRegisterData({ ...registerData, district: e.target.value })}
-                        placeholder="e.g. Satara"
-                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div>
-                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
-                        Mobile Number
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        value={registerData.phone_number}
-                        onChange={(e) => setRegisterData({ ...registerData, phone_number: e.target.value })}
-                        placeholder="10-digit mobile"
-                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-serif-zen text-xs font-medium text-[#38332C] mb-1">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        required
-                        value={registerData.password}
-                        onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                        placeholder="••••••••"
-                        className="w-full px-3 py-2 bg-transparent border border-[#D5CCBD] rounded-[6px] text-xs sm:text-sm text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-[6px] text-sm font-medium tracking-wide transition-all shadow-xs active:scale-[0.99] cursor-pointer"
+                      disabled={isSubmitting || adminLoading}
+                      className="w-full bg-[#222222] hover:bg-[#111111] text-white py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md cursor-pointer mt-2"
                     >
-                      Create account
+                      {isSubmitting ? 'Provisioning...' : 'Provision Badge & Send Email'}
                     </button>
-                  </div>
-                </form>
-              </div>
+                  </form>
+                )}
+              </>
             )}
           </div>
 
-          {/* Thin Hairline Divider & Bottom Mode Switcher */}
-          <div className="mt-8 pt-4 border-t border-[#E3D9CA] text-xs text-[#6B6256] flex items-center justify-between">
+          {/* Mode Switcher Footer */}
+          <div className="mt-6 pt-4 border-t border-[#E3D9CA] text-xs text-[#6B6256] flex items-center justify-between">
             {mode === 'login' ? (
               <p>
-                Don't have an account?{' '}
+                Need official admin credentials?{' '}
                 <button
                   type="button"
                   onClick={() => setMode('register')}
                   className="font-semibold text-[#1F1F1F] hover:underline cursor-pointer ml-1"
                 >
-                  Sign up
+                  Register Badge
                 </button>
               </p>
             ) : (
               <p>
-                Already have an account?{' '}
+                Already have credentials?{' '}
                 <button
                   type="button"
                   onClick={() => setMode('login')}
                   className="font-semibold text-[#1F1F1F] hover:underline cursor-pointer ml-1"
                 >
-                  Log in
+                  Sign in
                 </button>
               </p>
             )}
 
-            <span className="text-[11px] text-[#A39B8E] hidden sm:inline">
-              Encrypted & Offline-Ready
+            <span className="text-[11px] text-[#A39B8E]">
+              Supabase Auth & RLS
             </span>
           </div>
 
         </div>
 
         {/* ========================================================= */}
-        {/* RIGHT COLUMN: DREAMCATCHER WATERCOLOR ARTWORK & WIND      */}
+        {/* RIGHT COLUMN: JANAK'S WATERCOLOR ARTWORK & WIND FEATHERS  */}
         {/* ========================================================= */}
         <div className="hidden lg:block lg:col-span-6 relative min-h-[550px] overflow-hidden">
           {/* Main Watercolor Artwork Image */}

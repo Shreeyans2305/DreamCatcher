@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { AdminAuthProvider } from './context/AdminAuthContext';
+import { AdminAuthProvider, useAdminAuth } from './context/AdminAuthContext';
 import { CampOperationsProvider, useCampOperations } from './context/CampOperationsContext';
 import AppHeader from './components/layout/AppHeader';
 import SyncStatusBar from './components/layout/SyncStatusBar';
 import LandingPageView from './views/LandingPageView';
 import AuthPageView from './views/AuthPageView';
-import AdminLoginView from './views/AdminLoginView';
 import DashboardView from './views/DashboardView';
 import CampsView from './views/CampsView';
 import DirectoryView from './views/DirectoryView';
@@ -17,12 +16,14 @@ import StudentCaseDrawer from './components/students/StudentCaseDrawer';
 import VolunteerCredentialModal from './components/auth/VolunteerCredentialModal';
 
 function AppContent() {
-  // Top-level View Router: 'landing' (Default Home) | 'auth' (Volunteer Auth) | 'admin-login' (Admin Auth) | 'portal' (Authenticated App)
+  // Top-level View Router: 'landing' (Default Home) | 'auth' (Volunteer Auth View) | 'portal' (Authenticated App)
   const [viewMode, setViewMode] = useState('landing');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [drawerStudent, setDrawerStudent] = useState(null);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated: isVolunteerAuth } = useAuth();
+  const { isAuthenticated: isAdminAuth } = useAdminAuth();
+  const isAuthenticated = isVolunteerAuth || isAdminAuth;
   const { 
     selectedStudentForGuidance, 
     setSelectedStudentForGuidance,
@@ -33,23 +34,13 @@ function AppContent() {
   if (viewMode === 'landing') {
     return (
       <LandingPageView
-        onEnterAuth={() => setViewMode('admin-login')}
+        onEnterAuth={() => setViewMode('auth')}
         onEnterPortal={() => setViewMode('portal')}
       />
     );
   }
 
-  // 2. Admin Login View (Supabase Auth / Demo Admin Login)
-  if (viewMode === 'admin-login') {
-    return (
-      <AdminLoginView
-        onBackToHome={() => setViewMode('landing')}
-        onLoginSuccess={() => setViewMode('portal')}
-      />
-    );
-  }
-
-  // 3. Legacy Auth View Fallback
+  // 2. Janak's Restored Split-Screen Auth View (Login / Register)
   if (viewMode === 'auth' || !isAuthenticated) {
     return (
       <div className="relative">
@@ -64,7 +55,7 @@ function AppContent() {
     );
   }
 
-  // 4. Authenticated Volunteer Field Portal
+  // 3. Authenticated Volunteer Field Portal
   const handleLaunchGuidance = (student) => {
     setSelectedStudentForGuidance(student);
     setActiveTab('guidance');
@@ -144,7 +135,7 @@ function AppContent() {
       <footer className="bg-white border-t border-black/[0.04] py-4 text-center text-xs text-neutral-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>DreamCatcher — Multilingual Public AI Career Guidance Field Platform</span>
-          <span className="text-neutral-500 font-medium">Zero-Latency Offline Field Storage</span>
+          <span className="text-neutral-400">Offline-Ready PWA • UX4G Indic Design Standard</span>
         </div>
       </footer>
 
