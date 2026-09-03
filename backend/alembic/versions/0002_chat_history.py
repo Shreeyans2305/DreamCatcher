@@ -10,7 +10,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = "0002_chat_history"
-down_revision = "0001_initial_schema"
+down_revision = "0001"
 branch_labels = None
 depends_on = None
 
@@ -27,14 +27,25 @@ def upgrade() -> None:
     )
 
     # Message role enum
-    op.execute("CREATE TYPE message_role_enum AS ENUM ('user', 'assistant', 'system')")
+    op.execute("""
+        DO $$ BEGIN
+            CREATE TYPE message_role_enum AS ENUM ('user', 'assistant', 'system');
+        EXCEPTION WHEN duplicate_object THEN null;
+        END $$;
+    """)
 
     # Chat messages table
     op.create_table(
         "chat_messages",
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True, server_default=sa.text("gen_random_uuid()")),
         sa.Column("session_id", postgresql.UUID(as_uuid=True), sa.ForeignKey("chat_sessions.id", ondelete="CASCADE"), nullable=False, index=True),
-        sa.Column("role", sa.Enum("user", "assistant", "system", name="message_role_enum", create_type=False), nullable=False),
+        sa.Column(
+            "role",
+            postgresql.ENUM(
+                "user", "assistant", "system", name="message_role_enum", create_type=False
+            ),
+            nullable=False,
+        ),
         sa.Column("content", sa.Text(), nullable=False),
         sa.Column("metadata", postgresql.JSONB(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),

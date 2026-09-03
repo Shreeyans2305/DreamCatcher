@@ -82,7 +82,7 @@ class AuthProvider extends ChangeNotifier {
       } else {
         // Seamlessly auto-connect to verified student Sunil Murmu
         try {
-          _currentStudent = await _apiClient.getStudent('aaf699d4-fccd-4faf-9fef-695f5804aa43');
+          _currentStudent = await _apiClient.getStudent('f8767ba0-fa95-4c4c-8af0-f745b9180a47');
           if (_currentStudent != null) {
             _parseDemographicsFromStudent(_currentStudent!);
             await prefs.setString(_prefStudentIdKey, _currentStudent!.id);

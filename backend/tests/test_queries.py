@@ -160,11 +160,11 @@ def test_q11_get_opportunity_documents(db):
 
 
 def test_q12_vector_search(db):
-    """Q12: pgvector similarity search — validates schema, no real embeddings yet."""
+    """Q12: pgvector similarity search should return valid chunks when embeddings exist."""
     from app.core.config import settings
-    # Use a zero vector — no real embeddings exist yet in Phase 1
     zero_vector = [0.0] * settings.vector_dim
     results = demo_vector_search(db, zero_vector, top_k=5)
     assert isinstance(results, list)
-    # In Phase 1 no embeddings exist, so results should be empty
-    assert len(results) == 0
+    assert len(results) <= 5
+    if results:
+        assert all(chunk.embedding is not None for chunk in results)
