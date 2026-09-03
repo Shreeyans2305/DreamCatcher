@@ -2,26 +2,27 @@
 
 @layer base {
   :root {
-    --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-    --font-primary: 'Inter', 'Mukta', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
+    --font-display: 'Outfit', -apple-system, sans-serif;
+    --font-primary: 'Plus Jakarta Sans', 'Mukta', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
     --font-indic: 'Mukta', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
     
-    /* Serene Japanese Zen / Linen Aesthetic Tokens */
+    /* Serene Linen & Glass Tokens */
     --bg-canvas: #F7F4EE;
     --bg-card: #FCFAF7;
     --bg-parchment: #F4EFE6;
     --bg-blush-frame: #EEDCD8;
-    --text-primary: #1C1C1C;
-    --text-secondary: #585149;
-    --text-muted: #8C8276;
-    --border-subtle: #E5DED4;
+    --text-primary: #121212;
+    --text-secondary: #4A4641;
+    --text-muted: #7A746C;
+    --border-subtle: rgba(0, 0, 0, 0.07);
     --border-warm: rgba(80, 60, 40, 0.12);
-    --accent-ink: #1C1C1C;
+    --accent-ink: #141414;
+    --accent-coral: #E0533C;
     --accent-sakura: #E5978B;
-    --accent-sakura-light: #FAF0EE;
-    --accent-sage: #5B7065;
+    --accent-sage: #4E6B58;
     --accent-gold: #C49F5A;
-    --radius-card: 22px;
+    --radius-card: 24px;
   }
 
   html {
@@ -66,12 +67,16 @@
 }
 
 /* Typography Helpers */
+.font-display {
+  font-family: var(--font-display);
+}
+
 .font-serif-zen {
   font-family: var(--font-serif);
 }
 
 .font-sans-clean {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .font-indic {
@@ -80,6 +85,31 @@
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* Apple iOS-Grade Glassmorphism Utilities */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 10px 32px 0 rgba(20, 15, 10, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-dark {
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 /* Zen Japanese Editorial Aesthetics */

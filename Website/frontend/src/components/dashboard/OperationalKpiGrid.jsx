@@ -53,28 +53,28 @@ export default function OperationalKpiGrid({ onNewIntake, onSyncNow }) {
           <div
             key={idx}
             onClick={kpi.action || undefined}
-            className={`bg-[#FCFAF7] border border-[#E5DED4] rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-2.5 shadow-xs transition-all ${
-              kpi.action ? 'cursor-pointer hover:border-[#222222]' : ''
+            className={`glass-card rounded-2xl p-5 flex flex-col justify-between space-y-3 transition-all ${
+              kpi.action ? 'cursor-pointer hover:border-[#141414]' : ''
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className={`w-9 h-9 rounded-xl ${kpi.badgeBg} flex items-center justify-center shrink-0`}>
-                <Icon className="w-4 h-4" />
+              <div className={`w-10 h-10 rounded-xl ${kpi.badgeBg} flex items-center justify-center shrink-0`}>
+                <Icon className="w-5 h-5" />
               </div>
               {kpi.action && (
-                <span className="text-[10px] font-semibold bg-[#FAF0EE] text-[#8E3A32] border border-[#E8C2BA] px-2 py-0.5 rounded-full">
-                  Action
+                <span className="text-[10px] font-bold bg-[#FAF0EE] text-[#8E3A32] border border-[#E8C2BA] px-2 py-0.5 rounded-full">
+                  Action Needed
                 </span>
               )}
             </div>
             <div>
-              <div className="font-serif-zen text-2xl sm:text-3xl font-bold text-[#1F1F1F] tracking-tight tabular-nums">
+              <div className="font-display font-black text-3xl sm:text-4xl text-[#141414] tracking-tight tabular-nums">
                 {kpi.value}
               </div>
-              <div className="text-xs font-semibold text-[#38332C] mt-1">
+              <div className="text-xs font-bold text-[#38332C] mt-1">
                 {kpi.title}
               </div>
-              <p className="text-[11px] text-[#7A6F62] mt-0.5 leading-normal">
+              <p className="text-[11px] text-[#7A6F62] font-medium mt-0.5 leading-normal">
                 {kpi.subtext}
               </p>
             </div>

@@ -132,7 +132,7 @@ function AppContent() {
       <footer className="bg-white border-t border-black/[0.04] py-4 text-center text-xs text-neutral-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>DreamCatcher — Multilingual Public AI Career Guidance Field Platform</span>
-          <span className="text-neutral-400">Offline-Ready PWA • UX4G Indic Design Standard</span>
+          <span className="text-neutral-500 font-medium">Zero-Latency Offline Field Storage</span>
         </div>
       </footer>
 

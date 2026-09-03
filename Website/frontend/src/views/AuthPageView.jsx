@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import DreamCatcherWind from '../components/ui/DreamCatcherWind';
+import DreamCatcherIcon from '../components/ui/DreamCatcherIcon';
 import { 
   Mail, 
   Lock, 
@@ -83,27 +84,26 @@ export default function AuthPageView({ onLoginSuccess }) {
           <div>
             {/* Top Bar: DreamCatcher Logo & Minimal Language Switcher */}
             <div className="flex items-center justify-between mb-8 sm:mb-10">
-              <div className="flex items-center gap-2">
-                <span className="font-serif-zen text-2xl font-semibold tracking-tight text-[#1F1F1F]">
-                  • DreamCatcher
-                </span>
-                <span className="text-[10px] bg-[#EAE2D5] text-[#585149] px-2 py-0.5 rounded-full font-serif-zen font-medium border border-[#D5CCBD] hidden sm:inline">
-                  National Mission
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-[#161616] text-[#FAF7F2] flex items-center justify-center p-1 shadow-sm">
+                  <DreamCatcherIcon className="w-5 h-5 text-[#FAF7F2]" />
+                </div>
+                <span className="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-[#141414]">
+                  DreamCatcher
                 </span>
               </div>
 
-              {/* Minimalist Language Switcher */}
-              <div className="flex items-center bg-[#ECE4D8] border border-[#DDD3C5] rounded-full px-2.5 py-1 text-xs">
-                <Globe className="w-3 h-3 text-[#7B7165] mr-1 shrink-0" />
+              <div className="flex items-center bg-[#ECE4D8] border border-[#DDD3C5] rounded-full px-2.5 py-1 text-xs mr-6">
+                <Globe className="w-3 h-3 text-[#7A6F62] mr-1.5 shrink-0" />
                 <select
                   value={uiLanguage}
                   onChange={(e) => setLanguage(e.target.value)}
                   aria-label="Portal Language"
-                  className="bg-transparent text-[#2D2823] font-medium text-[11px] cursor-pointer focus:outline-none"
+                  className="bg-transparent text-[#2D2823] font-bold text-[11px] cursor-pointer focus:outline-none uppercase"
                 >
                   {languageOptions.map(opt => (
                     <option key={opt.code} value={opt.code} className="text-[#1F1F1F] bg-[#F4EFE6]">
-                      {opt.nativeLabel}
+                      {opt.code.toUpperCase()}
                     </option>
                   ))}
                 </select>
@@ -116,17 +116,17 @@ export default function AuthPageView({ onLoginSuccess }) {
             {mode === 'login' ? (
               <div className="animate-in fade-in duration-300">
                 {/* Headers */}
-                <h1 className="font-serif-zen text-3xl sm:text-4xl text-[#1F1F1F] font-medium tracking-tight mb-2">
+                <h1 className="font-display font-black text-3xl sm:text-4xl text-[#141414] tracking-tight mb-2">
                   Welcome back!
                 </h1>
-                <p className="font-serif-zen text-sm sm:text-base text-[#6B6256] italic mb-8">
+                <p className="text-sm sm:text-base text-[#5C554B] font-medium mb-8">
                   Where every village dream is caught and guided.
                 </p>
 
                 <form onSubmit={handleLoginSubmit} className="space-y-4">
                   {/* Email / ID Field */}
                   <div>
-                    <label className="block font-serif-zen text-sm font-medium text-[#38332C] mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#524B41] mb-1.5">
                       Email or Volunteer ID
                     </label>
                     <div className="relative">
@@ -362,7 +362,7 @@ export default function AuthPageView({ onLoginSuccess }) {
             )}
 
             <span className="text-[11px] text-[#A39B8E] hidden sm:inline">
-              UX4G Public Standard
+              Encrypted & Offline-Ready
             </span>
           </div>
 

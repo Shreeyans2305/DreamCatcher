@@ -3,6 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import { useCampOperations } from '../../context/CampOperationsContext';
 import DreamCatcherIcon from '../ui/DreamCatcherIcon';
+import GlassLanguageDropdown from '../ui/GlassLanguageDropdown';
 import { 
   Globe, 
   Wifi, 
@@ -55,25 +56,25 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
     : 'DC';
 
   return (
-    <header className="sticky top-3 sm:top-4 z-40 max-w-7xl mx-auto px-3 sm:px-6 w-full pointer-events-none">
-      <div className="bg-[#FCFAF7]/75 backdrop-blur-2xl backdrop-saturate-150 border border-white/80 shadow-[0_10px_35px_rgba(40,30,20,0.06),0_1px_2px_rgba(0,0,0,0.03)] rounded-full px-3.5 sm:px-5 py-2 flex items-center justify-between pointer-events-auto transition-all duration-300">
+    <header className="sticky top-2 sm:top-3 z-40 max-w-5xl mx-auto px-3 w-full pointer-events-none">
+      <div className="glass-nav rounded-full px-3 sm:px-4 py-1.5 flex items-center justify-between pointer-events-auto transition-all duration-300">
         
         {/* ========================================================= */}
         {/* 1. LEFT: BRAND & DREAMCATCHER ICON                        */}
         {/* ========================================================= */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onNavigateHome}
             title="Return to Home"
             className="flex items-center gap-2 text-left group cursor-pointer"
           >
             {/* Minimalist Dreamcatcher Vector Icon */}
-            <div className="w-8 h-8 rounded-full bg-[#222222] text-[#F7F4EE] flex items-center justify-center shadow-xs p-1 group-hover:scale-105 group-hover:bg-[#111111] transition-all">
-              <DreamCatcherIcon className="w-5 h-5 text-[#F7F4EE]" />
+            <div className="w-7 h-7 rounded-full bg-[#161616] text-[#FAF7F2] flex items-center justify-center shadow-xs p-1 group-hover:scale-105 group-hover:bg-[#000000] transition-all">
+              <DreamCatcherIcon className="w-4 h-4 text-[#FAF7F2]" />
             </div>
 
-            <div className="flex flex-col">
-              <span className="font-serif-zen font-semibold text-base sm:text-lg tracking-tight text-[#1F1F1F] group-hover:text-black transition-colors">
+            <div className="flex items-center">
+              <span className="font-display font-extrabold text-base tracking-tight text-[#141414] group-hover:text-black transition-colors">
                 DreamCatcher
               </span>
             </div>
@@ -84,7 +85,7 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
         {/* 2. CENTER: MINIMAL FLOATING NAVIGATION TABS (iOS Glass)   */}
         {/* ========================================================= */}
         {onSelectTab && (
-          <nav className="hidden md:flex items-center gap-1 bg-black/[0.03] p-1 rounded-full border border-black/[0.03]">
+          <nav className="hidden md:flex items-center gap-0.5 bg-black/[0.04] p-0.5 rounded-full border border-black/[0.03]">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -92,17 +93,17 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
                 <button
                   key={tab.id}
                   onClick={() => onSelectTab(tab.id)}
-                  className={`relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  className={`relative flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[#222222] text-white shadow-xs'
-                      : 'text-[#61574C] hover:text-[#1F1F1F] hover:bg-black/[0.04]'
+                      ? 'bg-[#141414] text-white shadow-xs'
+                      : 'text-[#5C554B] hover:text-[#111111] hover:bg-white/80'
                   }`}
                 >
                   <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#7A6F62]'}`} />
-                  <span className="font-serif-zen font-medium">{tab.label}</span>
+                  <span className="font-display">{tab.label}</span>
                   {tab.badge && (
                     <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isActive ? 'bg-[#3D3730] text-white' : 'bg-[#EAE2D5] text-[#3D3730]'
+                      isActive ? 'bg-[#333333] text-white' : 'bg-[#EAE2D5] text-[#333333]'
                     }`}>
                       {tab.badge}
                     </span>
@@ -116,20 +117,20 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
         {/* ========================================================= */}
         {/* 3. RIGHT: COMPACT, STREAMLINED UTILITIES                  */}
         {/* ========================================================= */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           
           {/* Active Camp Dropdown Chip */}
           <div className="relative">
             <button
               onClick={() => setCampMenuOpen(!campMenuOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/70 hover:bg-white border border-[#DDD3C5] text-xs text-[#2D2823] transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/80 hover:bg-white border border-[#D8CFC2] text-xs text-[#2D2823] transition-all cursor-pointer shadow-2xs"
               title="Switch active camp location"
             >
-              <MapPin className="w-3.5 h-3.5 text-[#C49F5A]" />
-              <span className="font-medium max-w-[100px] truncate">
+              <MapPin className="w-3 h-3 text-[#DE482B]" />
+              <span className="font-bold text-[11px] max-w-[90px] truncate">
                 {activeCamp?.village_town || 'Satara'}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#7A6F62] opacity-70" />
+              <ChevronDown className="w-2.5 h-2.5 text-[#7A6F62] opacity-70" />
             </button>
 
             {campMenuOpen && (
@@ -158,56 +159,15 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
             )}
           </div>
 
-          {/* Online / Sync Status Dot */}
-          <div className="flex items-center">
-            <button
-              onClick={() => setIsOnline(!isOnline)}
-              title={isOnline ? 'Online (Click to simulate offline)' : 'Offline (Click to go online)'}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs transition-colors cursor-pointer border ${
-                isOnline 
-                  ? 'bg-[#E8EFE9]/80 border-[#BDD3C2] text-[#2C4A33] hover:bg-[#E8EFE9]' 
-                  : 'bg-[#FAF0EE]/80 border-[#E8C2BA] text-[#8E3A32] hover:bg-[#FAF0EE]'
-              }`}
-            >
-              <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-              <span className="hidden lg:inline text-[11px] font-medium">{isOnline ? 'Online' : 'Offline'}</span>
-            </button>
-
-            {syncQueue.length > 0 && (
-              <button
-                onClick={triggerSyncFlush}
-                title="Pending local records to sync"
-                className="ml-1.5 flex items-center gap-1 px-2.5 py-1 bg-[#C49F5A] text-white rounded-full text-[11px] font-medium shadow-2xs hover:bg-[#B38F4B] transition-all cursor-pointer"
-              >
-                <RefreshCw className="w-3 h-3 animate-spin" />
-                <span>{syncQueue.length}</span>
-              </button>
-            )}
-          </div>
-
-          {/* Minimal Language Selector (EN, MR, GU, HI) */}
-          <div className="flex items-center bg-white/70 hover:bg-white border border-[#DDD3C5] rounded-full px-2 py-1.5 text-xs shadow-2xs">
-            <Globe className="w-3 h-3 text-[#7A6F62] mr-1 shrink-0" />
-            <select
-              value={uiLanguage}
-              onChange={(e) => setLanguage(e.target.value)}
-              aria-label="Language selection"
-              className="bg-transparent text-[#1F1F1F] font-semibold text-[11px] cursor-pointer focus:outline-none uppercase"
-            >
-              {languageOptions.map(opt => (
-                <option key={opt.code} value={opt.code} className="text-black bg-[#FAF7F2]">
-                  {opt.code.toUpperCase()}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Minimal Integrated Glass Language Selector */}
+          <GlassLanguageDropdown />
 
           {/* Counselor Profile / Credentials Popover */}
           {isAuthenticated ? (
             <div className="relative">
               <button
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                className="w-8 h-8 rounded-full bg-[#222222] text-white flex items-center justify-center font-serif-zen font-bold text-xs shadow-xs hover:scale-105 transition-transform cursor-pointer"
+                className="w-7 h-7 rounded-full bg-[#161616] text-white flex items-center justify-center font-display font-black text-[11px] shadow-xs hover:scale-105 transition-transform cursor-pointer"
                 title="Volunteer Profile Menu"
               >
                 {initials}

@@ -4,69 +4,79 @@ import { useAuth } from '../context/AuthContext';
 import { dummyAiEngine } from '../services/dummyAiEngine';
 import DreamCatcherWind from '../components/ui/DreamCatcherWind';
 import DreamCatcherIcon from '../components/ui/DreamCatcherIcon';
+import GlassLanguageDropdown from '../components/ui/GlassLanguageDropdown';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
-  Compass, 
-  Sparkles, 
   ArrowRight, 
-  CheckCircle2, 
-  Globe, 
   Users, 
-  ShieldCheck, 
   Play, 
-  GraduationCap, 
-  Award, 
   Send,
-  Zap,
-  BookOpen,
-  Tent,
-  Check
+  Sparkles
 } from 'lucide-react';
 
 export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
-  const { t, uiLanguage, setLanguage, languageOptions } = useLanguage();
+  const { t, uiLanguage } = useLanguage();
   const { isAuthenticated } = useAuth();
   const shouldReduceMotion = useReducedMotion();
 
-  // Minimal Persona Selection for AI Counselor Simulator
+  // Authentic Student Personas with multilingual queries
   const samplePersonas = [
     {
       id: 'pooja',
-      name: 'Pooja Jadhav',
-      location: 'Satara, MH',
-      grade: 'Class 10th Pass',
-      category: 'OBC',
+      name: uiLanguage === 'mr' ? 'पूजा जाधव' : uiLanguage === 'hi' ? 'पूजा जाधव' : uiLanguage === 'gu' ? 'પૂજા જાધવ' : 'Pooja Jadhav',
+      place: uiLanguage === 'mr' ? 'सातारा' : uiLanguage === 'hi' ? 'सतारा' : uiLanguage === 'gu' ? 'સાતારા' : 'Satara',
+      classInfo: uiLanguage === 'mr' ? '१० वी उत्तीर्ण' : uiLanguage === 'hi' ? '१०वीं पास' : uiLanguage === 'gu' ? '૧૦મું પાસ' : '10th Pass',
       lang: 'mr',
-      defaultQuery: '१० वी नंतर लगेच नोकरीसाठी आयटीआय किंवा पॉलिटेक्निक चे कोणते ट्रेड्स बेस्ट आहेत?'
+      queries: {
+        en: 'What are the best ITI or polytechnic diploma trades for getting a job immediately after Class 10th?',
+        mr: '१० वी नंतर लगेच नोकरीसाठी आयटीआय किंवा पॉलिटेक्निक चे कोणते ट्रेड्स बेस्ट आहेत?',
+        hi: '१०वीं के बाद तुरंत नौकरी पाने के लिए आईटीआई या पॉलिटेक्निक के कौन से ट्रेड सबसे अच्छे हैं?',
+        gu: '૧૦મા પછી તરત જ નોકરી મેળવવા માટે આઈટીઆઈ કે પોલિટેકનિકના કયા ટ્રેડ સૌથી સારા છે?'
+      }
     },
     {
       id: 'rahul',
-      name: 'Rahul More',
-      location: 'Patan Tribal, MH',
-      grade: 'Class 10th Pass',
-      category: 'SC / Tribal',
+      name: uiLanguage === 'mr' ? 'राहुल मोरे' : uiLanguage === 'hi' ? 'राहुल मोरे' : uiLanguage === 'gu' ? 'રાહુલ મોરે' : 'Rahul More',
+      place: uiLanguage === 'mr' ? 'पाटण आदिवासी भाग' : uiLanguage === 'hi' ? 'पाटन आदिवासी क्षेत्र' : uiLanguage === 'gu' ? 'પાટણ આદિવાસી વિસ્તાર' : 'Patan Tribal Belt',
+      classInfo: uiLanguage === 'mr' ? '१० वी • वीज तंत्रज्ञान आवड' : uiLanguage === 'hi' ? '१०वीं • इलेक्ट्रीशियन रुचि' : uiLanguage === 'gu' ? '૧૦મું • ઈલેક્ટ્રિકલ રસ' : '10th Pass • Electrical',
       lang: 'hi',
-      defaultQuery: '१०वीं के बाद सरकारी नौकरी और आईटीआई वायरमैन के लिए कौन सी छात्रवृत्ति मिलेगी?'
+      queries: {
+        en: 'How to get a government job in railways or electricity board after wireman trade, and which scholarship is available?',
+        mr: 'वायरमन किंवा इलेक्ट्रीशियन ट्रेडनंतर रेल्वे किंवा वीज मंडळात सरकारी नोकरी कशी मिळते, आणि कोणती शिष्यवृत्ती मिळेल?',
+        hi: 'वायरमैन या इलेक्ट्रीशियन ट्रेड के बाद रेलवे या बिजली बोर्ड में नौकरी कैसे मिलती है, और कौन सी छात्रवृत्ति मिलेगी?',
+        gu: 'વાયરમેન કે ઇલેક્ટ્રિશિયન ટ્રેડ પછી રેલવે કે વીજળી બોર્ડમાં સરકારી નોકરી કેવી રીતે મળે?'
+      }
     },
     {
       id: 'darshan',
-      name: 'Darshan Patel',
-      location: 'Navsari, Gujarat',
-      grade: 'Class 10th Pass',
-      category: 'EWS',
+      name: uiLanguage === 'mr' ? 'दर्शन पटेल' : uiLanguage === 'hi' ? 'दर्शन पटेल' : uiLanguage === 'gu' ? 'દર્શન પટેલ' : 'Darshan Patel',
+      place: uiLanguage === 'mr' ? 'नवसारी' : uiLanguage === 'hi' ? 'नवसारी' : uiLanguage === 'gu' ? 'નવસારી' : 'Navsari',
+      classInfo: uiLanguage === 'mr' ? '१० वी • डिप्लोमा इंजिनिअरिंग' : uiLanguage === 'hi' ? '१०वीं • डिप्लोमा इंजीनियरिंग' : uiLanguage === 'gu' ? '૧૦મું • ડિપ્લોમા એન્જિનિયરિંગ' : '10th Pass • Diploma Eng.',
       lang: 'gu',
-      defaultQuery: 'ડિપ્લોમા એન્જિનિયરિંગમાં એડમિશન અને MYSY સ્કોલરશીપ માટે કેવી રીતે અરજી કરવી?'
+      queries: {
+        en: 'How to apply for diploma engineering admission and MYSY scholarship?',
+        mr: 'डिप्लोमा इंजिनिअरिंग प्रवेश आणि शिष्यवृत्तीसाठी अर्ज कसा करावा?',
+        hi: 'डिप्लोमा इंजीनियरिंग में प्रवेश और छात्रवृत्ति के लिए आवेदन कैसे करें?',
+        gu: 'ડિપ્લોમા એન્જિનિયરિંગમાં એડમિશન અને MYSY સ્કોલરશીપ માટે કેવી રીતે અરજી કરવી?'
+      }
     }
   ];
 
-  const [selectedPersona, setSelectedPersona] = useState(samplePersonas[0]);
-  const [queryInput, setQueryInput] = useState(samplePersonas[0].defaultQuery);
+  const [selectedPersonaId, setSelectedPersonaId] = useState(samplePersonas[0].id);
+  const selectedPersona = samplePersonas.find(p => p.id === selectedPersonaId) || samplePersonas[0];
+  const [queryInput, setQueryInput] = useState(selectedPersona.queries[uiLanguage] || selectedPersona.queries.en);
   const [aiResponse, setAiResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Sync queryInput when language or persona switches
+  React.useEffect(() => {
+    setQueryInput(selectedPersona.queries[uiLanguage] || selectedPersona.queries.en);
+    setAiResponse(null);
+  }, [uiLanguage, selectedPersonaId]);
+
   const handleSelectPersona = (p) => {
-    setSelectedPersona(p);
-    setQueryInput(p.defaultQuery);
+    setSelectedPersonaId(p.id);
+    setQueryInput(p.queries[uiLanguage] || p.queries.en);
     setAiResponse(null);
   };
 
@@ -77,11 +87,11 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
         full_name: selectedPersona.name,
         age_years: 16,
         education_level: 'grade_10',
-        education_level_label: selectedPersona.grade,
-        category: 'cat_' + selectedPersona.category.toLowerCase(),
-        category_label: selectedPersona.category,
-        village_location: selectedPersona.location,
-        preferred_language: selectedPersona.lang
+        education_level_label: selectedPersona.classInfo,
+        category: 'cat_obc',
+        category_label: 'OBC',
+        village_location: selectedPersona.place,
+        preferred_language: uiLanguage
       };
       const res = await dummyAiEngine.generateGuidanceResponse(queryInput, studentMock);
       setAiResponse(res);
@@ -93,83 +103,63 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F4EE] text-[#1C1C1C] selection:bg-[#222222] selection:text-[#F7F4EE] relative font-sans">
+    <div className="min-h-screen bg-[#F7F4EE] text-[#141414] selection:bg-[#161616] selection:text-[#FAF7F2] relative font-sans overflow-x-hidden">
       
-      {/* Gentle wind and floating feathers across background */}
-      <DreamCatcherWind showDreamcatchers={false} featherCount={14} windSpeed={0.8} opacity={0.45} />
+      {/* Floating feather wind ambience */}
+      <DreamCatcherWind showDreamcatchers={false} featherCount={16} windSpeed={0.85} opacity={0.5} />
 
       {/* ============================================================ */}
-      {/* 1. TOP NATIONAL / GOVERNMENT AFFILIATION BANNER              */}
+      {/* 1. COMPACT FLOATING iOS GLASSMORPHISM NAVBAR                 */}
       {/* ============================================================ */}
-      <div className="w-full bg-[#ECE5D8] border-b border-[#DCD1C2] px-4 py-1.5 text-xs text-[#524B43]">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="font-serif-zen font-semibold text-[#1F1F1F]">🇮🇳 National Guidance Mission</span>
-            <span className="hidden sm:inline text-[#7A6F62]">• NEP 2020 Vocational Education Standard</span>
-          </div>
-          <div className="flex items-center gap-3 text-[11px]">
-            <span className="text-[#6B6256] hidden md:inline">Government of India Digital Service</span>
-            <span className="bg-[#DFD4C3] px-2 py-0.5 rounded text-[#38332C] font-medium">UX4G Standard</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ============================================================ */}
-      {/* 2. MINIMAL FLOATING iOS GLASS NAVIGATION                     */}
-      {/* ============================================================ */}
-      <header className="sticky top-3 sm:top-4 z-40 max-w-6xl mx-auto px-4 w-full pointer-events-none">
-        <div className="bg-[#FCFAF7]/75 backdrop-blur-2xl backdrop-saturate-150 border border-white/80 shadow-[0_10px_35px_rgba(40,30,20,0.06),0_1px_2px_rgba(0,0,0,0.03)] rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between pointer-events-auto transition-all duration-300">
+      <header className="fixed top-3 sm:top-4 inset-x-0 mx-auto max-w-4xl z-50 px-4 pointer-events-none">
+        <div className="glass-nav rounded-full px-3.5 sm:px-5 py-1.5 flex items-center justify-between pointer-events-auto transition-all duration-300">
           
-          {/* Logo & Platform Name */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#222222] text-[#F7F4EE] flex items-center justify-center font-bold shadow-xs p-1 hover:scale-105 transition-transform">
-              <DreamCatcherIcon className="w-5 h-5 text-[#F7F4EE]" />
+          {/* Brand Logo & Name */}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center gap-2 group no-underline text-inherit cursor-pointer"
+          >
+            <div className="w-7 h-7 rounded-full bg-[#161616] text-[#FAF7F2] flex items-center justify-center p-1 shadow-sm group-hover:scale-105 group-hover:bg-[#000000] transition-all">
+              <DreamCatcherIcon className="w-4 h-4 text-[#FAF7F2]" />
             </div>
-            <div>
-              <span className="font-serif-zen font-semibold text-base sm:text-lg tracking-tight text-[#1F1F1F]">
-                DreamCatcher
-              </span>
-              <span className="text-[10px] text-[#7A6F62] ml-2 hidden sm:inline font-medium">
-                National Field Portal
-              </span>
-            </div>
-          </div>
+            <span className="font-display font-extrabold text-base tracking-tight text-[#141414]">
+              {t('brand', 'DreamCatcher')}
+            </span>
+          </a>
 
-          {/* Right: Language Selector & Login CTA */}
-          <div className="flex items-center gap-2.5">
-            {/* Minimal Language Pill */}
-            <div className="flex items-center bg-white/70 hover:bg-white border border-[#DDD3C5] rounded-full px-2.5 py-1 text-xs transition-colors shadow-2xs">
-              <Globe className="w-3 h-3 text-[#7A6F62] mr-1.5 shrink-0" />
-              <select
-                value={uiLanguage}
-                onChange={(e) => setLanguage(e.target.value)}
-                aria-label="Language Selector"
-                className="bg-transparent text-[#1F1F1F] font-semibold cursor-pointer focus:outline-none text-xs uppercase"
-              >
-                {languageOptions.map(opt => (
-                  <option key={opt.code} value={opt.code} className="text-[#1F1F1F] bg-[#F4EFE6]">
-                    {opt.code.toUpperCase()}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* Clean, Simple Anchor Links */}
+          <nav className="hidden sm:flex items-center gap-1 text-xs font-bold text-[#555048]">
+            <a href="#why-it-matters" className="px-3 py-1 rounded-full hover:text-black hover:bg-white/80 transition-all">
+              {t('landing.nav_why', 'Why We Built This')}
+            </a>
+            <a href="#try-it" className="px-3 py-1 rounded-full hover:text-black hover:bg-white/80 transition-all">
+              {t('landing.nav_demo', 'Live Demo')}
+            </a>
+          </nav>
 
-            {/* Portal Action */}
+          {/* Right Controls: Integrated Glass Language Dropdown + Action Button */}
+          <div className="flex items-center gap-2">
+            <GlassLanguageDropdown />
+
             {isAuthenticated ? (
               <button
                 onClick={onEnterPortal}
-                className="px-4 py-1.5 text-xs font-medium bg-[#222222] hover:bg-[#111111] text-white rounded-full transition-all shadow-xs flex items-center gap-1.5 cursor-pointer hover:scale-105"
+                className="px-3.5 py-1 text-xs font-bold bg-[#141414] hover:bg-[#000000] text-white rounded-full transition-all shadow-sm flex items-center gap-1 cursor-pointer hover:scale-105"
               >
-                <span>Enter Field Portal</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>{t('landing.portal_btn', 'Portal')}</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
             ) : (
               <button
                 onClick={onEnterAuth}
-                className="px-4 py-1.5 text-xs font-medium bg-[#222222] hover:bg-[#111111] text-white rounded-full transition-all shadow-xs flex items-center gap-1.5 cursor-pointer hover:scale-105"
+                className="px-3.5 py-1 text-xs font-bold bg-[#141414] hover:bg-[#000000] text-white rounded-full transition-all shadow-sm flex items-center gap-1 cursor-pointer hover:scale-105"
               >
-                <Users className="w-3.5 h-3.5" />
-                <span>Volunteer Sign In</span>
+                <Users className="w-3 h-3" />
+                <span>{t('landing.login_btn', 'Volunteer Login')}</span>
               </button>
             )}
           </div>
@@ -178,167 +168,197 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
       </header>
 
       {/* ============================================================ */}
-      {/* 3. HERO SECTION (Spacious, Minimal & Authoritative)          */}
+      {/* 2. HERO SECTION: BIG, BOLD, THICK & HUMAN                     */}
       {/* ============================================================ */}
-      <section className="pt-16 sm:pt-24 pb-14 px-4 sm:px-6 max-w-4xl mx-auto text-center">
-        
-        {/* Subtle Pill Tag */}
-        <div className="inline-flex items-center gap-2 bg-[#F4EFE6] border border-[#DCD1C2] px-3.5 py-1.5 rounded-full text-xs text-[#524B43] mb-6 shadow-xs">
-          <Sparkles className="w-3.5 h-3.5 text-[#C49F5A]" />
-          <span>Multilingual Career & Scholarship Guidance for Rural Youth</span>
-        </div>
+      <section className="pt-28 sm:pt-36 pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
 
-        {/* Poetic & Authoritative Main Headline */}
-        <h1 className="font-serif-zen font-medium text-4xl sm:text-5xl lg:text-6xl text-[#1F1F1F] leading-[1.15] tracking-tight mb-5">
-          Catch every dream.<br />
-          <span className="italic text-[#584F44]">Guide every village student.</span>
-        </h1>
+        {/* Big, Bold, Thick Human Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="font-display font-black text-5xl sm:text-7xl lg:text-8xl text-[#121212] tracking-tight leading-[0.98] mb-6"
+        >
+          {t('landing.hero_title_1', 'BIG DREAMS.')}<br />
+          <span className="text-[#DE482B] italic font-serif-zen font-normal">
+            {t('landing.hero_title_2', 'CATCH THEM HERE.')}
+          </span>
+        </motion.h1>
 
-        {/* Concise Description */}
-        <p className="font-serif-zen italic text-base sm:text-lg text-[#61574C] max-w-2xl mx-auto leading-relaxed mb-8">
-          Empowering field teachers, volunteers, and officers to connect secondary students to verified ITI, Polytechnic, and government DBT scholarships in their mother tongue.
-        </p>
+        {/* Real, human, grounded subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-base sm:text-xl text-[#524B41] max-w-2xl mx-auto font-medium leading-relaxed mb-10"
+        >
+          {t('landing.hero_subtitle')}
+        </motion.p>
 
-        {/* Clean Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+        {/* Bold Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-16"
+        >
           <button
             onClick={onEnterAuth}
-            className="w-full sm:w-auto px-7 py-3 text-sm font-medium bg-[#222222] hover:bg-[#111111] text-white rounded-full transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer hover:scale-105"
+            className="w-full sm:w-auto px-8 py-4 text-base font-bold bg-[#141414] hover:bg-[#000000] text-white rounded-full transition-all shadow-md flex items-center justify-center gap-2.5 cursor-pointer hover:scale-105 active:scale-95"
           >
-            <Users className="w-4 h-4" />
-            <span>Launch Field Portal</span>
-            <ArrowRight className="w-4 h-4" />
+            <Users className="w-5 h-5" />
+            <span>{t('landing.cta_launch', 'Launch Field Counselor Portal')}</span>
+            <ArrowRight className="w-5 h-5" />
           </button>
 
           <a
-            href="#counselor-demo"
-            className="w-full sm:w-auto px-6 py-3 text-sm font-medium bg-[#F4EFE6] hover:bg-white text-[#222222] border border-[#DDD3C5] rounded-full transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer hover:scale-105"
+            href="#try-it"
+            className="w-full sm:w-auto px-7 py-4 text-base font-bold bg-white/70 hover:bg-white text-[#141414] border border-[#D5CCBD] rounded-full transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
           >
             <Play className="w-4 h-4 fill-current text-[#7A6F62]" />
-            <span>Try AI Guidance Demo</span>
+            <span>{t('landing.cta_test', 'Test the AI Counselor')}</span>
           </a>
-        </div>
+        </motion.div>
 
-        {/* 4 Minimal Official Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-4 rounded-xl shadow-xs">
-            <span className="text-[10px] text-[#7A6F62] uppercase tracking-wider font-semibold block mb-1">
-              Students Guided
+        {/* Big Bold Human Numbers */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 text-left"
+        >
+          <div className="glass-card p-5 rounded-2xl">
+            <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
+              {t('landing.stat_students', '45,000+')}
             </span>
-            <span className="font-serif-zen text-2xl font-bold text-[#1F1F1F]">45,000+</span>
-          </div>
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-4 rounded-xl shadow-xs">
-            <span className="text-[10px] text-[#7A6F62] uppercase tracking-wider font-semibold block mb-1">
-              Rural Guidance Camps
+            <span className="text-xs sm:text-sm font-bold text-[#61574C]">
+              {t('landing.stat_students_label', 'Students Guided Personally')}
             </span>
-            <span className="font-serif-zen text-2xl font-bold text-[#1F1F1F]">3,400+</span>
           </div>
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-4 rounded-xl shadow-xs">
-            <span className="text-[10px] text-[#7A6F62] uppercase tracking-wider font-semibold block mb-1">
-              Public Service
+
+          <div className="glass-card p-5 rounded-2xl">
+            <span className="font-display font-black text-3xl sm:text-4xl text-[#DE482B] block mb-1">
+              {t('landing.stat_camps', '3,400+')}
             </span>
-            <span className="font-serif-zen text-2xl font-bold text-[#1F1F1F]">100% Free</span>
-          </div>
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-4 rounded-xl shadow-xs">
-            <span className="text-[10px] text-[#7A6F62] uppercase tracking-wider font-semibold block mb-1">
-              Offline Readiness
+            <span className="text-xs sm:text-sm font-bold text-[#61574C]">
+              {t('landing.stat_camps_label', 'Village Camps Conducted')}
             </span>
-            <span className="font-serif-zen text-2xl font-bold text-[#1F1F1F]">Zero Network</span>
           </div>
-        </div>
+
+          <div className="glass-card p-5 rounded-2xl">
+            <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
+              {t('landing.stat_langs', '4 Languages')}
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-[#61574C]">
+              {t('landing.stat_langs_label', 'Marathi • Hindi • Gujarati • EN')}
+            </span>
+          </div>
+
+          <div className="glass-card p-5 rounded-2xl">
+            <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
+              {t('landing.stat_free', '100% Free')}
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-[#61574C]">
+              {t('landing.stat_free_label', 'Public Service Forever')}
+            </span>
+          </div>
+        </motion.div>
 
       </section>
 
       {/* ============================================================ */}
-      {/* 4. THREE CORE PILLARS (Clean, Spacious & Minimal)            */}
+      {/* 3. SECTION: WHY IT MATTERS (Human, Genuine & Authentic)       */}
       {/* ============================================================ */}
-      <section className="py-14 px-4 sm:px-6 max-w-5xl mx-auto border-t border-[#E5DED4]">
-        
-        <div className="text-center mb-10">
-          <h2 className="font-serif-zen text-2xl sm:text-3xl text-[#1F1F1F] font-medium tracking-tight mb-2">
-            Designed for Bharat's Last Mile
-          </h2>
-          <p className="font-serif-zen italic text-sm text-[#6B6256]">
-            Three essential pillars delivering dignity and opportunity to rural students.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          
-          {/* Pillar 1 */}
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-6 rounded-2xl shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4EFE6] text-[#332C24] flex items-center justify-center font-bold mb-4 border border-[#DDD3C5]">
-                <Globe className="w-5 h-5 text-[#332C24]" />
-              </div>
-              <h3 className="font-serif-zen text-lg font-semibold text-[#1F1F1F] mb-2">
-                Vernacular AI Counseling
-              </h3>
-              <p className="text-xs sm:text-sm text-[#61574C] leading-relaxed">
-                Counseling delivered in Marathi, Hindi, Gujarati, and English. Uses voice and clear regional phrasing so low-literacy students understand every opportunity.
-              </p>
-            </div>
-            <div className="pt-4 mt-4 border-t border-[#EAE2D5] text-[11px] text-[#7A6F62]">
-              ✓ Voice hints & simple language
-            </div>
+      <section id="why-it-matters" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto border-t border-[#E5DED4]">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center"
+        >
+          <div className="lg:col-span-5 space-y-4 text-left">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#DE482B]">
+              {t('landing.why_tag', 'The Reality On The Ground')}
+            </span>
+            <h2 className="font-display font-black text-3xl sm:text-4xl text-[#141414] leading-tight">
+              {t('landing.why_heading', "Most students don't lack ambition. They lack information.")}
+            </h2>
+            <p className="text-sm sm:text-base text-[#524B41] font-medium leading-relaxed">
+              {t('landing.why_p1')}
+            </p>
+            <p className="text-sm sm:text-base text-[#524B41] font-medium leading-relaxed">
+              {t('landing.why_p2')}
+            </p>
           </div>
 
-          {/* Pillar 2 */}
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-6 rounded-2xl shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4EFE6] text-[#332C24] flex items-center justify-center font-bold mb-4 border border-[#DDD3C5]">
-                <Award className="w-5 h-5 text-[#332C24]" />
+          <div className="lg:col-span-7 space-y-3.5">
+            <div className="glass-card p-5 rounded-2xl flex items-start gap-4">
+              <div className="w-9 h-9 rounded-full bg-[#161616] text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">
+                01
               </div>
-              <h3 className="font-serif-zen text-lg font-semibold text-[#1F1F1F] mb-2">
-                Instant Scholarship Matching
-              </h3>
-              <p className="text-xs sm:text-sm text-[#61574C] leading-relaxed">
-                Automatically maps student caste, family income, and marks against active state and central welfare DBT schemes (MahaDBT, MYSY, NSP, Post-Matric).
-              </p>
+              <div>
+                <h3 className="font-display font-bold text-base text-[#141414] mb-1">
+                  {t('landing.pillar_1_title')}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#5C554B] font-medium leading-relaxed">
+                  {t('landing.pillar_1_desc')}
+                </p>
+              </div>
             </div>
-            <div className="pt-4 mt-4 border-t border-[#EAE2D5] text-[11px] text-[#7A6F62]">
-              ✓ Verified Govt scheme database
+
+            <div className="glass-card p-5 rounded-2xl flex items-start gap-4">
+              <div className="w-9 h-9 rounded-full bg-[#DE482B] text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">
+                02
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-base text-[#141414] mb-1">
+                  {t('landing.pillar_2_title')}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#5C554B] font-medium leading-relaxed">
+                  {t('landing.pillar_2_desc')}
+                </p>
+              </div>
+            </div>
+
+            <div className="glass-card p-5 rounded-2xl flex items-start gap-4">
+              <div className="w-9 h-9 rounded-full bg-[#161616] text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">
+                03
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-base text-[#141414] mb-1">
+                  {t('landing.pillar_3_title')}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#5C554B] font-medium leading-relaxed">
+                  {t('landing.pillar_3_desc')}
+                </p>
+              </div>
             </div>
           </div>
-
-          {/* Pillar 3 */}
-          <div className="bg-[#FCFAF7] border border-[#E5DED4] p-6 rounded-2xl shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4EFE6] text-[#332C24] flex items-center justify-center font-bold mb-4 border border-[#DDD3C5]">
-                <ShieldCheck className="w-5 h-5 text-[#332C24]" />
-              </div>
-              <h3 className="font-serif-zen text-lg font-semibold text-[#1F1F1F] mb-2">
-                100% Offline-Ready
-              </h3>
-              <p className="text-xs sm:text-sm text-[#61574C] leading-relaxed">
-                Operates seamlessly without active cellular coverage in deep rural talukas. Student intakes store locally and sync automatically when internet is detected.
-              </p>
-            </div>
-            <div className="pt-4 mt-4 border-t border-[#EAE2D5] text-[11px] text-[#7A6F62]">
-              ✓ Offline SQLite storage & encryption
-            </div>
-          </div>
-
-        </div>
-
+        </motion.div>
       </section>
 
       {/* ============================================================ */}
-      {/* 5. LIVE AI COUNSELOR SIMULATOR (Minimal, Clean & Focused)    */}
+      {/* 4. SECTION: LIVE DREAM MATCHER (Interactive & Punchy)        */}
       {/* ============================================================ */}
-      <section id="counselor-demo" className="py-14 px-4 sm:px-6 max-w-4xl mx-auto border-t border-[#E5DED4]">
-        
-        <div className="text-center mb-8">
-          <span className="text-xs bg-[#EAE2D5] text-[#585149] px-3 py-1 rounded-full font-serif-zen font-medium border border-[#D5CCBD]">
-            Interactive Demonstration
+      <section id="try-it" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto border-t border-[#E5DED4]">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <span className="text-xs font-extrabold uppercase tracking-wider text-[#DE482B] block mb-2">
+            {t('landing.demo_tag', 'Try It Yourself')}
           </span>
-          <h2 className="font-serif-zen text-2xl sm:text-3xl text-[#1F1F1F] font-medium tracking-tight mt-3 mb-2">
-            Try the Multilingual AI Counselor
+          <h2 className="font-display font-black text-3xl sm:text-5xl text-[#141414] tracking-tight mb-3">
+            {t('landing.demo_heading', 'See how the guidance works.')}
           </h2>
-          <p className="font-serif-zen italic text-xs sm:text-sm text-[#6B6256]">
-            Select a rural student persona to see how DreamCatcher delivers instant, actionable guidance.
+          <p className="text-sm sm:text-base text-[#524B41] font-medium max-w-lg mx-auto">
+            {t('landing.demo_subtitle', 'Choose a real student case below to see how DreamCatcher gives immediate, realistic advice.')}
           </p>
-        </div>
+        </motion.div>
 
         {/* Persona Selectors */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
@@ -348,73 +368,75 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
               <button
                 key={p.id}
                 onClick={() => handleSelectPersona(p)}
-                className={`px-4 py-2 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#222222] text-white shadow-xs'
-                    : 'bg-[#FCFAF7] border border-[#DDD3C5] text-[#585149] hover:text-[#1F1F1F] hover:bg-white'
+                    ? 'bg-[#141414] text-white shadow-sm scale-105'
+                    : 'bg-white/70 border border-[#D5CCBD] text-[#555048] hover:text-black hover:bg-white'
                 }`}
               >
-                <span className="font-semibold">{p.name}</span>
-                <span className="opacity-70 ml-1.5">({p.location} • {p.category})</span>
+                <span>{p.name}</span>
+                <span className="opacity-60 ml-1.5 font-normal">({p.place} • {p.classInfo})</span>
               </button>
             );
           })}
         </div>
 
-        {/* Minimal Query Box */}
-        <div className="bg-[#FCFAF7] border border-[#DDD3C5] rounded-2xl p-5 shadow-xs mb-6">
-          <div className="flex items-center gap-2 text-xs text-[#7A6F62] mb-2 font-medium">
-            <span>Student Career Question:</span>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2.5">
+        {/* Interactive Query Box */}
+        <div className="glass-card rounded-2xl p-5 sm:p-6 shadow-sm mb-6 text-left">
+          <label className="block text-xs font-extrabold uppercase text-[#7A746C] tracking-wider mb-2">
+            {t('landing.demo_q_label', 'Question Asked by Student:')}
+          </label>
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={queryInput}
               onChange={(e) => setQueryInput(e.target.value)}
-              className="flex-1 px-4 py-2.5 bg-white border border-[#D5CCBD] rounded-xl text-sm text-[#1F1F1F] focus:outline-none focus:border-[#222222]"
+              className="flex-1 px-4 py-3 bg-white/90 border border-[#D5CCBD] rounded-xl text-sm font-semibold text-[#141414] focus:outline-none focus:border-[#141414]"
             />
             <button
               onClick={handleRunGuidance}
               disabled={isLoading}
-              className="px-6 py-2.5 bg-[#222222] hover:bg-[#111111] text-white text-xs font-medium rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer shrink-0 disabled:opacity-50"
+              className="px-7 py-3 bg-[#141414] hover:bg-[#000000] text-white text-sm font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer shrink-0 disabled:opacity-50 hover:scale-105 active:scale-95"
             >
-              <Send className="w-3.5 h-3.5" />
-              <span>{isLoading ? 'Generating...' : 'Run Guidance'}</span>
+              <Send className="w-4 h-4" />
+              <span>{isLoading ? t('landing.demo_btn_thinking', 'Thinking...') : t('landing.demo_btn_ask', 'Get Answer')}</span>
             </button>
           </div>
         </div>
 
-        {/* AI Result Card */}
+        {/* Answer Result Card */}
         {aiResponse && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#FAF7F2] border border-[#DCD1C2] rounded-2xl p-6 shadow-sm space-y-4"
+            className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm space-y-4 text-left border-l-4 border-l-[#DE482B]"
           >
-            <div className="flex items-center justify-between border-b border-[#EAE2D5] pb-3">
+            <div className="flex items-center justify-between pb-3 border-b border-[#EAE2D5]">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#C49F5A]" />
-                <span className="font-serif-zen font-semibold text-sm text-[#1F1F1F]">
-                  Counselor Recommendation for {selectedPersona.name}
+                <Sparkles className="w-4 h-4 text-[#DE482B]" />
+                <span className="font-display font-bold text-base text-[#141414]">
+                  {t('landing.demo_rec_title', 'Recommendation for')} {selectedPersona.name}
                 </span>
               </div>
-              <span className="text-[10px] bg-[#E8EFE9] text-[#2C4A33] px-2 py-0.5 rounded font-medium">
-                Verified Match
+              <span className="text-xs bg-[#E8EFE9] text-[#2C4A33] px-2.5 py-0.5 rounded-full font-bold">
+                {t('landing.demo_matched_badge', 'Actionable Match')}
               </span>
             </div>
 
-            <p className="text-sm text-[#38332C] leading-relaxed">
+            <p className="text-sm sm:text-base text-[#38332C] font-medium leading-relaxed">
               {aiResponse.summary || aiResponse.response_text}
             </p>
 
             {aiResponse.pathways && aiResponse.pathways.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
                 {aiResponse.pathways.slice(0, 2).map((path, idx) => (
-                  <div key={idx} className="bg-white border border-[#DDD3C5] p-3 rounded-xl text-xs">
-                    <span className="font-semibold text-[#1F1F1F] block mb-1">
+                  <div key={idx} className="bg-white/90 border border-[#D5CCBD] p-4 rounded-xl">
+                    <span className="font-display font-bold text-sm text-[#141414] block mb-1">
                       {path.title || path.trade_name}
                     </span>
-                    <span className="text-[#6B6256] block">{path.description}</span>
+                    <span className="text-xs text-[#585149] font-medium block leading-normal">
+                      {path.description}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -425,29 +447,31 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
       </section>
 
       {/* ============================================================ */}
-      {/* 6. CLEAN, TRUSTED GOVERNMENT-STANDARD FOOTER                  */}
+      {/* 5. BIG BOLD CALL TO ACTION: VOLUNTEER CIRCLE                 */}
       {/* ============================================================ */}
-      <footer className="w-full bg-[#ECE5D8] border-t border-[#DCD1C2] py-8 px-4 text-xs text-[#6B6256]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="space-y-1 text-center sm:text-left">
-            <div className="font-serif-zen font-semibold text-sm text-[#1F1F1F]">
-              DreamCatcher — Multilingual Public AI Career Guidance Platform
-            </div>
-            <p className="text-[11px] text-[#7A6F62]">
-              Aligned with National Education Policy (NEP 2020) • Data encrypted at rest • UX4G Standard
+      <section className="py-20 px-4 sm:px-6 max-w-4xl mx-auto text-center">
+        <div className="glass-dark text-white rounded-3xl p-8 sm:p-14 shadow-2xl relative overflow-hidden">
+          <div className="relative z-10 space-y-5">
+            <span className="text-xs font-black uppercase tracking-widest text-[#E5978B] block">
+              {t('landing.cta_box_tag', 'For Teachers & Youth Volunteers')}
+            </span>
+            <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight">
+              {t('landing.cta_box_title', 'Ready to guide students in your village?')}
+            </h2>
+            <p className="text-sm sm:text-base text-white/80 max-w-xl mx-auto font-medium leading-relaxed">
+              {t('landing.cta_box_desc', 'No technical expertise needed. Sign in with your Volunteer ID, register students in seconds, and start counseling.')}
             </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onEnterAuth}
-              className="px-4 py-1.5 bg-[#222222] text-white rounded-full text-xs font-medium hover:bg-[#111111] transition-all cursor-pointer"
-            >
-              Field Counselor Login
-            </button>
+            <div className="pt-4">
+              <button
+                onClick={onEnterAuth}
+                className="px-8 py-4 bg-[#FFFFFF] hover:bg-[#F2EBE4] text-[#121212] font-display font-black text-sm sm:text-base rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                {t('landing.cta_box_btn', 'Sign In to Volunteer Portal →')}
+              </button>
+            </div>
           </div>
         </div>
-      </footer>
+      </section>
 
     </div>
   );
