@@ -1,0 +1,101 @@
+{
+  "@@locale": "hi",
+  "appTitle": "ड्रीमकैचर",
+  "tagline": "अपने भविष्य की राह खोजें, कदम दर कदम",
+  
+  "navDashboard": "होम",
+  "navOpportunities": "अवसर",
+  "navChat": "सहायक",
+  "navProfile": "प्रोफ़ाइल",
+
+  "onboardingWelcome": "आइए अपनी राह बनाएं",
+  "onboardingSubtitle": "अपने बारे में थोड़ा बताएं ताकि हम आपके लिए सही छात्रवृत्तियां, पाठ्यक्रम और परीक्षाएं ढूंढ सकें।",
+  "stepBasic": "बुनियादी जानकारी",
+  "stepLocation": "स्थान व पृष्ठभूमि",
+  "stepEducation": "शिक्षा व हुनर",
+  "stepAspirations": "आपके लक्ष्य",
+  
+  "fullNameLabel": "पूरा नाम",
+  "fullNameHint": "जैसे: आरव शर्मा",
+  "phoneLabel": "फ़ोन नंबर",
+  "phoneHint": "जैसे: +91 98765 43210",
+  "preferredLanguageLabel": "पसंदीदा भाषा",
+  "selectLanguage": "अपनी भाषा चुनें",
+  
+  "stateLabel": "राज्य",
+  "districtLabel": "ज़िला",
+  "areaTypeLabel": "क्षेत्र प्रकार",
+  "rural": "ग्रामीण",
+  "urban": "शहरी",
+  "semiUrban": "अर्ध-शहरी",
+  
+  "casteCategoryLabel": "सामाजिक श्रेणी",
+  "incomeBracketLabel": "वार्षिक पारिवारिक आय",
+  
+  "educationLevelLabel": "उच्चतम शिक्षा स्तर",
+  "informalLearningLabel": "आपने क्या सीखा है? (व्यावहारिक/अनौपचारिक)",
+  "informalLearningHint": "जैसे: सौर पंप ठीक करना, दवाई दुकान में सहयोग, खेती का हिसाब...",
+  
+  "skillsTitle": "आपके हुनर (Skills)",
+  "interestsTitle": "पसंदीदा क्षेत्र (Interests)",
+  "aspirationLabel": "आपका सपना या लक्ष्य क्या है?",
+  "aspirationHint": "जैसे: कृषि ड्रोन पायलट, इलेक्ट्रीशियन, सिविल इंजीनियर...",
+
+  "btnNext": "आगे बढ़ें",
+  "btnBack": "पीछे",
+  "btnFinish": "प्रोफ़ाइल पूरी करें",
+  "saving": "प्रोफ़ाइल सहेजी जा रही है...",
+
+  "greeting": "नमस्ते, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCompleteness": "प्रोफ़ाइल पूर्णता",
+  "dashboardMatchedOpps": "आपके लिए सुझाये अवसर",
+  "dashboardActiveDeadlines": "नज़दीकी अंतिम तिथियां",
+  "topOpportunitiesTitle": "आपके लिए प्रमुख अवसर",
+  "viewAll": "सभी देखें",
+  "socialProofDistrict": "आपके ज़िले के {count} छात्रों ने इस सप्ताह आवेदन किया",
+  "@socialProofDistrict": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchHint": "छात्रवृत्तियां, कोर्स, परीक्षाएं खोजें...",
+  "filterAll": "सभी",
+  "filterScholarships": "छात्रवृत्तियां",
+  "filterCourses": "पाठ्यक्रम",
+  "filterExams": "प्रवेश परीक्षाएं",
+  "filterInternships": "इंटर्नशिप",
+  "filterEligibleOnly": "केवल पात्र",
+  "eligibleBadge": "पात्र (Eligible)",
+  "notEligibleBadge": "पात्रता जांचें",
+  "rulesPassed": "{total} में से {passed} शर्तें पूरी हुईं",
+  "@rulesPassed": {
+    "placeholders": {
+      "passed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "eligibilityReasoningTitle": "पात्रता विवरण",
+  "applyNow": "आधिकारिक पोर्टल पर आवेदन करें",
+  "noOpportunitiesFound": "कोई अवसर नहीं मिला। फ़िल्टर बदल कर देखें।",
+
+  "assistantTitle": "एआई करियर मार्गदर्शक",
+  "assistantSubtitle": "आपकी राह के लिए व्यक्तिगत सलाह",
+  "chatInputHint": "करियर या छात्रवृत्ति के बारे में कुछ भी पूछें...",
+  "send": "भेजें",
+
+  "editProfile": "प्रोफ़ाइल संपादित करें",
+  "addSkill": "नया हुनर जोड़ें",
+  "addInterest": "नयी रुचि जोड़ें",
+  "saveChanges": "बदलाव सहेजें"
+}

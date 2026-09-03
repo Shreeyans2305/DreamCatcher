@@ -1,0 +1,101 @@
+{
+  "@@locale": "en",
+  "appTitle": "DreamCatcher",
+  "tagline": "Discover your future, step by step",
+  
+  "navDashboard": "Home",
+  "navOpportunities": "Opportunities",
+  "navChat": "Assistant",
+  "navProfile": "Profile",
+
+  "onboardingWelcome": "Let's build your future path",
+  "onboardingSubtitle": "Tell us a bit about yourself so we can find scholarships, courses, exams, and jobs made for you.",
+  "stepBasic": "Basic Info",
+  "stepLocation": "Location & Background",
+  "stepEducation": "Education & Skills",
+  "stepAspirations": "Your Goals",
+  
+  "fullNameLabel": "Full Name",
+  "fullNameHint": "e.g. Aarav Sharma",
+  "phoneLabel": "Phone Number",
+  "phoneHint": "e.g. +91 98765 43210",
+  "preferredLanguageLabel": "Preferred Language",
+  "selectLanguage": "Select your language",
+  
+  "stateLabel": "State",
+  "districtLabel": "District",
+  "areaTypeLabel": "Area Type",
+  "rural": "Rural",
+  "urban": "Urban",
+  "semiUrban": "Semi-Urban",
+  
+  "casteCategoryLabel": "Social Category",
+  "incomeBracketLabel": "Annual Family Income",
+  
+  "educationLevelLabel": "Highest Education Level",
+  "informalLearningLabel": "What have you learned? (Practical/Informal)",
+  "informalLearningHint": "e.g. Repaired solar pumps, assisted in pharmacy, farm bookkeeping...",
+  
+  "skillsTitle": "Skills You Have",
+  "interestsTitle": "Fields You Like",
+  "aspirationLabel": "What is your dream job or ambition?",
+  "aspirationHint": "e.g. Agricultural Drone Pilot, Village Electrician, Civil Engineer...",
+
+  "btnNext": "Continue",
+  "btnBack": "Back",
+  "btnFinish": "Complete Profile",
+  "saving": "Saving your profile...",
+
+  "greeting": "Hello, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCompleteness": "Profile Completeness",
+  "dashboardMatchedOpps": "Matched Opportunities",
+  "dashboardActiveDeadlines": "Deadlines Approaching",
+  "topOpportunitiesTitle": "Top Opportunities For You",
+  "viewAll": "View All",
+  "socialProofDistrict": "{count} students in your district applied this week",
+  "@socialProofDistrict": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchHint": "Search scholarships, courses, exams...",
+  "filterAll": "All",
+  "filterScholarships": "Scholarships",
+  "filterCourses": "Courses",
+  "filterExams": "Exams",
+  "filterInternships": "Internships",
+  "filterEligibleOnly": "Eligible Only",
+  "eligibleBadge": "Eligible",
+  "notEligibleBadge": "Check Criteria",
+  "rulesPassed": "{passed} of {total} criteria met",
+  "@rulesPassed": {
+    "placeholders": {
+      "passed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "eligibilityReasoningTitle": "Eligibility Breakdown",
+  "applyNow": "Apply on Official Portal",
+  "noOpportunitiesFound": "No matching opportunities found. Try adjusting your filters.",
+
+  "assistantTitle": "AI Career Guide",
+  "assistantSubtitle": "Personalized advice for your journey",
+  "chatInputHint": "Ask anything about careers or scholarships...",
+  "send": "Send",
+
+  "editProfile": "Edit Profile",
+  "addSkill": "Add Skill",
+  "addInterest": "Add Interest",
+  "saveChanges": "Save Changes"
+}
