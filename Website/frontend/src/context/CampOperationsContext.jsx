@@ -25,7 +25,7 @@ export function CampOperationsProvider({ children }) {
   const [activeCampId, setActiveCampIdState] = useState(() => {
     const all = storageEngine.getCamps();
     const userCamps = isDemoUser ? all : all.filter(c => c.volunteer_id === activeBadgeId);
-    return userCamps[0]?.camp_id || null;
+    return userCamps.find(camp => camp.status !== 'completed')?.camp_id || null;
   });
   const [students, setStudents] = useState(() => {
     const all = storageEngine.getStudents();
@@ -59,8 +59,7 @@ export function CampOperationsProvider({ children }) {
               created_at: evt.created_at
             }));
             setCamps(mapped);
-            if (mapped.length > 0) setActiveCampIdState(mapped[0].camp_id);
-            else setActiveCampIdState(null);
+            setActiveCampIdState(mapped.find(camp => camp.status !== 'completed')?.camp_id || null);
             return;
           }
         } catch (err) {
@@ -72,11 +71,7 @@ export function CampOperationsProvider({ children }) {
       const allCamps = storageEngine.getCamps();
       const userCamps = isDemoUser ? allCamps : allCamps.filter(c => c.volunteer_id === activeBadgeId);
       setCamps(userCamps);
-      if (userCamps.length > 0) {
-        setActiveCampIdState(userCamps[0].camp_id);
-      } else {
-        setActiveCampIdState(null);
-      }
+      setActiveCampIdState(userCamps.find(camp => camp.status !== 'completed')?.camp_id || null);
 
       const allStudents = storageEngine.getStudents();
       const userStudents = isDemoUser ? allStudents : allStudents.filter(s => s.volunteer_id === activeBadgeId);
@@ -107,11 +102,43 @@ export function CampOperationsProvider({ children }) {
     };
   }, []);
 
-  const activeCamp = camps.find(c => c.camp_id === activeCampId) || camps[0] || null;
+  const activeCamp = camps.find(camp => camp.camp_id === activeCampId && camp.status !== 'completed') || null;
 
   const setActiveCamp = (campId) => {
-    storageEngine.setActiveCampId(campId);
-    setActiveCampIdState(campId);
+    const selectedCamp = camps.find(camp => camp.camp_id === campId);
+    if (selectedCamp?.status === 'completed') return;
+
+    storageEngine.setActiveCampId(campId || '');
+    setActiveCampIdState(campId || null);
+  };
+
+  const endCamp = async (campId) => {
+    if (!admin) {
+      throw new Error('Only an administrator can end a camp.');
+    }
+
+    const completedAt = new Date().toISOString();
+
+    if (isSupabaseConfigured()) {
+      await supabaseService.updateEventStatus(campId, 'COMPLETED');
+    }
+
+    storageEngine.updateCamp(campId, {
+      status: 'completed',
+      completed_at: completedAt
+    });
+
+    const updatedCamps = camps.map(camp => (
+      camp.camp_id === campId
+        ? { ...camp, status: 'completed', completed_at: completedAt }
+        : camp
+    ));
+    setCamps(updatedCamps);
+
+    if (activeCampId === campId) {
+      const nextActiveCamp = updatedCamps.find(camp => camp.status !== 'completed');
+      setActiveCamp(nextActiveCamp?.camp_id || null);
+    }
   };
 
   const createCamp = async (campData) => {
@@ -219,6 +246,7 @@ export function CampOperationsProvider({ children }) {
       activeCamp,
       activeCampId,
       setActiveCamp,
+      endCamp,
       createCamp,
       students,
       enrollStudent,

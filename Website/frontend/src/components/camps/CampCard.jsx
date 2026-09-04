@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCampOperations } from '../../context/CampOperationsContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { MapPin, Calendar, Users, CheckCircle2, Radio } from 'lucide-react';
+import { useAdminAuth } from '../../context/AdminAuthContext';
+import { MapPin, Calendar, Users, CheckCircle2, Radio, CircleStop } from 'lucide-react';
 
 export default function CampCard({ camp, onSelectIntake }) {
-  const { activeCampId, setActiveCamp } = useCampOperations();
+  const { activeCampId, setActiveCamp, endCamp } = useCampOperations();
+  const { admin } = useAdminAuth();
   const { t } = useLanguage();
 
   const isActive = activeCampId === camp.camp_id;
+  const isCompleted = camp.status === 'completed';
+  const [isEnding, setIsEnding] = useState(false);
+
+  const handleEndCamp = async () => {
+    if (!window.confirm(`End “${camp.camp_name}”? This will mark the camp as completed.`)) return;
+
+    setIsEnding(true);
+    try {
+      await endCamp(camp.camp_id);
+    } catch (error) {
+      console.error('Unable to end camp:', error);
+      window.alert(error.message || 'Unable to end this camp. Please try again.');
+    } finally {
+      setIsEnding(false);
+    }
+  };
 
   const statusConfig = {
     upcoming: { bg: 'bg-blue-50 text-blue-800 border-blue-200', label: t('camps.filter_upcoming') },
@@ -60,9 +78,14 @@ export default function CampCard({ camp, onSelectIntake }) {
         </div>
       </div>
 
-      {/* Action Footer (Pill Buttons) */}
+      {/* Action Footer */}
       <div className="flex items-center gap-2 pt-3 border-t border-black/[0.04]">
-        {!isActive ? (
+        {isCompleted ? (
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-neutral-500">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            {t('camps.filter_completed')}
+          </span>
+        ) : !isActive ? (
           <button
             onClick={() => setActiveCamp(camp.camp_id)}
             className="btn-pill-secondary flex-1 py-2 text-xs font-semibold"
@@ -70,13 +93,26 @@ export default function CampCard({ camp, onSelectIntake }) {
             {t('camps.set_active')}
           </button>
         ) : (
-          <button
-            onClick={() => onSelectIntake(camp)}
-            className="btn-pill-black flex-1 py-2 text-xs font-semibold gap-1.5 shadow-sm"
-          >
-            <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-            <span>{t('nav.intake')}</span>
-          </button>
+          <>
+            <button
+              onClick={() => onSelectIntake(camp)}
+              className="btn-pill-black flex-1 py-2 text-xs font-semibold gap-1.5 shadow-sm"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+              <span>{t('nav.intake')}</span>
+            </button>
+            {admin && (
+              <button
+                onClick={handleEndCamp}
+                disabled={isEnding}
+                className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#C83B24]/30 bg-[#FFF3F0] px-3 py-2 text-xs font-bold text-[#A63722] transition-colors hover:bg-[#FCE3DE] disabled:cursor-not-allowed disabled:opacity-60"
+                title="End camp"
+              >
+                <CircleStop className="w-3.5 h-3.5" />
+                <span>{isEnding ? 'Ending…' : t('camps.end_camp', 'End Camp')}</span>
+              </button>
+            )}
+          </>
         )}
       </div>
 

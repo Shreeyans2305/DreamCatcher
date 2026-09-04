@@ -66,22 +66,33 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
   const selectedPersona = samplePersonas.find(p => p.id === selectedPersonaId) || samplePersonas[0];
   const [queryInput, setQueryInput] = useState(selectedPersona.queries[uiLanguage] || selectedPersona.queries.en);
   const [aiResponse, setAiResponse] = useState(null);
+  const [aiError, setAiError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Sync queryInput when language or persona switches
   React.useEffect(() => {
     setQueryInput(selectedPersona.queries[uiLanguage] || selectedPersona.queries.en);
     setAiResponse(null);
+    setAiError(null);
   }, [uiLanguage, selectedPersonaId]);
 
   const handleSelectPersona = (p) => {
     setSelectedPersonaId(p.id);
     setQueryInput(p.queries[uiLanguage] || p.queries.en);
     setAiResponse(null);
+    setAiError(null);
   };
 
   const handleRunGuidance = async () => {
+    const question = queryInput.trim();
+    if (!question) {
+      setAiError(t('landing.demo_empty_question', 'Enter a question to get guidance.'));
+      return;
+    }
+
     setIsLoading(true);
+    setAiResponse(null);
+    setAiError(null);
     try {
       const studentMock = {
         full_name: selectedPersona.name,
@@ -93,10 +104,11 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
         village_location: selectedPersona.place,
         preferred_language: uiLanguage
       };
-      const res = await dummyAiEngine.generateGuidanceResponse(queryInput, studentMock);
+      const res = await dummyAiEngine.generateGuidanceResponse(question, studentMock);
       setAiResponse(res);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error('Homepage AI demo failed:', error);
+      setAiError(t('landing.demo_error', 'We could not generate guidance. Please try again.'));
     } finally {
       setIsLoading(false);
     }
@@ -407,6 +419,11 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
           </div>
         </div>
 
+        {aiError && (
+          <div role="alert" className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
+            {aiError}
+          </div>
+        )}
         {/* Answer Result Card */}
         {aiResponse && (
           <motion.div
@@ -427,21 +444,35 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
             </div>
 
             <p className="text-sm sm:text-base text-[#38332C] font-medium leading-relaxed">
-              {aiResponse.summary || aiResponse.response_text}
+              {aiResponse.text || aiResponse.summary || aiResponse.response_text}
             </p>
 
-            {aiResponse.pathways && aiResponse.pathways.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
-                {aiResponse.pathways.slice(0, 2).map((path, idx) => (
+            {aiResponse.pathway && (
+              <div className="rounded-xl bg-[#FFF7F4] border border-[#F1D4CC] p-4">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#A63722] block mb-1">
+                  {t('landing.demo_pathway', 'Recommended pathway')}
+                </span>
+                <p className="text-sm font-bold text-[#302B25] leading-relaxed">{aiResponse.pathway}</p>
+              </div>
+            )}
+
+            {aiResponse.schemes?.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                {aiResponse.schemes.slice(0, 2).map((scheme, idx) => (
                   <div key={idx} className="bg-white/90 border border-[#D5CCBD] p-4 rounded-xl">
-                    <span className="font-display font-bold text-sm text-[#141414] block mb-1">
-                      {path.title || path.trade_name}
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#7A746C] block mb-1">
+                      {t('landing.demo_scheme', 'Support option')} {idx + 1}
                     </span>
-                    <span className="text-xs text-[#585149] font-medium block leading-normal">
-                      {path.description}
-                    </span>
+                    <span className="text-xs text-[#585149] font-medium block leading-normal">{scheme}</span>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {aiResponse.nextStep && (
+              <div className="text-sm text-[#38332C] font-medium leading-relaxed">
+                <span className="font-bold">{t('landing.demo_next_step', 'Next step:')} </span>
+                {aiResponse.nextStep}
               </div>
             )}
           </motion.div>
