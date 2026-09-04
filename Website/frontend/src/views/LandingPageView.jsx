@@ -170,26 +170,47 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
       {/* ============================================================ */}
       {/* 2. HERO SECTION: BIG, BOLD, THICK & HUMAN                     */}
       {/* ============================================================ */}
-      <section className="pt-28 sm:pt-36 pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
+      <section className="hero-section pt-28 sm:pt-36 pb-16 sm:pb-20 px-4 sm:px-6 text-center max-w-6xl mx-auto">
 
-        {/* Big, Bold, Thick Human Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="font-display font-black text-5xl sm:text-7xl lg:text-8xl text-[#121212] tracking-tight leading-[0.98] mb-6"
+        {/* Hero Billboard Card with Background Image & Centered Big Title */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full rounded-3xl sm:rounded-[36px] overflow-hidden shadow-2xl border border-black/10 bg-[#141414] min-h-[380px] sm:min-h-[480px] flex items-center justify-center px-6 py-16 sm:py-24 mb-10 group"
         >
-          {t('landing.hero_title_1', 'BIG DREAMS.')}<br />
-          <span className="text-[#DE482B] italic font-serif-zen font-normal">
-            {t('landing.hero_title_2', 'CATCH THEM HERE.')}
-          </span>
-        </motion.h1>
+          {/* Background Image */}
+          <img
+            src="/catcherimage2.png"
+            alt="DreamCatcher community learning"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+
+
+
+
+
+          {/* Text Centered in the Middle */}
+          <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="font-display font-black text-5xl sm:text-7xl lg:text-8xl text-[#F5F0E8] tracking-tight leading-[0.98]"
+            >
+              {t('landing.hero_title_1', 'BIG DREAMS.')}<br />
+              <span className="inline-block bg-black/70 px-5 py-2 sm:px-7 sm:py-3 text-[#D94F2B] italic font-serif-zen font-normal">
+                {t('landing.hero_title_2', 'CATCH THEM HERE.')}
+              </span>
+            </motion.h1>
+          </div>
+        </motion.div>
 
         {/* Real, human, grounded subtext */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
           className="text-base sm:text-xl text-[#524B41] max-w-2xl mx-auto font-medium leading-relaxed mb-10"
         >
           {t('landing.hero_subtitle')}
@@ -199,8 +220,8 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-16"
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-14"
         >
           <button
             onClick={onEnterAuth}
@@ -213,7 +234,7 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
 
           <a
             href="#try-it"
-            className="w-full sm:w-auto px-7 py-4 text-base font-bold bg-white/70 hover:bg-white text-[#141414] border border-[#D5CCBD] rounded-full transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto px-7 py-4 text-base font-bold bg-white/80 hover:bg-white text-[#141414] border border-[#D5CCBD] rounded-full transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
           >
             <Play className="w-4 h-4 fill-current text-[#7A6F62]" />
             <span>{t('landing.cta_test', 'Test the AI Counselor')}</span>
@@ -224,12 +245,12 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
           className="grid grid-cols-2 max-w-lg mx-auto gap-4 text-left"
         >
           <div className="glass-card p-5 rounded-2xl">
-            <span className="font-display font-black text-3xl sm:text-4xl text-[#141414] block mb-1">
-              {t('landing.stat_langs', '4 Languages')}
+            <span className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[#141414] block mb-1">
+              {t('landing.stat_langs', 'Multilingual')}
             </span>
             <span className="text-xs sm:text-sm font-bold text-[#61574C]">
               {t('landing.stat_langs_label', 'Marathi • Hindi • Gujarati • EN')}
@@ -237,7 +258,7 @@ export default function LandingPageView({ onEnterAuth, onEnterPortal }) {
           </div>
 
           <div className="glass-card p-5 rounded-2xl">
-            <span className="font-display font-black text-3xl sm:text-4xl text-[#DE482B] block mb-1">
+            <span className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[#DE482B] block mb-1">
               {t('landing.stat_free', '100% Free')}
             </span>
             <span className="text-xs sm:text-sm font-bold text-[#61574C]">
