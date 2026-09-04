@@ -222,6 +222,7 @@ export function CampOperationsProvider({ children }) {
       createCamp,
       students,
       enrollStudent,
+      registerNewStudent: enrollStudent,
       addCaseNoteToStudent,
       syncQueue,
       isOnline,

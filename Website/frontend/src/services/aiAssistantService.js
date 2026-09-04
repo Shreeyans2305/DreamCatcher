@@ -125,6 +125,54 @@ const ASPIRATION_KNOWLEDGE_BASE = {
       hi: ['ANM और GNM में क्या अंतर है?', 'क्या नर्सिंग के लिए NEET जरूरी है?', 'सरकारी अस्पताल में जॉब कैसे मिलती है?'],
       gu: ['ANM અને GNM વચ્ચે શું તફાવત છે?', 'NEET જરૂરી છે?', 'સરકારી નોકરી કેવી રીતે મળે?']
     }
+  },
+  agriculture_dairy: {
+    title: 'Agriculture & Dairy Farming',
+    keywords: ['agriculture', 'dairy', 'farm', 'krishi', 'farming', 'livestock', 'crop', 'soil', 'kisan', 'animal'],
+    pathway: {
+      en: 'Class 10th Pass → Diploma in Agriculture / Animal Husbandry → Modern Dairy Farm Management & NABARD / PM Kisan Subsidized Agro-Ventures.',
+      mr: '१० वी उत्तीर्ण → कृषी / पशुसंवर्धन पदविका (Agri Diploma) → आधुनिक दुग्ध व्यवसाय व्यवस्थापन व नाबार्ड / पोकरा (PoCRA) कृषी अनुदान योजना.',
+      hi: '10वीं पास → कृषि/पशुपालन डिप्लोमा → आधुनिक डेयरी फार्मिंग प्रबंधन एवं नाबार्ड / पीएम किसान अनुदान योजनाएं.',
+      gu: '૧૦મું પાસ → કૃષિ / પશુપાલન ડિપ્લોમા → ડેરી ફાર્મિંગ વ્યવસ્થાપન અને નાબાર્ડ સરકારી યોજનાઓ.'
+    },
+    criteria: {
+      mr: '१० वी उत्तीर्ण गुणपत्रिका, ७/१२ उतारा किंवा ग्रामीण रहिवासी दाखला कृषी व दुग्ध व्यवसाय अनुदान योजनांसाठी आवश्यक.',
+      hi: '10वीं पास अंकपत्र, खतौनी/जमीन दस्तावेज या ग्रामीण निवास प्रमाण पत्र सरकारी अनुदान के लिए आवश्यक है।',
+      gu: '૧૦મું પાસ માર્કશીટ, ૭/૧૨ નો ઉતારો અથવા ગ્રામીણ રહેઠાણ પ્રમાણપત્ર જરૂરી છે.',
+      en: 'Class 10th pass, basic land records (7/12 extract) or rural residency certificate for state agriculture subsidies.'
+    },
+    opportunities: [
+      {
+        id: 'opp-agri-01',
+        title: 'Maharashtra Krishi Vidyapeeth Agriculture Diploma Admissions',
+        type: 'Agri Polytechnic',
+        official_url: 'https://mcaer.org',
+        deadline: 'August Annual Cycle',
+        match_reason: 'Practical hands-on training in dairy cattle breeding, organic cultivation, and farm automation.'
+      },
+      {
+        id: 'opp-dairy-02',
+        title: 'NABARD Dairy Entrepreneurship Development Scheme (DEDS)',
+        type: 'Government Subsidy',
+        official_url: 'https://nabard.org',
+        deadline: 'Ongoing FY 2026-27',
+        match_reason: 'Up to 33% capital subsidy for rural youth establishing modern dairy and cattle units.'
+      },
+      {
+        id: 'opp-pmkisan-03',
+        title: 'PM Kisan Samman Nidhi & Farmer Credit Card (KCC)',
+        type: 'Credit & Grant',
+        official_url: 'https://pmkisan.gov.in',
+        deadline: 'Open Registration',
+        match_reason: 'Direct financial assistance and low-interest credit for farm equipment and livestock feed.'
+      }
+    ],
+    chips: {
+      en: ['How to apply for Dairy Farm subsidy?', 'Government Agriculture Colleges after 10th?', 'What is the fee for Agri Diploma?', 'Organic farming training centers?'],
+      mr: ['दुग्ध व्यवसायासाठी सरकारी अनुदान कसे मिळवायचे?', '१०वीनंतर कृषी पदविका (Agri Diploma) महाविद्यालये कोणती?', 'कृषी पदविकेची फी किती असते?', 'सेंद्रिय शेती प्रशिक्षण केंद्र कोठे आहे?'],
+      hi: ['डेयरी फार्मिंग के लिए सरकारी सब्सिडी कैसे लें?', '10वीं के बाद कृषि कॉलेज कौन से हैं?', 'कृषि डिप्लोमा की फीस कितनी है?', 'जैविक खेती का प्रशिक्षण कहां मिलता है?'],
+      gu: ['ડેરી ફાર્મ માટે સરકારી સબસિડી કેવી રીતે મેળવવી?', '૧૦મા પછી એગ્રીકલ્ચર કોર્સ?', 'ડિપ્લોમાની ફી કેટલી છે?']
+    }
   }
 };
 

@@ -33,7 +33,7 @@ const INITIAL_FORM = {
 
 export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
   const { t } = useLanguage();
-  const { activeCamp, registerNewStudent } = useCampOperations();
+  const { activeCamp, enrollStudent, registerNewStudent } = useCampOperations();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_FORM);
@@ -76,12 +76,38 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
   };
 
   const finalizeStudent = () => {
-    const newStudent = registerNewStudent({
-      ...formData,
-      camp_id: activeCamp?.camp_id || 'CAMP-DEFAULT',
-      age_years: parseInt(formData.age_years, 10) || 15,
-      annual_family_income_inr: parseInt(formData.annual_family_income_inr, 10) || 0
-    });
+    const registerFn = registerNewStudent || enrollStudent;
+    let newStudent = null;
+    
+    if (typeof registerFn === 'function') {
+      try {
+        newStudent = registerFn({
+          ...formData,
+          camp_id: activeCamp?.camp_id || 'CAMP-DEFAULT',
+          age_years: parseInt(formData.age_years, 10) || 15,
+          annual_family_income_inr: parseInt(formData.annual_family_income_inr, 10) || 0
+        });
+      } catch (err) {
+        console.warn('registerFn error:', err);
+      }
+    }
+
+    if (!newStudent) {
+      newStudent = storageEngine.addStudent({
+        student_record_id: `stu-${Date.now()}`,
+        camp_id: activeCamp?.camp_id || 'CAMP-DEFAULT',
+        full_name: formData.full_name,
+        age_years: parseInt(formData.age_years, 10) || 15,
+        education_level: formData.education_level,
+        category: formData.category,
+        preferred_language: formData.preferred_language || 'mr',
+        aspirations: formData.aspirations,
+        village_location: formData.village_location,
+        guardian_contact_number: formData.guardian_contact_number || formData.parent_guardian_phone,
+        created_at: new Date().toISOString()
+      });
+    }
+
     storageEngine.clearIntakeDraft();
     return newStudent;
   };
@@ -93,7 +119,9 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
 
   const handleSaveAndLaunch = () => {
     const created = finalizeStudent();
-    if (onLaunchGuidance) onLaunchGuidance(created);
+    if (onLaunchGuidance) {
+      onLaunchGuidance(created);
+    }
   };
 
   const steps = [

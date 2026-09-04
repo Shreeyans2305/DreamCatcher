@@ -33,25 +33,27 @@ const DEMO_STUDENT_NEEL = {
 
 export default function CounselingStudio({ student: initialStudent, onBackToDirectory, onNewStudentIntake }) {
   const { t, currentLanguage, changeLanguage } = useLanguage();
-  const { addCaseNoteToStudent } = useCampOperations();
+  const { addCaseNoteToStudent, selectedStudentForGuidance } = useCampOperations();
 
-  const [activeStudent, setActiveStudent] = useState(initialStudent || null);
+  const currentStudentObj = initialStudent || selectedStudentForGuidance || null;
+  const [activeStudent, setActiveStudent] = useState(currentStudentObj);
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [chips, setChips] = useState([]);
   const [summaryModalNote, setSummaryModalNote] = useState(null);
-  const [activeLanguage, setActiveLanguage] = useState(initialStudent?.preferred_language || currentLanguage || 'mr');
+  const [activeLanguage, setActiveLanguage] = useState(currentStudentObj?.preferred_language || currentLanguage || 'en');
 
   const messagesEndRef = useRef(null);
 
-  // Sync if prop changes
+  // Sync if prop or context changes
   useEffect(() => {
-    if (initialStudent) {
-      setActiveStudent(initialStudent);
-      setActiveLanguage(initialStudent.preferred_language || currentLanguage || 'mr');
+    const studentToUse = initialStudent || selectedStudentForGuidance;
+    if (studentToUse) {
+      setActiveStudent(studentToUse);
+      setActiveLanguage(studentToUse.preferred_language || currentLanguage || 'en');
     }
-  }, [initialStudent, currentLanguage]);
+  }, [initialStudent, selectedStudentForGuidance, currentLanguage]);
 
   // Initialize session greeting & chips
   useEffect(() => {
