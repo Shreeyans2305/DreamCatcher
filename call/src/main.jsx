@@ -5,13 +5,7 @@ import './styles.css';
 
 function App() {
   return (
-    <CallScreen
-      contactName="Maya Thompson"
-      contactLabel="mobile"
-      onRecordingComplete={(audioBlob) => {
-        console.info('Recording ready for upload:', audioBlob);
-      }}
-    />
+    <CallScreen />
   );
 }
 

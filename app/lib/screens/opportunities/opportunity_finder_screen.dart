@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/design_tokens.dart';
 import '../../core/widgets/widgets.dart';
 import '../../data/models/opportunity.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/opportunities_provider.dart';
 import 'opportunity_detail_sheet.dart';
 
@@ -26,15 +27,16 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final provider = context.watch<OpportunitiesProvider>();
     final items = provider.filteredOpportunities;
 
     final typeChips = [
-      const FilterChipItem(label: 'All Opportunities', value: 'all'),
-      const FilterChipItem(label: 'Scholarships', value: 'scholarship', icon: Icons.school_outlined),
-      const FilterChipItem(label: 'Vocational Courses', value: 'course', icon: Icons.book_outlined),
-      const FilterChipItem(label: 'Entrance Exams', value: 'entrance_exam', icon: Icons.edit_note_rounded),
-      const FilterChipItem(label: 'Internships', value: 'internship', icon: Icons.work_outline_rounded),
+      FilterChipItem(label: l10n.filterAll, value: 'all'),
+      FilterChipItem(label: l10n.filterScholarships, value: 'scholarship', icon: Icons.school_outlined),
+      FilterChipItem(label: l10n.filterCourses, value: 'course', icon: Icons.book_outlined),
+      FilterChipItem(label: l10n.filterExams, value: 'entrance_exam', icon: Icons.edit_note_rounded),
+      FilterChipItem(label: l10n.filterInternships, value: 'internship', icon: Icons.work_outline_rounded),
     ];
 
     return Scaffold(
@@ -47,7 +49,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
               child: AppSearchBar(
                 controller: _searchController,
-                hintText: 'Search scholarships, exams, courses...',
+                hintText: l10n.searchHint,
                 onChanged: provider.setSearchQuery,
                 filterActive: provider.onlyEligible,
                 onFilterTap: () {
@@ -108,7 +110,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            'Eligible Only',
+                            l10n.filterEligibleOnly,
                             style: GoogleFonts.inter(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -154,6 +156,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
   }
 
   Widget _buildCard(BuildContext context, Opportunity opp) {
+    final l10n = AppLocalizations.of(context)!;
     final elig = opp.eligibilityResult;
 
     return Padding(
@@ -203,7 +206,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          elig.isEligible ? 'Eligible' : 'Check Criteria',
+                          elig.isEligible ? l10n.eligibleBadge : l10n.notEligibleBadge,
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -246,7 +249,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
             // Rules summary line
             if (elig != null && elig.totalRulesCount > 0) ...[
               Text(
-                '${elig.passedRulesCount} of ${elig.totalRulesCount} criteria matched for your profile',
+                l10n.rulesPassed(elig.passedRulesCount, elig.totalRulesCount),
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   color: elig.isEligible ? DesignTokens.mintText : DesignTokens.textMuted,
@@ -296,7 +299,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                 provider.setOnlyEligible(false);
                 provider.setType('all');
               },
-              child: const Text('Reset Filters'),
+              child: Text(AppLocalizations.of(context)!.resetFilters),
             ),
           ],
         ),

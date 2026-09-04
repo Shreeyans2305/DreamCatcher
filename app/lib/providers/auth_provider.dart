@@ -6,11 +6,13 @@ import '../data/models/student.dart';
 class AuthProvider extends ChangeNotifier {
   final DreamCatcherApiClient _apiClient;
   StudentProfile? _currentStudent;
+  String _preferredLanguage = 'en';
   bool _isLoading = true;
   String? _errorMessage;
 
   String _socialCategory = 'General';
   String _tribe = '';
+  String _disabilityStatus = 'Prefer not to say';
   double _familyIncome = 0;
   String _ruralUrban = 'rural';
 
@@ -22,9 +24,11 @@ class AuthProvider extends ChangeNotifier {
   bool get isAuthenticated => _currentStudent != null;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  String get preferredLanguage => _preferredLanguage;
 
   String get socialCategory => _socialCategory;
   String get tribe => _tribe;
+  String get disabilityStatus => _disabilityStatus;
   double get familyIncome => _familyIncome;
   String get ruralUrban => _ruralUrban;
 
@@ -33,6 +37,7 @@ class AuthProvider extends ChangeNotifier {
   static const String _prefTribeKey = 'dreamcatcher_tribe';
   static const String _prefIncomeKey = 'dreamcatcher_family_income';
   static const String _prefRuralUrbanKey = 'dreamcatcher_rural_urban';
+  static const String _prefLanguageKey = 'dreamcatcher_preferred_language';
 
   void _parseDemographicsFromStudent(StudentProfile student) {
     if (student.educationRecords.isNotEmpty) {
@@ -45,6 +50,10 @@ class AuthProvider extends ChangeNotifier {
       if (tribeMatch != null) {
         final t = tribeMatch.group(1)!.trim();
         if (t.toLowerCase() != 'none') _tribe = t;
+      }
+      final disabilityMatch = RegExp(r'Disability:\s*([^|]+)').firstMatch(desc);
+      if (disabilityMatch != null) {
+        _disabilityStatus = disabilityMatch.group(1)!.trim();
       }
       final incMatch = RegExp(r'Income:\s*₹?([0-9.]+)').firstMatch(desc);
       if (incMatch != null) {
@@ -63,16 +72,19 @@ class AuthProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final savedId = prefs.getString(_prefStudentIdKey);
+      final savedLanguage = prefs.getString(_prefLanguageKey);
       _socialCategory = prefs.getString(_prefCategoryKey) ?? 'General';
       _tribe = prefs.getString(_prefTribeKey) ?? '';
       _familyIncome = prefs.getDouble(_prefIncomeKey) ?? 0;
       _ruralUrban = prefs.getString(_prefRuralUrbanKey) ?? 'rural';
+      _preferredLanguage = savedLanguage ?? 'en';
 
       if (savedId != null && savedId.isNotEmpty) {
         debugPrint('Found saved student session ID: $savedId');
         try {
           _currentStudent = await _apiClient.getStudent(savedId);
           if (_currentStudent != null) {
+            if (savedLanguage == null) _preferredLanguage = _currentStudent!.preferredLanguage;
             _parseDemographicsFromStudent(_currentStudent!);
           }
         } catch (e) {
@@ -84,6 +96,7 @@ class AuthProvider extends ChangeNotifier {
         try {
           _currentStudent = await _apiClient.getStudent('f8767ba0-fa95-4c4c-8af0-f745b9180a47');
           if (_currentStudent != null) {
+            if (savedLanguage == null) _preferredLanguage = _currentStudent!.preferredLanguage;
             _parseDemographicsFromStudent(_currentStudent!);
             await prefs.setString(_prefStudentIdKey, _currentStudent!.id);
             debugPrint('Auto-connected to verified student: ${_currentStudent!.name}');
@@ -103,11 +116,13 @@ class AuthProvider extends ChangeNotifier {
   Future<void> updateDemographics({
     String? socialCategory,
     String? tribe,
+    String? disabilityStatus,
     double? familyIncome,
     String? ruralUrban,
   }) async {
     if (socialCategory != null) _socialCategory = socialCategory;
     if (tribe != null) _tribe = tribe;
+    if (disabilityStatus != null) _disabilityStatus = disabilityStatus;
     if (familyIncome != null) _familyIncome = familyIncome;
     if (ruralUrban != null) _ruralUrban = ruralUrban;
     notifyListeners();
@@ -128,6 +143,7 @@ class AuthProvider extends ChangeNotifier {
         final payload = [
           'Category: $_socialCategory',
           if (_tribe.isNotEmpty) 'Tribe: $_tribe',
+          'Disability: $_disabilityStatus',
           'Income: ₹${_familyIncome.toInt()}',
           'Area: $_ruralUrban',
         ].join(' | ');
@@ -147,6 +163,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> setCurrentStudent(StudentProfile student) async {
     _currentStudent = student;
+    _preferredLanguage = student.preferredLanguage;
     _parseDemographicsFromStudent(student);
     notifyListeners();
     try {
@@ -154,6 +171,26 @@ class AuthProvider extends ChangeNotifier {
       await prefs.setString(_prefStudentIdKey, student.id);
     } catch (e) {
       debugPrint('Error saving student ID: $e');
+    }
+  }
+
+  Future<void> updatePreferredLanguage(String languageCode) async {
+    _preferredLanguage = languageCode;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_prefLanguageKey, languageCode);
+
+      if (_currentStudent != null) {
+        _currentStudent = await _apiClient.updateStudent(
+          _currentStudent!.id,
+          {'preferred_language': languageCode},
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error saving preferred language: $e');
     }
   }
 

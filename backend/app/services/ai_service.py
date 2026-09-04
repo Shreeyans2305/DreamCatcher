@@ -266,6 +266,7 @@ Guidelines:
 6. If the user writes in Hindi or requests Hindi, reply in natural conversational Hindi (Devanagari or Hinglish). Otherwise reply in clear English.
 7. NEVER make up opportunity names, deadlines, or URLs. Only reference data from the "Verified Opportunities" section above.
 8. At the end, suggest 3 brief follow-up questions the student might want to ask (prefixed with "💡").
+9. For a new caller with missing profile details, act as an interviewer: ask for one or two missing facts at a time (name, village/state, education, work or skills, interests, and goal). Use facts already shared in conversation history and do not ask the same question again. Only give highly specific opportunity guidance after enough facts are available.
 """
 
         # Build multi-turn contents

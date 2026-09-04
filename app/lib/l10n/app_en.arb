@@ -75,6 +75,7 @@
   "filterExams": "Exams",
   "filterInternships": "Internships",
   "filterEligibleOnly": "Eligible Only",
+  "resetFilters": "Reset Filters",
   "eligibleBadge": "Eligible",
   "notEligibleBadge": "Check Criteria",
   "rulesPassed": "{passed} of {total} criteria met",

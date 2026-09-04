@@ -75,6 +75,7 @@
   "filterExams": "प्रवेश परीक्षाएं",
   "filterInternships": "इंटर्नशिप",
   "filterEligibleOnly": "केवल पात्र",
+  "resetFilters": "फ़िल्टर रीसेट करें",
   "eligibleBadge": "पात्र (Eligible)",
   "notEligibleBadge": "पात्रता जांचें",
   "rulesPassed": "{total} में से {passed} शर्तें पूरी हुईं",

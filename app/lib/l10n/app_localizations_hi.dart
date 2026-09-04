@@ -170,6 +170,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get filterEligibleOnly => 'केवल पात्र';
 
   @override
+  String get resetFilters => 'फ़िल्टर रीसेट करें';
+
+  @override
   String get eligibleBadge => 'पात्र (Eligible)';
 
   @override

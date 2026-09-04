@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/design_tokens.dart';
 import '../../core/widgets/widgets.dart';
 import '../../data/models/opportunity.dart';
+import '../../l10n/app_localizations.dart';
 
 class OpportunityDetailSheet extends StatelessWidget {
   final Opportunity opportunity;
@@ -20,6 +21,7 @@ class OpportunityDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final elig = opportunity.eligibilityResult;
 
     return Container(
@@ -88,7 +90,7 @@ class OpportunityDetailSheet extends StatelessWidget {
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                elig.isEligible ? 'You Are Eligible' : 'Check Criteria',
+                                elig.isEligible ? l10n.eligibleBadge : l10n.notEligibleBadge,
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
@@ -117,9 +119,9 @@ class OpportunityDetailSheet extends StatelessWidget {
                   if (opportunity.highlightBenefit != null) ...[
                     StatBlock(
                       stat: opportunity.highlightBenefit!,
-                      label: opportunity.type == 'scholarship'
-                          ? 'Total financial award support'
-                          : 'Program benefit highlights',
+                        label: opportunity.type == 'scholarship'
+                          ? l10n.dashboardMatchedOpps
+                          : l10n.topOpportunitiesTitle,
                       variant: StatBlockVariant.mint,
                       icon: Icons.monetization_on_outlined,
                     ),
@@ -129,7 +131,7 @@ class OpportunityDetailSheet extends StatelessWidget {
                   // Description
                   if (opportunity.description != null && opportunity.description!.isNotEmpty) ...[
                     Text(
-                      'About This Opportunity',
+                      l10n.topOpportunitiesTitle,
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -153,7 +155,7 @@ class OpportunityDetailSheet extends StatelessWidget {
 
                   // Plain-Language Eligibility Reasoning Breakdown
                   Text(
-                    'Eligibility Breakdown',
+                    l10n.eligibilityReasoningTitle,
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -172,7 +174,7 @@ class OpportunityDetailSheet extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${elig.passedRulesCount} of ${elig.totalRulesCount} criteria satisfied',
+                                l10n.rulesPassed(elig.passedRulesCount, elig.totalRulesCount),
                                 style: GoogleFonts.inter(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
@@ -270,14 +272,13 @@ class OpportunityDetailSheet extends StatelessWidget {
 
           // Bottom Action Button
           Container(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(top: BorderSide(color: DesignTokens.border.withValues(alpha: 0.8))),
             ),
             child: ElevatedButton.icon(
               icon: const Icon(Icons.open_in_new_rounded, size: 18),
-              label: const Text('Apply on Official Portal'),
+              label: Text(l10n.applyNow),
               onPressed: () {
                 final url = opportunity.applicationUrl ?? opportunity.officialUrl ?? 'https://scholarships.gov.in';
                 ScaffoldMessenger.of(context).showSnackBar(

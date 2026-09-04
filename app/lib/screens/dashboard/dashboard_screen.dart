@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/design_tokens.dart';
 import '../../core/widgets/widgets.dart';
 import '../../data/models/opportunity.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/opportunities_provider.dart';
 import '../opportunities/opportunity_detail_sheet.dart';
@@ -23,6 +24,7 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
     final opps = context.watch<OpportunitiesProvider>();
     final student = auth.currentStudent;
@@ -59,7 +61,7 @@ class DashboardScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hello, $name 👋',
+                            l10n.greeting(name),
                             style: GoogleFonts.poppins(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
@@ -69,7 +71,7 @@ class DashboardScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Discover your future, step by step',
+                            l10n.tagline,
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               color: DesignTokens.textSecondary,
@@ -109,7 +111,7 @@ class DashboardScreen extends StatelessWidget {
                     Expanded(
                       child: StatBlock(
                         stat: '$completenessPercent%',
-                        label: 'Profile Complete',
+                        label: l10n.dashboardCompleteness,
                         variant: StatBlockVariant.mustard,
                         icon: Icons.pie_chart_outline_rounded,
                         onTap: onNavigateToProfile,
@@ -119,7 +121,7 @@ class DashboardScreen extends StatelessWidget {
                     Expanded(
                       child: StatBlock(
                         stat: '$matchedCount',
-                        label: 'Matches For You',
+                        label: l10n.dashboardMatchedOpps,
                         variant: StatBlockVariant.mint,
                         icon: Icons.star_outline_rounded,
                         onTap: onNavigateToOpportunities,
@@ -135,8 +137,8 @@ class DashboardScreen extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: AvatarStack(
                     label: matchedCount > 0
-                        ? '$matchedCount opportunities matched for $region'
-                        : 'Explore all scholarships & schemes available for $region',
+                      ? '${l10n.dashboardMatchedOpps}: $matchedCount ($region)'
+                      : '${l10n.viewAll}: $region',
                     totalCount: matchedCount > 0 ? matchedCount : opps.allOpportunities.length,
                   ),
                 ),
@@ -168,7 +170,7 @@ class DashboardScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'DreamCatcher AI Guide',
+                              l10n.assistantTitle,
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -177,7 +179,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Have doubts about college or exams? Ask in your language.',
+                              l10n.assistantSubtitle,
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 color: DesignTokens.lavenderText.withValues(alpha: 0.9),
@@ -201,7 +203,7 @@ class DashboardScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Top Opportunities For You',
+                      l10n.topOpportunitiesTitle,
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -211,7 +213,7 @@ class DashboardScreen extends StatelessWidget {
                     TextButton(
                       onPressed: onNavigateToOpportunities,
                       child: Text(
-                        'View All',
+                        l10n.viewAll,
                         style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
@@ -240,7 +242,7 @@ class DashboardScreen extends StatelessWidget {
                           const Icon(Icons.search_off_rounded, size: 40, color: DesignTokens.textMuted),
                           const SizedBox(height: 8),
                           Text(
-                            'No opportunities found yet.',
+                            l10n.noOpportunitiesFound,
                             style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
                           ),
                         ],
@@ -261,6 +263,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildOpportunityCard(BuildContext context, Opportunity opp) {
+    final l10n = AppLocalizations.of(context)!;
     final elig = opp.eligibilityResult;
 
     return Padding(
@@ -299,7 +302,7 @@ class DashboardScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
                     ),
                     child: Text(
-                      elig.isEligible ? 'Eligible' : 'Check Criteria',
+                      elig.isEligible ? l10n.eligibleBadge : l10n.notEligibleBadge,
                       style: GoogleFonts.inter(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,

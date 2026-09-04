@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/design_tokens.dart';
 
 class AppSearchBar extends StatelessWidget {
@@ -59,7 +60,7 @@ class AppSearchBar extends StatelessWidget {
               padding: const EdgeInsets.only(right: 6),
               child: Semantics(
                 button: true,
-                label: 'Filter options',
+                label: AppLocalizations.of(context)!.filterEligibleOnly,
                 child: Material(
                   color: DesignTokens.primary,
                   shape: const CircleBorder(),

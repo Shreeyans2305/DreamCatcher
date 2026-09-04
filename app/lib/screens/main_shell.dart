@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/widgets/floating_bottom_nav.dart';
+import '../l10n/app_localizations.dart';
 import 'chat/chat_screen.dart';
 import 'dashboard/dashboard_screen.dart';
 import 'opportunities/opportunity_finder_screen.dart';
@@ -29,6 +30,7 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final screens = [
       DashboardScreen(
         onNavigateToOpportunities: () => _onTabSelected(1),
@@ -40,11 +42,11 @@ class _MainShellState extends State<MainShell> {
       const ProfileScreen(),
     ];
 
-    const navItems = [
-      FloatingNavItem(icon: Icons.home_rounded, label: 'Home'),
-      FloatingNavItem(icon: Icons.explore_rounded, label: 'Opportunities'),
-      FloatingNavItem(icon: Icons.chat_bubble_rounded, label: 'Assistant'),
-      FloatingNavItem(icon: Icons.person_rounded, label: 'Profile'),
+    final navItems = [
+      FloatingNavItem(icon: Icons.home_rounded, label: l10n.navDashboard),
+      FloatingNavItem(icon: Icons.explore_rounded, label: l10n.navOpportunities),
+      FloatingNavItem(icon: Icons.chat_bubble_rounded, label: l10n.navChat),
+      FloatingNavItem(icon: Icons.person_rounded, label: l10n.navProfile),
     ];
 
     return Scaffold(

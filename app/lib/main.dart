@@ -57,21 +57,31 @@ class DreamCatcherApp extends StatelessWidget {
               previous ?? ChatProvider(client, auth, opps),
         ),
       ],
-      child: MaterialApp(
-        title: 'DreamCatcher',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'),
-          Locale('hi'),
-        ],
-        home: const AuthGate(),
+      child: Consumer2<AuthProvider, OnboardingProvider>(
+        builder: (context, auth, onboarding, child) {
+            final languageCode = auth.isAuthenticated
+              ? auth.preferredLanguage
+              : onboarding.preferredLanguage;
+          final locale = AppLocalizations.supportedLocales.firstWhere(
+            (supportedLocale) => supportedLocale.languageCode == languageCode,
+            orElse: () => AppLocalizations.supportedLocales.first,
+          );
+
+          return MaterialApp(
+            title: 'DreamCatcher',
+            locale: locale,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const AuthGate(),
+          );
+        },
       ),
     );
   }

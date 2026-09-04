@@ -1,0 +1,23 @@
+# DreamCatcher voice counselling call
+
+This is the lightweight voice client for DreamCatcher counselling.
+
+## Run
+
+```sh
+npm install
+VITE_APP_BACKEND_URL=https://dreamcatcher-backend-635980060226.asia-south1.run.app/api/v1 VITE_STUDENT_ID=<optional-existing-student-uuid> npm run dev
+```
+
+`VITE_STUDENT_ID` is optional. When it is omitted, the first voice turn creates a new minimal caller profile. The returned `student_id` and `conversation_id` are retained for the remaining call.
+
+Use a browser that supports `MediaRecorder` and allow microphone access. Google Cloud Speech-to-Text transcribes the selected Indian language; Google Cloud Text-to-Speech reads the counsellor reply aloud. The assistant response uses the existing profile-aware opportunity matching.
+
+## Turn-by-turn voice conversation architecture
+
+1. Hold `Hold to speak` to open the microphone with `getUserMedia` and `MediaRecorder`.
+2. Release to stop recording. The client decodes the blob, resamples it to 16 kHz mono LINEAR16 WAV, and sends base64 bytes to `/api/v1/voice/query-base64`.
+3. The backend uses Google Cloud Speech-to-Text, sends the transcript and `conversation_id` through the existing profile-aware assistant service, persists the turn in the database conversation store, and uses Google Cloud Text-to-Speech for the reply.
+4. The returned `conversation_id` is reused for every later turn. Ending and starting a new call clears it. The returned audio is played as a data URL while the alternating transcript remains visible if playback fails.
+
+The voice endpoint can receive an existing `student_id`, but new callers do not need one. Authentication can be supplied with `VITE_AUTH_TOKEN` or the `auth_token` local-storage value.

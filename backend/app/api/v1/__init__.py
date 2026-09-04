@@ -8,7 +8,7 @@ from app.api.v1.reference import router as reference_router
 from app.api.v1.students import router as students_router
 from app.api.v1.opportunities import router as opportunities_router
 from app.api.v1.careers import router as careers_router
-from app.api.v1.assistant import router as assistant_router
+from app.api.v1.assistant import router as assistant_router, voice_router
 
 api_v1_router = APIRouter(prefix="/api/v1")
 
@@ -29,3 +29,4 @@ api_v1_router.include_router(careers_router, prefix="", tags=["Careers"])
 
 # AI Assistant & Guidance
 api_v1_router.include_router(assistant_router, prefix="", tags=["AI Assistant"])
+api_v1_router.include_router(voice_router, prefix="", tags=["Voice"])

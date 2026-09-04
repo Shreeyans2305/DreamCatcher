@@ -1,0 +1,11 @@
+{
+  "@@locale": "bn",
+  "appTitle": "ড্রিমক্যাচার", "tagline": "ধাপে ধাপে আপনার ভবিষ্যৎ আবিষ্কার করুন",
+  "navDashboard": "হোম", "navOpportunities": "সুযোগ", "navChat": "সহায়ক", "navProfile": "প্রোফাইল",
+  "onboardingWelcome": "চলুন আপনার ভবিষ্যতের পথ তৈরি করি", "onboardingSubtitle": "আপনার সম্পর্কে কিছু বলুন, যাতে আমরা আপনার জন্য সঠিক বৃত্তি, কোর্স, পরীক্ষা ও চাকরি খুঁজে দিতে পারি।",
+  "stepBasic": "মৌলিক তথ্য", "stepLocation": "স্থান ও পটভূমি", "stepEducation": "শিক্ষা ও দক্ষতা", "stepAspirations": "আপনার লক্ষ্য",
+  "fullNameLabel": "পুরো নাম", "fullNameHint": "যেমন: আরভ শর্মা", "phoneLabel": "ফোন নম্বর", "phoneHint": "যেমন: +91 98765 43210", "preferredLanguageLabel": "পছন্দের ভাষা", "selectLanguage": "আপনার ভাষা নির্বাচন করুন",
+  "stateLabel": "রাজ্য", "districtLabel": "জেলা", "areaTypeLabel": "এলাকার ধরন", "rural": "গ্রামীণ", "urban": "শহুরে", "semiUrban": "আধা-শহুরে", "casteCategoryLabel": "সামাজিক শ্রেণি", "incomeBracketLabel": "বার্ষিক পারিবারিক আয়", "educationLevelLabel": "সর্বোচ্চ শিক্ষাগত স্তর",
+  "skillsTitle": "আপনার দক্ষতা", "interestsTitle": "আপনার পছন্দের ক্ষেত্র", "aspirationLabel": "আপনার স্বপ্নের কাজ বা উচ্চাকাঙ্ক্ষা কী?", "aspirationHint": "যেমন: কৃষি ড্রোন পাইলট, ইলেকট্রিশিয়ান, সিভিল ইঞ্জিনিয়ার...", "btnNext": "চালিয়ে যান", "btnBack": "পিছনে", "btnFinish": "প্রোফাইল সম্পূর্ণ করুন", "saving": "আপনার প্রোফাইল সংরক্ষণ হচ্ছে...",
+  "dashboardCompleteness": "প্রোফাইল সম্পূর্ণতা", "dashboardMatchedOpps": "মিলেছে এমন সুযোগ", "topOpportunitiesTitle": "আপনার জন্য সেরা সুযোগ", "viewAll": "সব দেখুন", "searchHint": "বৃত্তি, কোর্স, পরীক্ষা খুঁজুন...", "filterAll": "সব", "filterScholarships": "বৃত্তি", "filterCourses": "কোর্স", "filterExams": "পরীক্ষা", "filterInternships": "ইন্টার্নশিপ", "filterEligibleOnly": "শুধু যোগ্য", "resetFilters": "ফিল্টার রিসেট করুন", "eligibleBadge": "যোগ্য", "notEligibleBadge": "শর্ত দেখুন", "eligibilityReasoningTitle": "যোগ্যতার বিবরণ", "applyNow": "সরকারি পোর্টালে আবেদন করুন", "noOpportunitiesFound": "কোনও মিল পাওয়া সুযোগ নেই।", "assistantTitle": "এআই ক্যারিয়ার গাইড", "assistantSubtitle": "আপনার যাত্রার জন্য ব্যক্তিগত পরামর্শ", "chatInputHint": "ক্যারিয়ার বা বৃত্তি সম্পর্কে জিজ্ঞাসা করুন...", "send": "পাঠান", "editProfile": "প্রোফাইল সম্পাদনা করুন", "addSkill": "দক্ষতা যোগ করুন", "addInterest": "আগ্রহ যোগ করুন", "saveChanges": "পরিবর্তন সংরক্ষণ করুন"
+}

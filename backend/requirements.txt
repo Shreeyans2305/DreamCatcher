@@ -27,4 +27,6 @@ python-dateutil==2.9.0
 # Generative AI & Cloud (Vertex AI)
 google-genai>=2.22.0
 google-auth>=2.57.0
+google-cloud-speech>=2.33.0
+google-cloud-texttospeech>=2.27.0
 tiktoken>=0.9.0

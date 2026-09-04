@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/design_tokens.dart';
 import '../../core/widgets/widgets.dart';
 import '../../data/models/reference.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/onboarding_provider.dart';
 import '../main_shell.dart';
 
@@ -58,12 +59,13 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     final stepTitles = [
-      'Basic Details',
-      'Location & Background',
-      'Education & Practical Learning',
-      'Skills & Interests',
-      'Your Aspirations',
+      l10n.stepBasic,
+      l10n.stepLocation,
+      l10n.stepEducation,
+      l10n.skillsTitle,
+      l10n.stepAspirations,
     ];
 
     return Container(
@@ -86,7 +88,7 @@ class OnboardingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Step ${provider.currentStep + 1} of ${provider.totalSteps}',
+                  '${provider.currentStep + 1} / ${provider.totalSteps}',
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -108,7 +110,7 @@ class OnboardingScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
               onPressed: provider.prevStep,
-              tooltip: 'Previous step',
+              tooltip: l10n.btnBack,
             ),
         ],
       ),
@@ -131,16 +133,16 @@ class OnboardingScreen extends StatelessWidget {
         return const SizedBox.shrink();
     }
   }
-
   // ---------------------------------------------------------------------------
   // Step 0: Basic Info & Language
   // ---------------------------------------------------------------------------
   Widget _buildStep0Basic(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Let\'s build your future path 🚀',
+          l10n.onboardingWelcome,
           style: GoogleFonts.poppins(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -149,22 +151,22 @@ class OnboardingScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Fill in a few details so we can find scholarships, courses, and jobs made for you.',
+          l10n.onboardingSubtitle,
           style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
         ),
         const SizedBox(height: 24),
 
         // Full Name
         Text(
-          'Your Full Name *',
+          '${l10n.fullNameLabel} *',
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
         TextFormField(
           initialValue: provider.name,
           onChanged: provider.setName,
-          decoration: const InputDecoration(
-            hintText: 'e.g. Aarav Sharma',
+          decoration: InputDecoration(
+            hintText: l10n.fullNameHint,
             prefixIcon: Icon(Icons.person_outline_rounded, color: DesignTokens.textMuted),
           ),
         ),
@@ -172,7 +174,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Phone Number
         Text(
-          'Phone Number (for SMS alerts)',
+          l10n.phoneLabel,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
@@ -180,8 +182,8 @@ class OnboardingScreen extends StatelessWidget {
           initialValue: provider.phone,
           keyboardType: TextInputType.phone,
           onChanged: provider.setPhone,
-          decoration: const InputDecoration(
-            hintText: '+91 98765 43210',
+          decoration: InputDecoration(
+            hintText: l10n.phoneHint,
             prefixIcon: Icon(Icons.phone_outlined, color: DesignTokens.textMuted),
           ),
         ),
@@ -189,7 +191,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Preferred Language
         Text(
-          'Preferred Language',
+          l10n.preferredLanguageLabel,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
@@ -199,7 +201,8 @@ class OnboardingScreen extends StatelessWidget {
             for (final l in provider.languages) {
               uniqueLangs[l.code] = l;
             }
-            final langList = uniqueLangs.values.toList();
+            final langList = uniqueLangs.values
+                .toList();
             final currentLang = provider.preferredLanguage;
             final effectiveLang = uniqueLangs.containsKey(currentLang)
                 ? currentLang
@@ -216,7 +219,7 @@ class OnboardingScreen extends StatelessWidget {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: effectiveLang,
-                  hint: const Text('Select your preferred language'),
+                  hint: Text(l10n.selectLanguage),
                   icon: const Icon(Icons.keyboard_arrow_down_rounded),
                   items: langList.map((lang) {
                     return DropdownMenuItem<String>(
@@ -243,11 +246,12 @@ class OnboardingScreen extends StatelessWidget {
   // Step 1: Location & Background Demographics
   // ---------------------------------------------------------------------------
   Widget _buildStep1Location(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Where are you located?',
+          '${l10n.stateLabel} & ${l10n.districtLabel}',
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -263,7 +267,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Location Selector from Catalogue
         Text(
-          'Select Your Village / District *',
+          '${l10n.districtLabel} *',
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
@@ -290,7 +294,7 @@ class OnboardingScreen extends StatelessWidget {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: effectiveId,
-                  hint: const Text('Select your village or district'),
+                  hint: Text(l10n.selectLanguage),
                   icon: const Icon(Icons.keyboard_arrow_down_rounded),
                   items: locList.map((loc) {
                     return DropdownMenuItem<String>(
@@ -314,26 +318,26 @@ class OnboardingScreen extends StatelessWidget {
 
         // Rural / Urban toggle
         Text(
-          'Area Classification',
+          l10n.areaTypeLabel,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
         Row(
           children: [
             _buildSelectionPill(
-              label: 'Rural',
+              label: l10n.rural,
               selected: provider.ruralUrban == 'rural',
               onTap: () => provider.setRuralUrban('rural'),
             ),
             const SizedBox(width: 12),
             _buildSelectionPill(
-              label: 'Semi-Urban',
+              label: l10n.semiUrban,
               selected: provider.ruralUrban == 'semi_urban',
               onTap: () => provider.setRuralUrban('semi_urban'),
             ),
             const SizedBox(width: 12),
             _buildSelectionPill(
-              label: 'Urban',
+              label: l10n.urban,
               selected: provider.ruralUrban == 'urban',
               onTap: () => provider.setRuralUrban('urban'),
             ),
@@ -343,7 +347,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Caste / Social Category
         Text(
-          'Social Category & Caste (for quota eligibility)',
+          l10n.casteCategoryLabel,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 4),
@@ -364,6 +368,29 @@ class OnboardingScreen extends StatelessWidget {
           }).toList(),
         ),
         const SizedBox(height: 16),
+
+        Text(
+          'Do you have any disabilities?',
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'This helps us find opportunities with relevant accessibility support and benefits.',
+          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textSecondary),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: ['Yes', 'No', 'Prefer not to say'].map((status) {
+            return _buildSelectionPill(
+              label: status,
+              selected: provider.disabilityStatus == status,
+              onTap: () => provider.setDisabilityStatus(status),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 20),
 
         // Tribal Community / Tribe Affiliation
         Container(
@@ -487,7 +514,7 @@ class OnboardingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Annual Family Income',
+              l10n.incomeBracketLabel,
               style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             Container(
@@ -583,6 +610,7 @@ class OnboardingScreen extends StatelessWidget {
   // Step 2: Education & Practical Learning
   // ---------------------------------------------------------------------------
   Widget _buildStep2Education(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     final levels = [
       {'val': 'primary', 'label': 'Primary School (Up to 5th)'},
       {'val': 'upper_primary', 'label': 'Middle School (6th - 8th)'},
@@ -601,7 +629,7 @@ class OnboardingScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Your Education & Learning',
+          l10n.stepEducation,
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -617,7 +645,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Education Level Dropdown
         Text(
-          'Highest Education Level *',
+          '${l10n.educationLevelLabel} *',
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
@@ -675,11 +703,12 @@ class OnboardingScreen extends StatelessWidget {
   // Step 3: Skills & Interests Multi-Select
   // ---------------------------------------------------------------------------
   Widget _buildStep3SkillsAndInterests(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Skills & Interests',
+          '${l10n.skillsTitle} & ${l10n.interestsTitle}',
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -695,7 +724,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Skills Chips
         Text(
-          'Skills You Have (Tap to select)',
+          l10n.skillsTitle,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
@@ -715,7 +744,7 @@ class OnboardingScreen extends StatelessWidget {
 
         // Interests Chips
         Text(
-          'Fields You Want to Explore',
+          l10n.interestsTitle,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
@@ -739,11 +768,12 @@ class OnboardingScreen extends StatelessWidget {
   // Step 4: Aspirations (Dream Job)
   // ---------------------------------------------------------------------------
   Widget _buildStep4Aspirations(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Your Ambition & Dream 🎯',
+          l10n.aspirationLabel,
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -761,8 +791,8 @@ class OnboardingScreen extends StatelessWidget {
           initialValue: provider.aspirationText,
           maxLines: 3,
           onChanged: provider.setAspirationText,
-          decoration: const InputDecoration(
-            hintText: 'e.g. Agricultural Drone Pilot, Renewable Energy Technician, Government Officer...',
+          decoration: InputDecoration(
+            hintText: l10n.aspirationHint,
             prefixIcon: Icon(Icons.star_outline_rounded, color: DesignTokens.primary),
           ),
         ),
@@ -783,6 +813,7 @@ class OnboardingScreen extends StatelessWidget {
   // Bottom Navigation (1 Primary Action Button)
   // ---------------------------------------------------------------------------
   Widget _buildBottomNav(BuildContext context, OnboardingProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     final isLastStep = provider.currentStep == provider.totalSteps - 1;
 
     return Container(
@@ -816,7 +847,7 @@ class OnboardingScreen extends StatelessWidget {
                     } else {
                       if (provider.currentStep == 0 && provider.name.trim().isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please enter your full name')),
+                          SnackBar(content: Text('${l10n.fullNameLabel} *')),
                         );
                         return;
                       }
@@ -829,7 +860,7 @@ class OnboardingScreen extends StatelessWidget {
                     width: 20,
                     child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                   )
-                : Text(isLastStep ? 'Complete Profile & View Matches' : 'Continue'),
+                : Text(isLastStep ? l10n.btnFinish : l10n.btnNext),
           ),
         ],
       ),

@@ -22,8 +22,28 @@ from app.schemas.assistant import (
     EmbedAllResponse,
 )
 from app.services.ai_service import AIService
+from app.schemas.voice import VoiceQueryRequest, VoiceQueryResponse
+from app.services.voice_service import VoiceService
 
 router = APIRouter(prefix="/assistant", tags=["AI Assistant"])
+voice_router = APIRouter(prefix="/voice", tags=["Voice"])
+
+
+@voice_router.post("/query-base64", response_model=VoiceQueryResponse, summary="Transcribe, counsel, and synthesize one voice turn")
+def voice_query(request: VoiceQueryRequest, db: Session = Depends(get_db)):
+    try:
+        return VoiceService.query(
+            db,
+            audio_data=request.audio_data,
+            language=request.language,
+            conversation_id=request.conversation_id,
+            student_id=request.student_id,
+            sample_rate=request.sample_rate,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"Voice service unavailable: {error}")
 
 
 # ---------------------------------------------------------------------------

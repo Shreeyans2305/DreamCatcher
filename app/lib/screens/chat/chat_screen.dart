@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/theme/design_tokens.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/chat_provider.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final chat = context.watch<ChatProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: DesignTokens.background,
@@ -46,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'AI Career Guide',
+              l10n.assistantTitle,
               style: GoogleFonts.poppins(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -54,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Text(
-              'Vertex AI — Profile-aware guidance',
+              l10n.assistantSubtitle,
               style: GoogleFonts.inter(
                 fontSize: 13,
                 color: DesignTokens.textMuted,
@@ -66,8 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
           // New Chat button
           IconButton(
             icon: const Icon(Icons.add_comment_rounded),
-            tooltip: 'New Chat',
-            color: DesignTokens.primary,
+            tooltip: l10n.assistantTitle,
             onPressed: () {
               chat.startNewChat();
               _scrollToBottom();
@@ -93,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'Online',
+                  l10n.send,
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -190,9 +191,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     child: TextField(
                       controller: _textController,
-                      style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textPrimary),
                       decoration: InputDecoration(
-                        hintText: 'Ask about scholarships or careers...',
+                        hintText: l10n.chatInputHint,
                         hintStyle: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textMuted),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                         border: InputBorder.none,

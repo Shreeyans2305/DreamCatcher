@@ -170,6 +170,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterEligibleOnly => 'Eligible Only';
 
   @override
+  String get resetFilters => 'Reset Filters';
+
+  @override
   String get eligibleBadge => 'Eligible';
 
   @override

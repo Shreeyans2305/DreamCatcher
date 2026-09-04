@@ -20,6 +20,7 @@ class OnboardingProvider extends ChangeNotifier {
   String _ruralUrban = 'rural';
   String _socialCategory = 'General';
   String _tribe = '';
+  String _disabilityStatus = 'Prefer not to say';
   double _familyIncome = 0;
 
   String _educationLevel = 'secondary';
@@ -68,6 +69,7 @@ class OnboardingProvider extends ChangeNotifier {
   String get ruralUrban => _ruralUrban;
   String get socialCategory => _socialCategory;
   String get tribe => _tribe;
+  String get disabilityStatus => _disabilityStatus;
   double get familyIncome => _familyIncome;
   String get educationLevel => _educationLevel;
   String get informalLearningDescription => _informalLearningDescription;
@@ -129,6 +131,11 @@ class OnboardingProvider extends ChangeNotifier {
 
   void setTribe(String val) {
     _tribe = val;
+    notifyListeners();
+  }
+
+  void setDisabilityStatus(String val) {
+    _disabilityStatus = val;
     notifyListeners();
   }
 
@@ -246,6 +253,7 @@ class OnboardingProvider extends ChangeNotifier {
       final demographicsPayload = [
         'Category: $_socialCategory',
         if (_tribe.isNotEmpty) 'Tribe: $_tribe',
+        'Disability: $_disabilityStatus',
         'Income: ₹${_familyIncome.toInt()}',
         'Area: $_ruralUrban',
         if (_informalLearningDescription.trim().isNotEmpty)
@@ -301,6 +309,7 @@ class OnboardingProvider extends ChangeNotifier {
       await _authProvider.updateDemographics(
         socialCategory: _socialCategory,
         tribe: _tribe,
+        disabilityStatus: _disabilityStatus,
         familyIncome: _familyIncome,
         ruralUrban: _ruralUrban,
       );

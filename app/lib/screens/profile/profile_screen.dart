@@ -6,6 +6,7 @@ import '../../core/theme/design_tokens.dart';
 import '../../core/widgets/widgets.dart';
 import '../../data/api_client.dart';
 import '../../data/models/reference.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/opportunities_provider.dart';
 import '../onboarding/onboarding_screen.dart';
@@ -49,6 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final student = auth.currentStudent;
+    final l10n = AppLocalizations.of(context)!;
 
     if (student == null) {
       return Scaffold(
@@ -57,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('No active profile found.'),
+              Text(l10n.noOpportunitiesFound),
               const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
@@ -65,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     MaterialPageRoute(builder: (_) => const OnboardingScreen()),
                   );
                 },
-                child: const Text('Create Profile'),
+                child: Text(l10n.btnFinish),
               ),
             ],
           ),
@@ -80,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: DesignTokens.background,
       appBar: AppBar(
         title: Text(
-          'Student Profile',
+          l10n.navProfile,
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -101,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
-            tooltip: 'Refresh Profile',
+            tooltip: l10n.navProfile,
             onPressed: () async {
               await auth.refreshProfile();
               if (context.mounted) {
@@ -157,6 +159,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 20),
+            _buildLanguageSelector(context, auth),
             // Demographics & Quotas Section
             _buildSectionHeader(
               title: 'Demographics & Quotas',
@@ -369,6 +373,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageSelector(BuildContext context, AuthProvider auth) {
+    final l10n = AppLocalizations.of(context)!;
+    final languages = Language.defaultLanguages
+        .where((language) => AppLocalizations.supportedLocales.any(
+              (locale) => locale.languageCode == language.code,
+            ))
+        .toList();
+
+    return RoundedCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: languages.any((language) => language.code == auth.preferredLanguage)
+              ? auth.preferredLanguage
+              : languages.first.code,
+          icon: const Icon(Icons.translate_rounded),
+          items: languages.map((language) {
+            return DropdownMenuItem<String>(
+              value: language.code,
+              child: Text('${l10n.preferredLanguageLabel}: ${language.name} (${language.nativeName})'),
+            );
+          }).toList(),
+          onChanged: (value) {
+            if (value != null && value != auth.preferredLanguage) {
+              auth.updatePreferredLanguage(value);
+            }
+          },
         ),
       ),
     );
