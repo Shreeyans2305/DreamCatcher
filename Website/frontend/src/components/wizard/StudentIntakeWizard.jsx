@@ -20,6 +20,8 @@ const INITIAL_FORM = {
   age_years: '',
   gender: 'male',
   parent_guardian_phone: '',
+  guardian_contact_number: '',
+  student_contact_number: '',
   village_location: '',
   education_level: 'grade_10',
   category: 'cat_obc',
@@ -95,10 +97,10 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
   };
 
   const steps = [
-    { num: 1, label: t('wizard.step_basic') },
-    { num: 2, label: t('wizard.step_academic') },
-    { num: 3, label: t('wizard.step_aspiration') },
-    { num: 4, label: t('wizard.step_review') }
+    { num: 1, label: t('wizard.step_basic', 'Basic Details') },
+    { num: 2, label: t('wizard.step_academic', 'Academic Profile') },
+    { num: 3, label: t('wizard.step_aspiration', 'Aspirations & Language') },
+    { num: 4, label: t('wizard.step_review', 'Review & Guidance') }
   ];
 
   return (
@@ -119,7 +121,7 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
             }}
             className="text-xs font-bold text-amber-800 underline cursor-pointer"
           >
-            Reset Form
+            {t('wizard.reset_form', 'Reset Form')}
           </button>
         </div>
       )}
@@ -127,10 +129,10 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
       <div className="card-soft bg-white overflow-hidden shadow-sm">
         
         {/* Header with Active Camp & Wizard Title */}
-        <div className="p-5 sm:p-6 border-b border-black/[0.05] bg-white">
+        <div className="p-5 sm:p-6 border-b border-black/5 bg-white">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-[12px] bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold shrink-0">
                 <UserPlus className="w-5 h-5" />
               </div>
               <div>
@@ -139,8 +141,8 @@ export default function StudentIntakeWizard({ onLaunchGuidance, onSavedOnly }) {
               </div>
             </div>
 
-            <div className="bg-neutral-100 px-3 py-1 rounded-full text-xs font-semibold text-neutral-700 border border-black/[0.04] self-start sm:self-auto">
-              Camp: {activeCamp?.camp_name}
+            <div className="bg-neutral-100 px-3 py-1 rounded-full text-xs font-semibold text-neutral-700 border border-black/4 self-start sm:self-auto">
+              {t('nav.camps', 'Camp')}: {activeCamp?.camp_name}
             </div>
           </div>
 

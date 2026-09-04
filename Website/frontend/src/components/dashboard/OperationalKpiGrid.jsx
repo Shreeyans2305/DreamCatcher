@@ -13,11 +13,20 @@ export default function OperationalKpiGrid({ onNewIntake, onSyncNow }) {
   const studentsWithNotes = students.filter(s => (s.case_notes || []).length > 0).length;
   const pendingGuidance = totalStudents - studentsWithNotes;
 
+  const distinctLocations = Array.from(
+    new Set(camps.map(c => c.village_town || c.district).filter(Boolean))
+  );
+  const campsLocationSubtext = distinctLocations.length > 0
+    ? `${distinctLocations.slice(0, 2).join(' & ')}${distinctLocations.length > 2 ? ` +${distinctLocations.length - 2} hubs` : ''} field schools`
+    : 'Scheduled guidance drives in jurisdiction';
+
   const kpis = [
     {
       title: t('dashboard.kpi_total_students'),
       value: totalStudents,
-      subtext: `${studentsWithNotes} fully completed guidance notes`,
+      subtext: totalStudents > 0
+        ? `${studentsWithNotes} fully completed guidance notes`
+        : 'Ready for initial student intakes',
       icon: Users,
       iconColor: 'text-[#161616]',
       badgeBg: 'bg-[#161616]/[0.06]',
@@ -25,7 +34,7 @@ export default function OperationalKpiGrid({ onNewIntake, onSyncNow }) {
     {
       title: 'Field Camps Completed',
       value: `${completedCamps} / ${totalCamps}`,
-      subtext: 'Satara & Patan rural secondary schools',
+      subtext: campsLocationSubtext,
       icon: CalendarCheck,
       iconColor: 'text-[#DE482B]',
       badgeBg: 'bg-[#DE482B]/10',
@@ -33,7 +42,9 @@ export default function OperationalKpiGrid({ onNewIntake, onSyncNow }) {
     {
       title: 'Pending AI Guidance',
       value: pendingGuidance,
-      subtext: 'Enrolled students awaiting career notes',
+      subtext: pendingGuidance > 0 
+        ? `${pendingGuidance} enrolled students awaiting recommendations`
+        : 'All current student case records complete',
       icon: Sparkles,
       iconColor: 'text-[#B87333]',
       badgeBg: 'bg-[#B87333]/10',

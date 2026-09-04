@@ -8,7 +8,7 @@ import DreamCatcherWind from '../components/ui/DreamCatcherWind';
 import DreamCatcherIcon from '../components/ui/DreamCatcherIcon';
 import { 
   Mail, Lock, User, Building, MapPin, Phone, 
-  ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, HeartHandshake, Key, Copy
+  ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, HeartHandshake, Key, Copy, Eye, EyeOff, Download
 } from 'lucide-react';
 
 export default function AuthPageView({ onLoginSuccess }) {
@@ -20,6 +20,27 @@ export default function AuthPageView({ onLoginSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [issuedCredentials, setIssuedCredentials] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [revealCredentials, setRevealCredentials] = useState(false);
+
+  const downloadCredentialsFile = () => {
+    if (!issuedCredentials) return;
+    const content = `DREAMCATCHER NATIONAL FIELD PORTAL
+OFFICIAL LOGIN CREDENTIALS
+=========================================
+Official Badge ID: ${issuedCredentials.badgeId}
+Temp Password:     ${issuedCredentials.password}
+Registered Email:  ${issuedCredentials.email}
+Portal URL:        http://localhost:5173
+=========================================
+Keep these credentials safe. Change your password on first login.`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `DreamCatcher_Credentials_${issuedCredentials.badgeId}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Login Form Data
   const [loginData, setLoginData] = useState({
@@ -123,7 +144,7 @@ export default function AuthPageView({ onLoginSuccess }) {
       }
 
       // Dispatch credential email
-      await sendAdminCredentialEmail({
+      const emailResult = await sendAdminCredentialEmail({
         email: registerData.email,
         name: registerData.full_name,
         government_id: officialBadgeId,
@@ -138,7 +159,9 @@ export default function AuthPageView({ onLoginSuccess }) {
       setIssuedCredentials({
         badgeId: officialBadgeId,
         password: passwordToUse,
-        email: registerData.email,
+        email: emailResult?.delivered_to || registerData.email,
+        original_email: registerData.email,
+        is_sandbox_fallback: emailResult?.is_sandbox_fallback,
         name: registerData.full_name
       });
 
@@ -195,51 +218,98 @@ export default function AuthPageView({ onLoginSuccess }) {
               </p>
             </div>
 
-            {/* Issued Credentials Overlay (Post Signup) */}
+            {/* Dispatched Credentials Confirmation (Post Signup) */}
             {issuedCredentials ? (
-              <div className="bg-white border-2 border-emerald-600/40 rounded-2xl p-5 shadow-lg space-y-4 animate-in fade-in zoom-in duration-300">
-                <div className="flex items-center gap-2.5 text-emerald-800">
-                  <CheckCircle2 className="w-6 h-6 shrink-0 text-emerald-600" />
+              <div className="bg-white border-2 border-emerald-600/30 rounded-2xl p-6 shadow-lg space-y-4 animate-in fade-in zoom-in duration-300">
+                <div className="flex items-start gap-3 text-emerald-800">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
                   <div>
-                    <h3 className="text-sm font-extrabold font-serif-zen">Credentials Provisioned!</h3>
-                    <p className="text-xs text-neutral-600">Email sent to <strong>{issuedCredentials.email}</strong></p>
+                    <h3 className="text-base font-extrabold font-serif-zen text-neutral-900">Official Credentials Dispatched</h3>
+                    <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
+                      Your official Badge ID and temporary access password have been securely emailed to:
+                    </p>
+                    <p className="text-xs font-mono font-bold text-neutral-900 mt-1 bg-neutral-100 px-2.5 py-1 rounded-md inline-block border border-neutral-200">
+                      {issuedCredentials.email}
+                    </p>
+                    {issuedCredentials.is_sandbox_fallback && (
+                      <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-2 mt-2 leading-tight">
+                        <strong>Resend Sandbox Notice:</strong> Delivered to your verified account email (<strong>{issuedCredentials.email}</strong>) because Resend free tier only allows delivery to the account owner. Check this inbox for your credentials!
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className="bg-[#F8F5EE] border border-[#DECBC7] rounded-xl p-3.5 space-y-2 text-xs">
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-[#5C5245]">Official Badge ID:</span>
-                    <span className="font-mono font-extrabold text-[#A83E28]">{issuedCredentials.badgeId}</span>
+                <div className="bg-[#FAF7F2] border border-[#DECBC7] rounded-xl p-3.5 text-xs text-[#5C5245] space-y-1.5">
+                  <div className="flex items-center gap-1.5 font-bold text-[#38332C]">
+                    <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <span>Privacy & Security Compliance</span>
                   </div>
-                  <div className="flex justify-between items-center border-t border-[#DECBC7]/60 pt-2">
-                    <span className="font-bold text-[#5C5245]">Temporary Password:</span>
-                    <span className="font-mono font-extrabold text-[#222222]">{issuedCredentials.password}</span>
-                  </div>
+                  <p className="text-[11px] text-[#7A6F62] leading-normal">
+                    For institutional security, official access credentials are never displayed on public terminals. Please check your inbox (and spam folder) to sign in.
+                  </p>
                 </div>
 
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(`Badge ID: ${issuedCredentials.badgeId}\nPassword: ${issuedCredentials.password}`)}
-                    className="flex-1 py-2 bg-[#F4EFE6] border border-[#D5CCBD] text-[#222222] font-bold text-xs rounded-lg flex items-center justify-center gap-1 hover:bg-[#E3D9CA] cursor-pointer"
-                  >
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>{copied ? 'Copied!' : 'Copy Info'}</span>
-                  </button>
+                {/* Reveal & Download Options (Guarantees user is never locked out if email is delayed) */}
+                <div className="pt-2 space-y-2">
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setRevealCredentials(prev => !prev)}
+                      className="flex-1 py-2 px-3 bg-[#FAF7F2] hover:bg-[#F2ECE1] border border-[#DECBC7] text-neutral-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                    >
+                      {revealCredentials ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      <span>{revealCredentials ? 'Hide Credentials' : 'Reveal Credentials On-Screen'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={downloadCredentialsFile}
+                      className="py-2 px-3 bg-[#FAF7F2] hover:bg-[#F2ECE1] border border-[#DECBC7] text-neutral-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                      title="Download credentials as .txt file"
+                    >
+                      <Download className="w-3.5 h-3.5 text-neutral-600" />
+                      <span>Save .txt</span>
+                    </button>
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLoginData({ email_or_phone: issuedCredentials.email, password: issuedCredentials.password });
-                      setIssuedCredentials(null);
-                      setMode('login');
-                    }}
-                    className="flex-1 py-2 bg-[#222222] hover:bg-[#111111] text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1 cursor-pointer shadow-xs"
-                  >
-                    <span>Log in now</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  {revealCredentials && (
+                    <div className="bg-[#FAF7F2] border border-[#DECBC7] rounded-xl p-3.5 space-y-2.5 text-xs animate-in fade-in duration-200">
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-[#5C5245]">Official Badge ID:</span>
+                        <span className="font-mono font-extrabold text-[#A83E28] bg-white px-2 py-0.5 rounded border border-[#DECBC7]">{issuedCredentials.badgeId}</span>
+                      </div>
+                      <div className="flex justify-between items-center border-t border-[#DECBC7]/60 pt-2">
+                        <span className="font-bold text-[#5C5245]">Temporary Password:</span>
+                        <span className="font-mono font-extrabold text-[#222222] bg-white px-2 py-0.5 rounded border border-[#DECBC7]">{issuedCredentials.password}</span>
+                      </div>
+                      <div className="pt-1 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => copyToClipboard(`Badge ID: ${issuedCredentials.badgeId}\nPassword: ${issuedCredentials.password}`)}
+                          className="px-3 py-1 bg-white border border-[#D5CCBD] text-xs font-bold rounded-md flex items-center gap-1 hover:bg-neutral-50 cursor-pointer shadow-xs"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>{copied ? 'Copied to Clipboard!' : 'Copy Badge ID & Password'}</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLoginData(prev => ({ ...prev, email_or_phone: issuedCredentials.email, password: '' }));
+                    setIssuedCredentials(null);
+                    setRevealCredentials(false);
+                    setMode('login');
+                  }}
+                  className="w-full py-3 bg-[#222222] hover:bg-[#111111] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all"
+                >
+                  <span>Proceed to Sign In</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             ) : (
               <>
@@ -361,11 +431,6 @@ export default function AuthPageView({ onLoginSuccess }) {
                       </div>
                     )}
 
-                    {/* Live Generated Badge Preview Banner */}
-                    <div className="p-2.5 bg-white/70 border border-[#DECBC7] rounded-xl flex items-center justify-between text-xs">
-                      <span className="font-bold text-[#5C5245]">Auto Badge ID:</span>
-                      <span className="font-mono font-extrabold text-[#A83E28]">{liveGeneratedId}</span>
-                    </div>
 
                     {/* Full Name */}
                     <div>

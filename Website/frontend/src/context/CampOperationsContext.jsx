@@ -1,18 +1,90 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { storageEngine } from '../services/storageEngine';
+import { useAuth } from './AuthContext';
+import { useAdminAuth } from './AdminAuthContext';
+import { supabaseService } from '../services/supabaseService';
+import { isSupabaseConfigured } from '../services/supabaseClient';
 import confetti from 'canvas-confetti';
 
 const CampOperationsContext = createContext(null);
 
 export function CampOperationsProvider({ children }) {
-  const [camps, setCamps] = useState(() => storageEngine.getCamps());
-  const [activeCampId, setActiveCampIdState] = useState(() => storageEngine.getActiveCampId());
-  const [students, setStudents] = useState(() => storageEngine.getStudents());
+  const { volunteer } = useAuth();
+  const { admin } = useAdminAuth();
+
+  const activeBadgeId = admin?.government_id || volunteer?.volunteer_id || 'DC-OFFICER';
+  const activeDistrict = admin?.district || volunteer?.district || 'Satara';
+  const activeState = admin?.state || volunteer?.state || 'Maharashtra';
+
+  const isDemoUser = !activeBadgeId || activeBadgeId === 'DC-VOL-2026-00042' || activeBadgeId === 'GOV-MH-SAT-2026';
+
+  const [camps, setCamps] = useState(() => {
+    const all = storageEngine.getCamps();
+    return isDemoUser ? all : all.filter(c => c.volunteer_id === activeBadgeId);
+  });
+  const [activeCampId, setActiveCampIdState] = useState(() => {
+    const all = storageEngine.getCamps();
+    const userCamps = isDemoUser ? all : all.filter(c => c.volunteer_id === activeBadgeId);
+    return userCamps[0]?.camp_id || null;
+  });
+  const [students, setStudents] = useState(() => {
+    const all = storageEngine.getStudents();
+    return isDemoUser ? all : all.filter(s => s.volunteer_id === activeBadgeId);
+  });
   const [syncQueue, setSyncQueue] = useState(() => storageEngine.getSyncQueue());
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
   const [selectedStudentForGuidance, setSelectedStudentForGuidance] = useState(null);
   const [isCreateCampModalOpen, setIsCreateCampModalOpen] = useState(false);
   const [syncNotification, setSyncNotification] = useState(null);
+
+  // Sync / isolate data whenever the active officer changes or live events are available
+  useEffect(() => {
+    const syncOfficerData = async () => {
+      if (isSupabaseConfigured()) {
+        try {
+          const events = await supabaseService.getEvents();
+          if (events && events.length > 0) {
+            const mapped = events.map(evt => ({
+              camp_id: evt.event_id,
+              volunteer_id: evt.admin_id,
+              camp_name: evt.place,
+              village_town: evt.place.includes('(') ? evt.place.split('(')[0].trim() : evt.place,
+              district: activeDistrict,
+              state: activeState,
+              scheduled_date: evt.event_date,
+              start_time: evt.event_time?.slice(0, 5) || '09:30',
+              end_time: '16:30',
+              status: evt.status?.toLowerCase() || 'upcoming',
+              students_enrolled: 0,
+              created_at: evt.created_at
+            }));
+            setCamps(mapped);
+            if (mapped.length > 0) setActiveCampIdState(mapped[0].camp_id);
+            else setActiveCampIdState(null);
+            return;
+          }
+        } catch (err) {
+          console.warn('Live events fetch notice:', err);
+        }
+      }
+
+      // Local storage scoping
+      const allCamps = storageEngine.getCamps();
+      const userCamps = isDemoUser ? allCamps : allCamps.filter(c => c.volunteer_id === activeBadgeId);
+      setCamps(userCamps);
+      if (userCamps.length > 0) {
+        setActiveCampIdState(userCamps[0].camp_id);
+      } else {
+        setActiveCampIdState(null);
+      }
+
+      const allStudents = storageEngine.getStudents();
+      const userStudents = isDemoUser ? allStudents : allStudents.filter(s => s.volunteer_id === activeBadgeId);
+      setStudents(userStudents);
+    };
+
+    syncOfficerData();
+  }, [activeBadgeId, isDemoUser, activeDistrict, activeState]);
 
   // Monitor network status
   useEffect(() => {
@@ -35,21 +107,21 @@ export function CampOperationsProvider({ children }) {
     };
   }, []);
 
-  const activeCamp = camps.find(c => c.camp_id === activeCampId) || camps[0];
+  const activeCamp = camps.find(c => c.camp_id === activeCampId) || camps[0] || null;
 
   const setActiveCamp = (campId) => {
     storageEngine.setActiveCampId(campId);
     setActiveCampIdState(campId);
   };
 
-  const createCamp = (campData) => {
+  const createCamp = async (campData) => {
     const newCamp = {
       camp_id: `camp-${Date.now()}`,
-      volunteer_id: 'DC-VOL-2026-00042',
+      volunteer_id: activeBadgeId,
       camp_name: campData.camp_name,
-      village_town: campData.village_town,
-      district: campData.district,
-      state: campData.state || 'Maharashtra',
+      village_town: campData.village_town || activeDistrict,
+      district: campData.district || activeDistrict,
+      state: campData.state || activeState,
       scheduled_date: campData.scheduled_date || new Date().toISOString().split('T')[0],
       start_time: campData.start_time || '09:30',
       end_time: campData.end_time || '16:30',
@@ -59,9 +131,25 @@ export function CampOperationsProvider({ children }) {
     };
 
     const updated = storageEngine.addCamp(newCamp);
-    setCamps(updated);
+    const userCamps = isDemoUser ? updated : updated.filter(c => c.volunteer_id === activeBadgeId);
+    setCamps(userCamps);
     setActiveCamp(newCamp.camp_id);
     setIsCreateCampModalOpen(false);
+
+    // Sync to Supabase events table if configured
+    try {
+      if (isSupabaseConfigured()) {
+        await supabaseService.createEvent({
+          place: `${newCamp.camp_name} (${newCamp.village_town}, ${newCamp.district})`,
+          event_date: newCamp.scheduled_date,
+          event_time: `${newCamp.start_time}:00`,
+          status: 'SCHEDULED'
+        });
+      }
+    } catch (e) {
+      console.warn('Supabase event creation skipped:', e);
+    }
+
     return newCamp;
   };
 
@@ -69,14 +157,14 @@ export function CampOperationsProvider({ children }) {
     const newStudent = {
       student_record_id: `stu-${Date.now()}`,
       camp_id: activeCamp?.camp_id || 'camp-001',
-      camp_name: activeCamp?.camp_name || 'General Field Camp',
-      volunteer_id: 'DC-VOL-2026-00042',
+      camp_name: activeCamp?.camp_name || `${activeDistrict} Field Camp`,
+      volunteer_id: activeBadgeId,
       full_name: studentData.full_name,
       age_years: parseInt(studentData.age_years, 10) || 15,
       date_of_birth: studentData.date_of_birth || '',
       student_contact_number: studentData.student_contact_number || '',
       guardian_contact_number: studentData.guardian_contact_number,
-      village_location: studentData.village_location,
+      village_location: studentData.village_location || activeDistrict,
       education_level: studentData.education_level,
       education_level_label: studentData.education_level_label || studentData.education_level,
       category: studentData.category,
@@ -88,8 +176,10 @@ export function CampOperationsProvider({ children }) {
     };
 
     const committed = storageEngine.addStudent(newStudent, isOnline);
-    setStudents(storageEngine.getStudents());
-    setCamps(storageEngine.getCamps());
+    const allStudents = storageEngine.getStudents();
+    const userStudents = isDemoUser ? allStudents : allStudents.filter(s => s.volunteer_id === activeBadgeId);
+    setStudents(userStudents);
+    setCamps(userCamps => userCamps);
     setSyncQueue(storageEngine.getSyncQueue());
 
     // Trigger slight confetti celebration for field completion

@@ -59,7 +59,49 @@ export async function sendAdminCredentialEmail({
     </div>
   `;
 
-  // Dispatches via Resend API if API key is present in .env
+  // 1. Try dispatching via Website/backend Python Resend service
+  try {
+    const backendEndpoints = ['/api/send-credentials', 'http://localhost:8000/api/send-credentials'];
+    
+    for (const endpoint of backendEndpoints) {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            name,
+            government_id,
+            badge_id: government_id,
+            temp_password,
+            district,
+            state,
+            entityType,
+            organization_name
+          })
+        });
+
+        if (response.ok) {
+          const resData = await response.json();
+          console.log('[EmailService] Dispatched via backend service:', resData);
+          return {
+            success: true,
+            delivered_to: resData.delivered_to || email,
+            is_sandbox_fallback: resData.is_sandbox_fallback,
+            original_email: resData.original_email || email
+          };
+        }
+      } catch (e) {
+        // Try next endpoint
+      }
+    }
+  } catch (err) {
+    console.warn('[EmailService] Backend dispatch attempt failed, falling back:', err);
+  }
+
+  // 2. Direct Resend API dispatch if key is present in frontend .env
   if (resendApiKey) {
     try {
       const response = await fetch('https://api.resend.com/emails', {
@@ -77,13 +119,13 @@ export async function sendAdminCredentialEmail({
       });
       return response.ok;
     } catch (err) {
-      console.warn('Resend API call failed, falling back to local simulation:', err);
+      console.warn('Direct Resend API call failed:', err);
     }
   }
 
-  // Console log for local development & demonstration
+  // 3. Fallback simulation log for local development
   console.log('====================================================');
-  console.log('📧 SIMULATED CREDENTIAL EMAIL DISPATCH');
+  console.log('[SIMULATED CREDENTIAL EMAIL DISPATCH]');
   console.log(`TO: ${email}`);
   console.log(`TITLE: ${entityTitle}`);
   console.log(`BADGE ID: ${government_id}`);

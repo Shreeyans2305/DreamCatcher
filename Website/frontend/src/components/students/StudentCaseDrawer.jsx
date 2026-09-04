@@ -23,7 +23,7 @@ export default function StudentCaseDrawer({ student, onClose, onLaunchGuidance }
               </span>
             </div>
             <p className="text-xs text-neutral-500 mt-1 font-normal">
-              Camp: {student.camp_name || 'Shindewadi ZP School'}
+              Camp: {student.camp_name || 'Assigned Camp'}
             </p>
           </div>
           <button 

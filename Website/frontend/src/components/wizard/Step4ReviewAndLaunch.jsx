@@ -14,7 +14,7 @@ export default function Step4ReviewAndLaunch({ formData }) {
       <div className="bg-emerald-50 border border-emerald-200 rounded-[14px] p-3.5 text-xs text-emerald-900 flex items-start gap-2.5">
         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
         <span>
-          Please verify the captured student information before launching the AI counselor session.
+          {t('wizard.verify_notice', 'Please verify the captured student information before launching the AI counselor session.')}
         </span>
       </div>
 
@@ -23,55 +23,55 @@ export default function Step4ReviewAndLaunch({ formData }) {
         
         <div className="flex items-center justify-between border-b border-black/[0.05] pb-3">
           <div>
-            <span className="text-[10px] uppercase font-bold text-neutral-400 block">Student Name</span>
+            <span className="text-[10px] uppercase font-bold text-neutral-400 block">{t('wizard.student_name', 'Student Name')}</span>
             <span className="text-base font-bold text-neutral-900">{formData.full_name}</span>
           </div>
           <span className="text-xs bg-neutral-100 text-neutral-800 font-bold px-2.5 py-1 rounded-full border border-black/[0.04]">
-            Age: {formData.age_years} Yrs
+            {t('wizard.age_yrs', 'Age')}: {formData.age_years}
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <span className="text-[10px] uppercase font-bold text-neutral-400 block">Village & Camp</span>
+            <span className="text-[10px] uppercase font-bold text-neutral-400 block">{t('wizard.village_camp', 'Village & Camp')}</span>
             <span className="font-semibold text-neutral-800 flex items-center gap-1 mt-0.5">
               <MapPin className="w-3.5 h-3.5 text-neutral-400" />
-              {formData.village_location} ({activeCamp?.village_town})
+              {formData.village_location} {activeCamp?.village_town ? `(${activeCamp.village_town})` : ''}
             </span>
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-neutral-400 block">Guardian Mobile</span>
+            <span className="text-[10px] uppercase font-bold text-neutral-400 block">{t('wizard.guardian_mobile', 'Guardian Mobile')}</span>
             <span className="font-semibold text-neutral-800 flex items-center gap-1 mt-0.5">
               <Phone className="w-3.5 h-3.5 text-neutral-400" />
-              {formData.guardian_contact_number}
+              {formData.guardian_contact_number || formData.parent_guardian_phone}
             </span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-black/[0.05] pt-3">
           <div>
-            <span className="text-[10px] uppercase font-bold text-neutral-400 block">Education Level</span>
+            <span className="text-[10px] uppercase font-bold text-neutral-400 block">{t('wizard.education_level', 'Education Level')}</span>
             <span className="font-semibold text-neutral-800 flex items-center gap-1 mt-0.5">
               <GraduationCap className="w-3.5 h-3.5 text-neutral-400" />
-              {formData.education_level_label}
+              {formData.education_level_label || formData.education_level}
             </span>
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-neutral-400 block">Category</span>
+            <span className="text-[10px] uppercase font-bold text-neutral-400 block">{t('wizard.category_label_text', 'Category')}</span>
             <span className="font-semibold text-neutral-800 flex items-center gap-1 mt-0.5">
               <Award className="w-3.5 h-3.5 text-amber-600" />
-              {formData.category_label}
+              {formData.category_label || formData.category}
             </span>
           </div>
         </div>
 
         <div className="border-t border-black/[0.05] pt-3">
-          <span className="text-[10px] uppercase font-bold text-neutral-400 block">Aspirations & Guidance Language</span>
+          <span className="text-[10px] uppercase font-bold text-neutral-400 block">{t('wizard.aspirations_lang_label', 'Aspirations & Guidance Language')}</span>
           <p className="font-medium text-neutral-800 mt-0.5">
             {formData.aspirations}
           </p>
           <span className="inline-block mt-2 bg-neutral-100 text-neutral-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase border border-black/[0.04]">
-            AI Session Language: {formData.preferred_language.toUpperCase()}
+            {t('wizard.ai_lang_label', 'AI Session Language')}: {formData.preferred_language?.toUpperCase()}
           </span>
         </div>
 

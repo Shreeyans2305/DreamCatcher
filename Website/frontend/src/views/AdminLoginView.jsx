@@ -186,51 +186,44 @@ export default function AdminLoginView({ onBackToHome, onLoginSuccess }) {
 
         {/* Issued Credentials Overlay Card (Post Signup) */}
         {issuedCredentials ? (
-          <div className="bg-[#2A1517] border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-300">
-            <div className="flex items-center gap-3 text-emerald-400">
-              <CheckCircle2 className="w-8 h-8 shrink-0" />
+          <div className="bg-[#2A1517] border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-300">
+            <div className="flex items-start gap-3 text-emerald-400">
+              <div className="w-10 h-10 rounded-full bg-emerald-950/60 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
               <div>
-                <h2 className="text-lg font-extrabold text-white">Credentials Provisioned & Emailed!</h2>
-                <p className="text-xs text-emerald-300/80">
-                  Welcome email sent to <strong>{issuedCredentials.email}</strong>
+                <h2 className="text-lg font-extrabold text-white">Official Credentials Dispatched</h2>
+                <p className="text-xs text-emerald-200/80 mt-1 leading-relaxed">
+                  Your official Badge ID and temporary access password have been sent to:
+                </p>
+                <p className="text-xs font-mono font-bold text-white mt-1 bg-[#1F0F11] px-3 py-1 rounded-lg inline-block border border-[#EBD1C6]/20">
+                  {issuedCredentials.email}
                 </p>
               </div>
             </div>
 
-            <div className="bg-[#1F0F11] border border-[#EBD1C6]/20 rounded-2xl p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#EBD1C6]/70 uppercase">Official Badge ID:</span>
-                <span className="font-mono text-sm font-extrabold text-[#EBD1C6] tracking-wider">{issuedCredentials.badgeId}</span>
+            <div className="bg-[#1F0F11] border border-[#EBD1C6]/15 rounded-2xl p-4 text-xs text-[#EBD1C6]/80 space-y-1.5">
+              <div className="flex items-center gap-1.5 font-bold text-white">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Confidential Security Protocol</span>
               </div>
-              <div className="flex items-center justify-between border-t border-[#EBD1C6]/10 pt-2">
-                <span className="text-xs font-bold text-[#EBD1C6]/70 uppercase">Temporary Password:</span>
-                <span className="font-mono text-sm font-extrabold text-amber-300 tracking-wider">{issuedCredentials.password}</span>
-              </div>
+              <p className="text-[11px] text-[#EBD1C6]/60 leading-normal">
+                Credentials are never displayed on public terminals. Please inspect your inbox (and spam folder) to retrieve your Badge ID and login password.
+              </p>
             </div>
 
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => copyToClipboard(`Badge ID: ${issuedCredentials.badgeId}\nPassword: ${issuedCredentials.password}`)}
-                className="flex-1 py-2.5 bg-[#3D2123] border border-[#EBD1C6]/30 text-[#EBD1C6] font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 hover:bg-[#4E2B2E] cursor-pointer"
-              >
-                <Copy className="w-3.5 h-3.5" />
-                <span>{copied ? 'Copied to Clipboard!' : 'Copy Credentials'}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData(prev => ({ ...prev, email: issuedCredentials.email, password: issuedCredentials.password }));
-                  setIssuedCredentials(null);
-                  setIsRegistering(false);
-                }}
-                className="flex-1 py-2.5 bg-[#A83E28] hover:bg-[#8F3320] text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
-              >
-                <span>Proceed to Sign In</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setFormData(prev => ({ ...prev, email: issuedCredentials.email, password: '' }));
+                setIssuedCredentials(null);
+                setIsRegistering(false);
+              }}
+              className="w-full py-3 bg-[#A83E28] hover:bg-[#8F3320] text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all"
+            >
+              <span>Proceed to Sign In</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         ) : (
           /* Card Container */

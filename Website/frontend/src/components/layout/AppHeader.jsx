@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCampOperations } from '../../context/CampOperationsContext';
 import DreamCatcherIcon from '../ui/DreamCatcherIcon';
 import GlassLanguageDropdown from '../ui/GlassLanguageDropdown';
@@ -23,7 +24,10 @@ import {
 
 export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
   const { uiLanguage, setLanguage, languageOptions, t } = useLanguage();
-  const { volunteer, isAuthenticated, logout, openAuthModal, setIsCredentialModalOpen } = useAuth();
+  const { volunteer, isAuthenticated: isVolAuth, logout, openAuthModal, setIsCredentialModalOpen } = useAuth();
+  const { admin, isAuthenticated: isAdminAuth, signOut: adminSignOut } = useAdminAuth();
+  const isAuthenticated = isVolAuth || isAdminAuth;
+
   const { 
     activeCamp, 
     camps, 
@@ -51,8 +55,11 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
     },
   ];
 
-  const initials = volunteer?.full_name
-    ? volunteer.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+  const officerName = admin?.name || volunteer?.full_name || 'Field Officer';
+  const officerBadgeId = admin?.government_id || volunteer?.volunteer_id || 'DC-OFFICER';
+
+  const initials = officerName
+    ? officerName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
     : 'DC';
 
   return (
@@ -127,8 +134,8 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
               title="Switch active camp location"
             >
               <MapPin className="w-3.5 h-3.5 text-[#DE482B]" />
-              <span className="font-display text-[11px] max-w-[90px] truncate">
-                {activeCamp?.village_town || 'Satara'}
+              <span className="font-display text-[11px] max-w-22.5 truncate">
+                {activeCamp?.village_town || admin?.district || volunteer?.district || 'Field Hub'}
               </span>
               <ChevronDown className="w-2.5 h-2.5 text-[#7A6F62] opacity-70" />
             </button>
@@ -138,23 +145,30 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
                 <span className="block px-3 py-1 text-[10px] uppercase font-semibold text-[#8C8276]">
                   Active Camp Locations
                 </span>
-                {camps.map(c => (
-                  <button
-                    key={c.camp_id}
-                    onClick={() => {
-                      setActiveCamp(c.camp_id);
-                      setCampMenuOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                      activeCamp?.camp_id === c.camp_id
-                        ? 'bg-[#222222] text-white'
-                        : 'text-[#2D2823] hover:bg-black/[0.04]'
-                    }`}
-                  >
-                    <span className="truncate">{c.camp_name}</span>
-                    <span className="text-[10px] opacity-70">{c.village_town}</span>
-                  </button>
-                ))}
+                {camps.length === 0 ? (
+                  <div className="px-3 py-3 text-xs text-[#7A6F62] text-center">
+                    No active camps yet.<br />
+                    <span className="text-[10px] text-[#A83E28] font-bold">Go to Camps to create one</span>
+                  </div>
+                ) : (
+                  camps.map(c => (
+                    <button
+                      key={c.camp_id}
+                      onClick={() => {
+                        setActiveCamp(c.camp_id);
+                        setCampMenuOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                        activeCamp?.camp_id === c.camp_id
+                          ? 'bg-[#222222] text-white'
+                          : 'text-[#2D2823] hover:bg-black/4'
+                      }`}
+                    >
+                      <span className="truncate">{c.camp_name}</span>
+                      <span className="text-[10px] opacity-70">{c.village_town}</span>
+                    </button>
+                  ))
+                )}
               </div>
             )}
           </div>
@@ -177,10 +191,10 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
                 <div className="absolute right-0 mt-2 w-52 bg-[#FCFAF7]/95 backdrop-blur-xl rounded-2xl p-2 border border-[#E5DED4] shadow-lg z-50 animate-in fade-in zoom-in-95 duration-150">
                   <div className="px-3 py-2 border-b border-[#EAE2D5] mb-1">
                     <span className="font-serif-zen font-semibold text-xs text-[#1F1F1F] block truncate">
-                      {volunteer?.full_name || 'Counselor'}
+                      {officerName}
                     </span>
-                    <span className="text-[10px] text-[#7A6F62] block truncate">
-                      {volunteer?.volunteer_id || 'DC-VOL-2026'}
+                    <span className="text-[10px] text-[#A83E28] font-mono font-bold block truncate">
+                      {officerBadgeId}
                     </span>
                   </div>
 
@@ -189,7 +203,7 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
                       setIsCredentialModalOpen(true);
                       setProfileMenuOpen(false);
                     }}
-                    className="w-full text-left px-3 py-1.5 text-xs text-[#2D2823] hover:bg-black/[0.04] rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
+                    className="w-full text-left px-3 py-1.5 text-xs text-[#2D2823] hover:bg-black/4 rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
                   >
                     <Award className="w-3.5 h-3.5 text-[#C49F5A]" />
                     <span>Official ID Badge</span>
@@ -200,7 +214,7 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
                       onNavigateHome();
                       setProfileMenuOpen(false);
                     }}
-                    className="w-full text-left px-3 py-1.5 text-xs text-[#2D2823] hover:bg-black/[0.04] rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
+                    className="w-full text-left px-3 py-1.5 text-xs text-[#2D2823] hover:bg-black/4 rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
                   >
                     <Home className="w-3.5 h-3.5 text-[#7A6F62]" />
                     <span>Public Home</span>
@@ -208,8 +222,9 @@ export default function AppHeader({ activeTab, onSelectTab, onNavigateHome }) {
 
                   <div className="border-t border-[#EAE2D5] mt-1 pt-1">
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         logout();
+                        if (adminSignOut) await adminSignOut();
                         setProfileMenuOpen(false);
                       }}
                       className="w-full text-left px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-xl flex items-center gap-2 cursor-pointer transition-colors"

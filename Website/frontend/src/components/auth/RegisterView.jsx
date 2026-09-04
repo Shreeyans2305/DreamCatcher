@@ -100,7 +100,7 @@ export default function RegisterView() {
               required
               value={formData.organization_name}
               onChange={(e) => setFormData({ ...formData, organization_name: e.target.value })}
-              placeholder="e.g. Zilla Parishad High School, Shindewadi"
+              placeholder="e.g. Govt High School / Pratham Foundation / ZP School"
               className="w-full px-3.5 py-2 text-sm bg-transparent border border-[#D5CCBD] rounded-[6px] text-[#1F1F1F] placeholder-[#A39B8E] focus:outline-none focus:border-[#222222] focus:bg-white/40 transition-all"
             />
           </div>

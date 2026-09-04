@@ -18,14 +18,36 @@ export const storageEngine = {
     if (!localStorage.getItem(STORAGE_KEYS.VOLUNTEER)) {
       localStorage.setItem(STORAGE_KEYS.VOLUNTEER, JSON.stringify(initialVolunteers[0]));
     }
-    if (!localStorage.getItem(STORAGE_KEYS.CAMPS)) {
-      localStorage.setItem(STORAGE_KEYS.CAMPS, JSON.stringify(initialCamps));
+
+    // Clean out legacy demo seed data if present
+    const existingCamps = localStorage.getItem(STORAGE_KEYS.CAMPS);
+    if (existingCamps && (existingCamps.includes('camp-001') || existingCamps.includes('Shindewadi'))) {
+      try {
+        const parsed = JSON.parse(existingCamps);
+        const filtered = parsed.filter(c => c.camp_id !== 'camp-001' && c.camp_id !== 'camp-002' && c.camp_id !== 'camp-003');
+        localStorage.setItem(STORAGE_KEYS.CAMPS, JSON.stringify(filtered));
+      } catch (e) {
+        localStorage.setItem(STORAGE_KEYS.CAMPS, JSON.stringify([]));
+      }
+    } else if (!existingCamps) {
+      localStorage.setItem(STORAGE_KEYS.CAMPS, JSON.stringify([]));
     }
-    if (!localStorage.getItem(STORAGE_KEYS.STUDENTS)) {
-      localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(initialStudents));
+
+    const existingStudents = localStorage.getItem(STORAGE_KEYS.STUDENTS);
+    if (existingStudents && (existingStudents.includes('stu-001') || existingStudents.includes('Aarav'))) {
+      try {
+        const parsed = JSON.parse(existingStudents);
+        const filtered = parsed.filter(s => !s.student_record_id.startsWith('stu-00'));
+        localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(filtered));
+      } catch (e) {
+        localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify([]));
+      }
+    } else if (!existingStudents) {
+      localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify([]));
     }
+
     if (!localStorage.getItem(STORAGE_KEYS.ACTIVE_CAMP)) {
-      localStorage.setItem(STORAGE_KEYS.ACTIVE_CAMP, 'camp-001');
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_CAMP, '');
     }
     if (!localStorage.getItem(STORAGE_KEYS.SYNC_QUEUE)) {
       localStorage.setItem(STORAGE_KEYS.SYNC_QUEUE, JSON.stringify([]));
@@ -45,7 +67,7 @@ export const storageEngine = {
   // Camps
   getCamps() {
     const raw = localStorage.getItem(STORAGE_KEYS.CAMPS);
-    return raw ? JSON.parse(raw) : initialCamps;
+    return raw ? JSON.parse(raw) : [];
   },
 
   addCamp(newCamp) {
@@ -63,7 +85,7 @@ export const storageEngine = {
   },
 
   getActiveCampId() {
-    return localStorage.getItem(STORAGE_KEYS.ACTIVE_CAMP) || 'camp-001';
+    return localStorage.getItem(STORAGE_KEYS.ACTIVE_CAMP) || '';
   },
 
   setActiveCampId(campId) {
@@ -73,7 +95,7 @@ export const storageEngine = {
   // Students & Case Notes
   getStudents() {
     const raw = localStorage.getItem(STORAGE_KEYS.STUDENTS);
-    return raw ? JSON.parse(raw) : initialStudents;
+    return raw ? JSON.parse(raw) : [];
   },
 
   addStudent(student, isOnline = true) {
@@ -117,7 +139,7 @@ export const storageEngine = {
     return updated;
   },
 
-  // KoboToolbox-style draft auto-save
+  // Offline field draft auto-save
   saveIntakeDraft(draftData) {
     localStorage.setItem(STORAGE_KEYS.DRAFT_INTAKE, JSON.stringify({
       data: draftData,

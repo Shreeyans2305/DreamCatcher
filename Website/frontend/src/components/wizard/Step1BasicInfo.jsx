@@ -53,7 +53,7 @@ export default function Step1BasicInfo({ formData, updateFormData }) {
               required
               value={formData.village_location}
               onChange={(e) => updateFormData({ village_location: e.target.value })}
-              placeholder="e.g. Shindewadi / Dhebewadi"
+              placeholder={t('wizard.village_placeholder', 'e.g. Village or Town')}
               className="w-full pl-10 pr-4 py-2.5 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
             />
           </div>
@@ -70,9 +70,9 @@ export default function Step1BasicInfo({ formData, updateFormData }) {
             <input
               type="tel"
               required
-              value={formData.guardian_contact_number || ''}
-              onChange={(e) => updateFormData({ guardian_contact_number: e.target.value })}
-              placeholder="Parent / Guardian 10-digit mobile"
+              value={formData.guardian_contact_number || formData.parent_guardian_phone || ''}
+              onChange={(e) => updateFormData({ guardian_contact_number: e.target.value, parent_guardian_phone: e.target.value })}
+              placeholder={t('wizard.guardian_phone_placeholder', 'Parent / Guardian 10-digit mobile')}
               className="w-full pl-10 pr-4 py-2.5 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
             />
           </div>
@@ -89,7 +89,7 @@ export default function Step1BasicInfo({ formData, updateFormData }) {
               type="tel"
               value={formData.student_contact_number || ''}
               onChange={(e) => updateFormData({ student_contact_number: e.target.value })}
-              placeholder="Student's own phone (if available)"
+              placeholder={t('wizard.student_phone_placeholder', "Student's own phone (if available)")}
               className="w-full pl-10 pr-4 py-2.5 text-sm border border-neutral-200 rounded-full focus:ring-2 focus:ring-black focus:outline-none font-medium bg-[#F7F6F4]/40"
             />
           </div>

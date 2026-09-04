@@ -3,15 +3,46 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { TrendingUp } from 'lucide-react';
 
-export default function IntakeTrendChart({ data }) {
+export default function IntakeTrendChart({ data, students = [] }) {
   const { t } = useLanguage();
 
-  const chartData = data || [
-    { month: 'Jun', students: 12 },
-    { month: 'Jul', students: 28 },
-    { month: 'Aug', students: 45 },
-    { month: 'Sep (Current)', students: 31 }
-  ];
+  const chartData = React.useMemo(() => {
+    if (data && data.length > 0) return data;
+    if (!students || students.length === 0) {
+      return [
+        { month: 'Prior', students: 0 },
+        { month: 'Current', students: 0 }
+      ];
+    }
+
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const currentMonthIdx = new Date().getMonth();
+    const countsByMonth = {};
+
+    // Populate last 3 months
+    for (let i = 2; i >= 0; i--) {
+      const idx = (currentMonthIdx - i + 12) % 12;
+      countsByMonth[monthNames[idx]] = 0;
+    }
+
+    students.forEach(s => {
+      const d = s.created_at ? new Date(s.created_at) : new Date();
+      const m = monthNames[d.getMonth()];
+      if (countsByMonth[m] !== undefined) {
+        countsByMonth[m] += 1;
+      } else {
+        countsByMonth[m] = 1;
+      }
+    });
+
+    return Object.keys(countsByMonth).map(m => ({
+      month: m === monthNames[currentMonthIdx] ? `${m} (Current)` : m,
+      students: countsByMonth[m]
+    }));
+  }, [data, students]);
+
+  const totalStudents = students.length;
+  const badgeLabel = totalStudents > 0 ? `${totalStudents} Intakes Recorded` : 'Intake Ready';
 
   return (
     <div className="glass-card rounded-3xl p-6 sm:p-7 shadow-xs">
@@ -23,7 +54,7 @@ export default function IntakeTrendChart({ data }) {
             </h3>
             <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
               <TrendingUp className="w-3 h-3" />
-              +38% vs Q2
+              {badgeLabel}
             </span>
           </div>
           <p className="text-xs text-[#6B6256] font-medium">
