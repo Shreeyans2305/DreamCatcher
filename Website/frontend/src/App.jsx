@@ -128,6 +128,7 @@ function AppContent() {
         />
       )}
 
+
       {/* Official Volunteer ID Card Modal */}
       <VolunteerCredentialModal />
 

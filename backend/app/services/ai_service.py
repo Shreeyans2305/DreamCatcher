@@ -260,12 +260,15 @@ Verified Opportunities Available in System (Eligibility-Matched):
 Guidelines:
 1. Tone: Warm, encouraging, respectful ("Namaste", "Aapka sapna sach ho sakta hai").
 2. Answer specifically addressing their question and their exact educational background.
-3. Recommend 1-3 specific schemes/courses from the verified opportunities when relevant.
+3. Structure your response using these exact alert callout blocks for clean card rendering in the UI:
+   - 🎯 **Recommended Pathway:** (followed by a 1-2 sentence structured roadmap)
+   - ⚠️ **Important Eligibility Notice:** (followed by key age, exam, or certificate criteria)
+   - 💡 **Officer Guidance:** (followed by strategic advice or next steps)
 4. Keep answers concise (under 250 words) with clear bullet points.
-5. Provide 2-3 immediate, actionable stepping stones (e.g. documents to gather, exam portal to register).
-6. If the user writes in Hindi or requests Hindi, reply in natural conversational Hindi (Devanagari or Hinglish). Otherwise reply in clear English.
+5. Provide 2-3 immediate, actionable stepping stones.
+6. If the user writes in Hindi or requests Hindi, reply in natural conversational Hindi (Devanagari or Hinglish). If Marathi, in Marathi. Otherwise in clear English.
 7. NEVER make up opportunity names, deadlines, or URLs. Only reference data from the "Verified Opportunities" section above.
-8. At the end, suggest 3 brief follow-up questions the student might want to ask (prefixed with "💡").
+8. At the very end, suggest 3 brief follow-up questions the student might want to ask (prefixed with "💡").
 9. For a new caller with missing profile details, act as an interviewer: ask for one or two missing facts at a time (name, village/state, education, work or skills, interests, and goal). Use facts already shared in conversation history and do not ask the same question again. Only give highly specific opportunity guidance after enough facts are available.
 """
 
@@ -609,11 +612,12 @@ Rules:
             reply = (
                 f"Namaste {first_name}! 🙏 Based on your profile from **{location}** and your education ({edu_level}), "
                 f"you qualify for government and merit-based financial aid schemes:\n\n"
-                f"{opp_bullet_points}\n"
-                f"**Key Steps to Apply:**\n"
-                f"1. **Income & Caste Certificate**: Ensure you have valid certificates from your local Tehsildar / Block Development Office.\n"
-                f"2. **National Scholarship Portal**: Register at [scholarships.gov.in](https://scholarships.gov.in) with your Aadhaar and Bank account.\n"
-                f"3. Keep your 10th marksheet and fee receipts ready for document verification."
+                f"🎯 **Recommended Pathway:**\n"
+                f"Income Certificate Verification → National Scholarship Portal Registration → 100% Fee Waiver.\n\n"
+                f"⚠️ **Important Eligibility Notice:**\n"
+                f"Valid Caste/Income Certificate from local Tehsildar and active Aadhaar-linked bank account required.\n\n"
+                f"💡 **Officer Guidance:**\n"
+                f"Check the verified scholarship schemes listed below. Prepare your 10th marksheet and fee receipts for instant upload."
             )
             suggested = [
                 "Which documents are required for NSP?",
@@ -622,12 +626,14 @@ Rules:
             ]
         elif "course" in msg_lower or "iti" in msg_lower or "learn" in msg_lower or "training" in msg_lower:
             reply = (
-                f"Hello {first_name}! With your practical background in *{edu_desc or 'hands-on learning'}*, "
+                f"Hello {first_name}! With your background in *{edu_desc or 'hands-on learning'}*, "
                 f"practical vocational courses offer high-demand career pathways:\n\n"
-                f"{opp_bullet_points}\n"
-                f"**Recommended Progression:**\n"
-                f"1. **NCVT Approved Programs**: Enroll in a government ITI or Polytechnic to get formal NSQF certification.\n"
-                f"2. **Dual Training**: Combine classroom learning with industry apprenticeship under NAPS (National Apprenticeship Promotion Scheme)."
+                f"🎯 **Recommended Pathway:**\n"
+                f"Class 10th Pass → Government ITI Trade Certification → NAPS Industry Apprenticeship (Stipend ₹8,000-₹12,000/mo).\n\n"
+                f"⚠️ **Important Eligibility Notice:**\n"
+                f"Class 10th pass marksheet and domicile certificate required for DVET centralized admission (CAP).\n\n"
+                f"💡 **Officer Guidance:**\n"
+                f"Enroll in high-demand trades like Electrician, Solar PV Technician, or Fitter for guaranteed campus placements."
             )
             suggested = [
                 "Find ITI centers in my district",
@@ -636,13 +642,13 @@ Rules:
             ]
         else:
             reply = (
-                f"Namaste {first_name}! 🙏 I am tracking your goal toward becoming **{aspiration_text}**.\n\n"
-                f"Here are top verified opportunities aligned with your background from {location}:\n\n"
-                f"{opp_bullet_points}\n"
-                f"**How I can guide you:**\n"
-                f"• Find scholarships with 100% fee waivers for rural students.\n"
-                f"• Connect your hands-on practical skills to government certified diplomas.\n"
-                f"• Prepare for entrance exams like JNVST, CUET, or Polytechnic CET."
+                f"Namaste {first_name}! 🙏 Here is your personalized roadmap toward becoming **{aspiration_text}**:\n\n"
+                f"🎯 **Recommended Pathway:**\n"
+                f"Board Exam Completion → Targeted Physical/Vocational Preparation → Official Recruitment & Scholarship Applications.\n\n"
+                f"⚠️ **Important Eligibility Notice:**\n"
+                f"Verify minimum age (18 years) and required physical/academic criteria for upcoming state recruitment cycles.\n\n"
+                f"💡 **Officer Guidance:**\n"
+                f"Review the eligible government recruitment drives and scholarship grants below. Tap any suggested question to get specific details."
             )
             suggested = [
                 "Which scholarships can I get?",
