@@ -10,6 +10,8 @@ import os
 import sys
 import json
 import smtplib
+import threading
+import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
@@ -145,3 +147,21 @@ Sign In: http://localhost:5173
         "simulated": True,
         "message": f"Credential record saved for {recipient_email}."
     }
+
+def keep_alive_task():
+    port = os.environ.get("PORT", 8000)
+    url = f"http://127.0.0.1:{port}/api/health"
+    
+    while True:
+        try:
+            time.sleep(600)
+            response = requests.get(url)
+            print(f"Keep-alive internal ping sent: Status {response.status_code}")
+        except Exception as e:
+            print(f"Keep-alive internal ping failed: {e}")
+
+@app.on_event("startup")
+async def startup_event():
+    thread = threading.Thread(target=keep_alive_task, daemon=True)
+    thread.start()
+    print("Started keep-alive background task")
