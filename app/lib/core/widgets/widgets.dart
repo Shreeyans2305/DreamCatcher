@@ -5,3 +5,5 @@ export 'floating_bottom_nav.dart';
 export 'app_search_bar.dart';
 export 'filter_chip_row.dart';
 export 'progress_ring.dart';
+export 'searchable_location_picker.dart';
+export 'student_avatar.dart';

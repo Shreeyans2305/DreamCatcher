@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -49,25 +50,25 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Text(
               l10n.assistantTitle,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.inter(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: DesignTokens.textPrimary,
+                letterSpacing: -0.3,
               ),
             ),
             Text(
               l10n.assistantSubtitle,
               style: GoogleFonts.inter(
                 fontSize: 13,
-                color: DesignTokens.textMuted,
+                color: DesignTokens.slate600,
               ),
             ),
           ],
         ),
         actions: [
-          // New Chat button
           IconButton(
-            icon: const Icon(Icons.add_comment_rounded),
+            icon: const Icon(Icons.add_comment_rounded, color: DesignTokens.slate600),
             tooltip: l10n.assistantTitle,
             onPressed: () {
               chat.startNewChat();
@@ -78,27 +79,27 @@ class _ChatScreenState extends State<ChatScreen> {
             margin: const EdgeInsets.only(right: 16),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: DesignTokens.mintBg,
+              color: DesignTokens.sageBg,
               borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
-              border: Border.all(color: DesignTokens.mintBorder),
+              border: Border.all(color: DesignTokens.sageBorder),
             ),
             child: Row(
               children: [
                 Container(
-                  width: 8,
-                  height: 8,
+                  width: 7,
+                  height: 7,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF059669),
+                    color: DesignTokens.sageText,
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 5),
                 Text(
-                  l10n.send,
+                  'Online',
                   style: GoogleFonts.inter(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: DesignTokens.mintText,
+                    color: DesignTokens.sageText,
                   ),
                 ),
               ],
@@ -128,8 +129,8 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 children: [
                   const SizedBox(
-                    width: 16,
-                    height: 16,
+                    width: 14,
+                    height: 14,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       color: DesignTokens.primary,
@@ -138,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(width: 10),
                   Text(
                     'DreamCatcher is thinking...',
-                    style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textMuted),
+                    style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textMuted),
                   ),
                 ],
               ),
@@ -156,16 +157,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: ActionChip(
-                      backgroundColor: Colors.white,
+                      backgroundColor: DesignTokens.blushBg,
                       label: Text(
                         chipText,
                         style: GoogleFonts.inter(
                           fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: DesignTokens.primary,
+                          fontWeight: FontWeight.w600,
+                          color: DesignTokens.maroon900,
                         ),
                       ),
-                      side: const BorderSide(color: DesignTokens.primary, width: 1),
+                      side: const BorderSide(color: DesignTokens.blushBorder),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+                      ),
                       onPressed: () {
                         chat.sendMessage(chipText);
                         _scrollToBottom();
@@ -178,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
           // Input Bar (padded for floating nav)
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
             child: Row(
               children: [
                 Expanded(
@@ -191,10 +195,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     child: TextField(
                       controller: _textController,
+                      style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textPrimary),
                       decoration: InputDecoration(
                         hintText: l10n.chatInputHint,
-                        hintStyle: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textMuted),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        hintStyle: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textMuted),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -215,7 +220,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   button: true,
                   label: 'Send Message',
                   child: Material(
-                    color: DesignTokens.primary,
+                    color: DesignTokens.maroon900,
                     shape: const CircleBorder(),
                     child: InkWell(
                       customBorder: const CircleBorder(),
@@ -229,14 +234,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(
-                          minWidth: DesignTokens.minTouchTarget,
-                          minHeight: DesignTokens.minTouchTarget,
+                          minWidth: 44,
+                          minHeight: 44,
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.send_rounded,
                             color: Colors.white,
-                            size: 20,
+                            size: 19,
                           ),
                         ),
                       ),
@@ -272,9 +277,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
-                    Icons.school_rounded,
+                    Icons.auto_awesome_rounded,
                     color: DesignTokens.lavenderText,
-                    size: 20,
+                    size: 18,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -283,7 +288,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                   decoration: BoxDecoration(
-                    color: isUser ? DesignTokens.primary : Colors.white,
+                    color: isUser ? DesignTokens.maroon900 : Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(20),
                       topRight: const Radius.circular(20),
@@ -292,17 +297,18 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     border: isUser
                         ? null
-                        : Border.all(color: DesignTokens.border.withValues(alpha: 0.8)),
-                    boxShadow: isUser ? null : DesignTokens.softShadow,
+                        : Border.all(color: DesignTokens.border),
+                    boxShadow: isUser
+                        ? [
+                            BoxShadow(
+                              color: DesignTokens.maroon900.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ]
+                        : DesignTokens.softShadow,
                   ),
-                  child: Text(
-                    msg.text,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      height: 1.45,
-                      color: isUser ? Colors.white : DesignTokens.textPrimary,
-                    ),
-                  ),
+                  child: _buildMarkdownMessage(msg.text, isUser),
                 ),
               ),
               if (isUser) const SizedBox(width: 6),
@@ -316,11 +322,11 @@ class _ChatScreenState extends State<ChatScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 46, top: 8),
               child: SizedBox(
-                height: 80,
+                height: 82,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: msg.referencedOpportunities!.length.clamp(0, 3),
-                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                  separatorBuilder: (ctx, i) => const SizedBox(width: 8),
                   itemBuilder: (context, idx) {
                     final opp = msg.referencedOpportunities![idx];
                     return _buildOpportunityCard(opp);
@@ -339,12 +345,12 @@ class _ChatScreenState extends State<ChatScreen> {
     final deadline = opp['deadline'] as String?;
 
     return Container(
-      width: 200,
-      padding: const EdgeInsets.all(10),
+      width: 210,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: DesignTokens.lavenderBg,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: DesignTokens.lavenderText.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: DesignTokens.lavenderBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,7 +361,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: DesignTokens.primary.withValues(alpha: 0.1),
+                  color: DesignTokens.maroon900.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -363,18 +369,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 9,
                     fontWeight: FontWeight.bold,
-                    color: DesignTokens.primary,
+                    color: DesignTokens.maroon900,
                     letterSpacing: 0.5,
                   ),
                 ),
               ),
               if (deadline != null) ...[
                 const Spacer(),
-                Icon(Icons.schedule_rounded, size: 11, color: DesignTokens.textMuted),
+                const Icon(Icons.schedule_rounded, size: 11, color: DesignTokens.slate600),
                 const SizedBox(width: 3),
                 Text(
                   deadline,
-                  style: GoogleFonts.inter(fontSize: 10, color: DesignTokens.textMuted),
+                  style: GoogleFonts.inter(fontSize: 10, color: DesignTokens.slate600),
                 ),
               ],
             ],
@@ -392,6 +398,95 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMarkdownMessage(String text, bool isUser) {
+    final baseColor = isUser ? Colors.white : DesignTokens.textPrimary;
+    final mutedColor = isUser ? Colors.white.withValues(alpha: 0.85) : DesignTokens.textSecondary;
+
+    return MarkdownBody(
+      data: text,
+      selectable: true,
+      styleSheet: MarkdownStyleSheet(
+        p: GoogleFonts.inter(
+          fontSize: 15,
+          height: 1.45,
+          color: baseColor,
+        ),
+        strong: GoogleFonts.inter(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          color: baseColor,
+        ),
+        em: GoogleFonts.inter(
+          fontSize: 15,
+          fontStyle: FontStyle.italic,
+          color: baseColor,
+        ),
+        h1: GoogleFonts.inter(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: baseColor,
+        ),
+        h2: GoogleFonts.inter(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: baseColor,
+        ),
+        h3: GoogleFonts.inter(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: baseColor,
+        ),
+        listBullet: GoogleFonts.inter(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          color: isUser ? Colors.white : DesignTokens.maroon900,
+        ),
+        listBulletPadding: const EdgeInsets.only(right: 6),
+        code: GoogleFonts.inter(
+          fontSize: 13,
+          backgroundColor: isUser
+              ? Colors.white.withValues(alpha: 0.2)
+              : DesignTokens.blush200,
+          color: isUser ? Colors.white : DesignTokens.maroon900,
+        ),
+        codeblockDecoration: BoxDecoration(
+          color: isUser
+              ? Colors.black.withValues(alpha: 0.15)
+              : DesignTokens.cream50,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isUser
+                ? Colors.white.withValues(alpha: 0.2)
+                : DesignTokens.border,
+          ),
+        ),
+        blockquote: GoogleFonts.inter(
+          fontSize: 14,
+          fontStyle: FontStyle.italic,
+          color: mutedColor,
+        ),
+        blockquoteDecoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(
+              color: isUser ? Colors.white70 : DesignTokens.primary,
+              width: 3,
+            ),
+          ),
+          color: isUser
+              ? Colors.white.withValues(alpha: 0.08)
+              : DesignTokens.cream50,
+        ),
+        a: GoogleFonts.inter(
+          fontSize: 15,
+          color: isUser ? Colors.white : DesignTokens.primary,
+          decoration: TextDecoration.underline,
+        ),
+        pPadding: const EdgeInsets.only(bottom: 6),
+        blockSpacing: 8,
       ),
     );
   }

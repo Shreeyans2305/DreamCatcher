@@ -99,7 +99,10 @@ class OpportunitiesProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final opps = await _apiClient.fetchOpportunities(pageSize: 50);
+      final opps = await _apiClient.fetchOpportunities(
+        pageSize: 50,
+        language: _authProvider.preferredLanguage,
+      );
       _allOpportunities = opps;
 
       // If student is logged in, evaluate eligibility

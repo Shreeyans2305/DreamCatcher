@@ -1,7 +1,236 @@
 {
   "@@locale": "gu",
-  "appTitle": "ડ્રીમકેચર", "tagline": "પગલું દર પગલું તમારું ભવિષ્ય શોધો", "navDashboard": "હોમ", "navOpportunities": "તકો", "navChat": "સહાયક", "navProfile": "પ્રોફાઇલ",
-  "onboardingWelcome": "ચાલો તમારા ભવિષ્યનો માર્ગ બનાવીએ", "onboardingSubtitle": "તમારા વિશે થોડી માહિતી આપો જેથી અમે તમારા માટે યોગ્ય શિષ્યવૃત્તિ, અભ્યાસક્રમ, પરીક્ષા અને નોકરી શોધી શકીએ.", "stepBasic": "મૂળભૂત માહિતી", "stepLocation": "સ્થાન અને પૃષ્ઠભૂમિ", "stepEducation": "શિક્ષણ અને કુશળતા", "stepAspirations": "તમારા લક્ષ્યો",
-  "fullNameLabel": "પૂરું નામ", "fullNameHint": "દા.ત. આરવ શર્મા", "phoneLabel": "ફોન નંબર", "phoneHint": "દા.ત. +91 98765 43210", "preferredLanguageLabel": "પસંદગીની ભાષા", "selectLanguage": "તમારી ભાષા પસંદ કરો", "stateLabel": "રાજ્ય", "districtLabel": "જિલ્લો", "areaTypeLabel": "વિસ્તારનો પ્રકાર", "rural": "ગ્રામીણ", "urban": "શહેરી", "semiUrban": "અર્ધ-શહેરી", "casteCategoryLabel": "સામાજિક વર્ગ", "incomeBracketLabel": "વાર્ષિક કુટુંબ આવક", "educationLevelLabel": "સર્વોચ્ચ શિક્ષણ સ્તર",
-  "skillsTitle": "તમારી કુશળતા", "interestsTitle": "તમને ગમતા ક્ષેત્રો", "aspirationLabel": "તમારી સ્વપ્ન નોકરી અથવા મહત્વાકાંક્ષા શું છે?", "aspirationHint": "દા.ત. કૃષિ ડ્રોન પાઇલટ, ઇલેક્ટ્રિશિયન, સિવિલ એન્જિનિયર...", "btnNext": "ચાલુ રાખો", "btnBack": "પાછળ", "btnFinish": "પ્રોફાઇલ પૂર્ણ કરો", "saving": "તમારી પ્રોફાઇલ સાચવાઈ રહી છે...", "dashboardCompleteness": "પ્રોફાઇલ પૂર્ણતા", "dashboardMatchedOpps": "મેળવેલી તકો", "topOpportunitiesTitle": "તમારા માટેની શ્રેષ્ઠ તકો", "viewAll": "બધી જુઓ", "searchHint": "શિષ્યવૃત્તિ, અભ્યાસક્રમ, પરીક્ષા શોધો...", "filterAll": "બધું", "filterScholarships": "શિષ્યવૃત્તિ", "filterCourses": "અભ્યાસક્રમો", "filterExams": "પરીક્ષાઓ", "filterInternships": "ઇન્ટર્નશિપ", "filterEligibleOnly": "માત્ર પાત્ર", "resetFilters": "ફિલ્ટર રીસેટ કરો", "eligibleBadge": "પાત્ર", "notEligibleBadge": "માપદંડ જુઓ", "eligibilityReasoningTitle": "પાત્રતાની વિગતો", "applyNow": "સત્તાવાર પોર્ટલ પર અરજી કરો", "noOpportunitiesFound": "મેળ ખાતી કોઈ તક મળી નથી.", "assistantTitle": "એઆઈ કારકિર્દી માર્ગદર્શક", "assistantSubtitle": "તમારી યાત્રા માટે વ્યક્તિગત સલાહ", "chatInputHint": "કારકિર્દી અથવા શિષ્યવૃત્તિ વિશે પૂછો...", "send": "મોકલો", "editProfile": "પ્રોફાઇલ સંપાદિત કરો", "addSkill": "કુશળતા ઉમેરો", "addInterest": "રસ ઉમેરો", "saveChanges": "ફેરફારો સાચવો"
+  "appTitle": "ડ્રીમકેચર",
+  "tagline": "તમારું ભવિષ્ય શોધો, એક પછી એક ડગલું",
+  
+  "navDashboard": "હોમ",
+  "navOpportunities": "તકો",
+  "navChat": "સહાયક",
+  "navProfile": "પ્રોફાઇલ",
+
+  "onboardingWelcome": "ચાલો તમારા ભવિષ્યની રાહ બનાવીએ",
+  "onboardingSubtitle": "તમારા વિશે થોડી માહિતી આપો જેથી અમે તમારા માટે યોગ્ય સ્કોલરશીપ, કોર્સ, પરીક્ષાઓ અને નોકરીઓ શોધી શકીએ.",
+  "stepBasic": "મૂળભૂત માહિતી",
+  "stepLocation": "સ્થળ અને પૃષ્ઠભૂમિ",
+  "stepEducation": "શિક્ષણ અને કૌશલ્ય",
+  "stepAspirations": "તમારા લક્ષ્યો",
+  
+  "fullNameLabel": "પૂરું નામ",
+  "fullNameHint": "દા.ત. આરવ શર્મા",
+  "phoneLabel": "ફોન નંબર",
+  "phoneHint": "દા.ત. +91 98765 43210",
+  "preferredLanguageLabel": "પસંદગીની ભાષા",
+  "selectLanguage": "તમારી ભાષા પસંદ કરો",
+  
+  "stateLabel": "રાજ્ય",
+  "districtLabel": "જિલ્લો",
+  "areaTypeLabel": "વિસ્તારનો પ્રકાર",
+  "rural": "ગ્રામીણ",
+  "urban": "શહેરી",
+  "semiUrban": "અર્ધ-શહેરી",
+  
+  "casteCategoryLabel": "સામાજિક વર્ગ",
+  "incomeBracketLabel": "વાર્ષિક કૌટુંબિક આવક",
+  
+  "educationLevelLabel": "ઉચ્ચતમ શિક્ષણ સ્તર",
+  "informalLearningLabel": "તમે શું શીખ્યા છો? (પ્રાયોગિક/બિનઔપચારિક)",
+  "informalLearningHint": "દા.ત. સોલર પંપ રિપેરિંગ, દવાની દુકાનમાં સહાય, ખેતીનો હિસાબ...",
+  
+  "skillsTitle": "તમારા કૌશલ્યો (Skills)",
+  "interestsTitle": "પસંદગીના ક્ષેત્રો (Interests)",
+  "aspirationLabel": "તમારી સપનાની નોકરી કે મહત્વાકાંક્ષા શું છે?",
+  "aspirationHint": "દા.ત. એગ્રીકલ્ચરલ ડ્રોન પાયલટ, ઇલેક્ટ્રિશિયન, સિવિલ એન્જિનિયર...",
+
+  "btnNext": "આગળ વધો",
+  "btnBack": "પાછળ",
+  "btnFinish": "પ્રોફાઇલ પૂર્ણ કરો",
+  "saving": "પ્રોફાઇલ સાચવી રહ્યાં છીએ...",
+
+  "greeting": "નમસ્તે, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCompleteness": "પ્રોફાઇલ પૂર્ણતા",
+  "dashboardMatchedOpps": "મળતી આવતી તકો",
+  "dashboardActiveDeadlines": "નજીકની અંતિમ તારીખો",
+  "topOpportunitiesTitle": "તમારા માટે શ્રેષ્ઠ તકો",
+  "viewAll": "બધું જુઓ",
+  "socialProofDistrict": "તમારા જિલ્લાના {count} વિદ્યાર્થીઓએ આ અઠવાડિયે અરજી કરી",
+  "@socialProofDistrict": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchHint": "સ્કોલરશીપ, કોર્સ, પરીક્ષાઓ શોધો...",
+  "filterAll": "બધા",
+  "filterScholarships": "સ્કોલરશીપ",
+  "filterCourses": "કોર્સ",
+  "filterExams": "પ્રવેશ પરીક્ષાઓ",
+  "filterInternships": "ઇન્ટર્નશીપ",
+  "filterEligibleOnly": "માત્ર પાત્ર",
+  "resetFilters": "ફિલ્ટર રીસેટ કરો",
+  "eligibleBadge": "પાત્ર (Eligible)",
+  "notEligibleBadge": "પાત્રતા તપાસો",
+  "rulesPassed": "{total} માંથી {passed} શરતો પૂરી થઈ",
+  "@rulesPassed": {
+    "placeholders": {
+      "passed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "eligibilityReasoningTitle": "પાત્રતાની વિગતો",
+  "applyNow": "સત્તાવાર પોર્ટલ પર અરજી કરો",
+  "noOpportunitiesFound": "કોઈ તક મળી નથી. ફિલ્ટર બદલીને જુઓ.",
+
+  "assistantTitle": "એઆઈ કારકિર્દી માર્ગદર્શક",
+  "assistantSubtitle": "તમારી સફર માટે અંગત સલાહ",
+  "chatInputHint": "કારકિર્દી કે સ્કોલરશીપ વિશે કંઈ પણ પૂછો...",
+  "send": "મોકલો",
+
+  "editProfile": "પ્રોફાઇલ સંપાદિત કરો",
+  "addSkill": "કૌશલ્ય ઉમેરો",
+  "addInterest": "રસ ઉમેરો",
+  "saveChanges": "ફેરફારો સાચવો",
+
+  "opportunitiesAvailable": "{count} તકો ઉપલબ્ધ છે",
+  "@opportunitiesAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "opportunityTypeScholarship": "સ્કોલરશીપ",
+  "opportunityTypeCourse": "વ્યાવસાયિક કોર્સ",
+  "opportunityTypeExam": "પ્રવેશ પરીક્ષા",
+  "opportunityTypeInternship": "ઇન્ટર્નશીપ / ફેલોશીપ",
+  "opportunityTypeGeneral": "તક",
+  "openToAllCriteria": "મૂળભૂત શરતો પૂરી કરતા તમામ ઉમેદવારો માટે ખુલ્લું",
+  "noMatchingOpportunities": "કોઈ મેળ ખાતી તક મળી નથી",
+  "noMatchingOpportunitiesSubtitle": "શોધ બદલો અથવા 'માત્ર પાત્ર' ફિલ્ટર બંધ કરો.",
+  "officialPortalOpening": "સત્તાવાર પોર્ટલ ખોલી રહ્યું છે: {url}",
+  "@officialPortalOpening": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "statFinancialBenefit": "નાણાકીય લાભ",
+  "statKeyDetails": "મુખ્ય વિગતો",
+  "opportunityAbout": "આ તક વિશે",
+  "yourProfileValue": "તમારી પ્રોફાઇલ: {value}",
+  "@yourProfileValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "openToAllGeneral": "સામાન્ય લાયકાત પૂરી કરતા તમામ વિદ્યાર્થીઓ માટે ઉપલબ્ધ.",
+
+  "locationNotSet": "સ્થળ નક્કી કરેલ નથી",
+  "demographicsTitle": "વસ્તી વિષયક અને અનામત ક્વોટા",
+  "socialCategoryLabel": "સામાજિક શ્રેણી અને જાતિ",
+  "tribeLabel": "જનજાતિ જોડાણ",
+  "annualIncomeLabel": "વાર્ષિક પારિવારિક આવક",
+  "areaClassificationLabel": "વિસ્તાર વર્ગીકરણ",
+  "educationSectionTitle": "શિક્ષણ અને શીખવું",
+  "skillsSectionTitle": "કૌશલ્યો ({count})",
+  "@skillsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "interestsSectionTitle": "પસંદગીના ક્ષેત્રો ({count})",
+  "@interestsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "careerAspirationTitle": "કારકિર્દી લક્ષ્ય / સ્વપ્ન",
+  "btnUpdate": "અપડેટ કરો",
+  "btnAddSkill": "+ કૌશલ્ય ઉમેરો",
+  "btnAddInterest": "+ રસ ઉમેરો",
+  "btnSwitchProfile": "પ્રોફાઇલ બદલો / રીસેટ કરો",
+  "noneSpecified": "કંઈ સ્પષ્ટ નથી",
+  "nilIncome": "₹0 (શૂન્ય આવક / ₹25,000 થી ઓછી)",
+  "underIncome": "₹{amount} (₹25,000 થી ઓછી)",
+  "@underIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "perYearIncome": "₹{amount} / વર્ષ",
+  "@perYearIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "noEducationDescription": "હજુ સુધી કોઈ વ્યવહારુ અનુભવ ઉમેરવામાં આવ્યો નથી.",
+  "noSkillsAdded": "હજુ સુધી કોઈ કૌશલ્ય ઉમેરાયું નથી. યાદીમાંથી ઉમેરવા '+ કૌશલ્ય ઉમેરો' પર ટૅપ કરો.",
+  "noInterestsAdded": "હજુ સુધી કોઈ રસ ઉમેરાયો નથી. ક્ષેત્ર પસંદ કરવા '+ રસ ઉમેરો' પર ટૅપ કરો.",
+  "noAspirationAdded": "હજુ સુધી કોઈ લક્ષ્ય ઉમેરાયું નથી.",
+  "qualifiesFullWaiver": "✓ ૧૦૦% સંપૂર્ણ ફી માફી અને મહત્તમ સ્કોલરશીપ માટે પાત્ર.",
+
+  "dialogAddSkillTitle": "નવું કૌશલ્ય ઉમેરો",
+  "dialogAllSkillsAdded": "કૅટેલૉગના તમામ કૌશલ્યો પહેલેથી જ ઉમેરેલા છે!",
+  "dialogAddInterestTitle": "રસનું ક્ષેત્ર ઉમેરો",
+  "dialogAllInterestsAdded": "તમામ ઉપલબ્ધ રુચિઓ પહેલેથી જ ઉમેરેલી છે!",
+  "dialogUpdateEducationTitle": "શિક્ષણ અને પ્રાયોગિક માહિતી અપડેટ કરો",
+  "dialogEduLevelLabel": "શિક્ષણ સ્તર",
+  "dialogEduDescLabel": "પ્રાયોગિક / અનૌપચારિક શિક્ષણનું વર્ણન",
+  "dialogEduDescHint": "તમે વ્યવહારિક રીતે શું કામ શીખ્યા છો?",
+  "dialogAspirationTitle": "તમારું કારકિર્દી લક્ષ્ય / મહત્વાકાંક્ષા",
+  "dialogAspirationHint": "દા.ત. એગ્રીકલ્ચરલ ડ્રોન પાયલટ, ઇલેક્ટ્રિકલ કોન્ટ્રાક્ટર...",
+  "dialogDemographicsTitle": "વસ્તી વિષયક અને ક્વોટા અપડેટ કરો",
+  "dialogCasteQuotaLabel": "સામાજિક વર્ગ / જાતિ ક્વોટા",
+  "dialogTribeLabel": "જનજાતિ / સમુદાય (વૈકલ્પિક)",
+  "dialogTribeSubtitle": "જનજાતિ કાર્ય મંત્રાલય (MoTA) અને PVTG વિશેષ યોજનાઓ સક્ષમ કરે છે.",
+  "dialogTribeCustomHint": "અથવા તમારી જનજાતિ / PVTG નું નામ લખો...",
+  "dialogIncomeLabel": "કૌટુંબિક આવક",
+  "btnCancel": "રદ કરો",
+  "btnSave": "સાચવો",
+
+  "snackbarSkillAdded": "કૌશલ્ય ઉમેરાયું: {name}",
+  "@snackbarSkillAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarInterestAdded": "રસ ઉમેરાયો: {name}",
+  "@snackbarInterestAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarEducationUpdated": "શિક્ષણની વિગતો સફળતાપૂર્વક અપડેટ થઈ!",
+  "snackbarAspirationUpdated": "કારકિર્દી લક્ષ્ય અપડેટ થયું!",
+  "snackbarDemographicsUpdated": "વસ્તી વિષયક અને ક્વોટા પાત્રતા અપડેટ થઈ!",
+  "snackbarError": "ભૂલ: {error}",
+  "@snackbarError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "eduPrimary": "પ્રાથમિક શાળા (૫મા ધોરણ સુધી)",
+  "eduUpperPrimary": "ઉચ્ચ પ્રાથમિક (૬ઠ્ઠા - ૮મા)",
+  "eduSecondary": "૧૦મું પાસ (માધ્યમિક)",
+  "eduSeniorSecondary": "૧૨મું પાસ (ઉચ્ચતર માધ્યમિક)",
+  "eduDiploma": "ડિપ્લોમા / પોલિટેકનિક",
+  "eduVocational": "વ્યવસાયિક / ITI",
+  "eduBachelor": "સ્નાતક પદવી (Bachelor's)",
+  "eduMaster": "અનુસ્નાતક પદવી (Master's)",
+  "eduInformal": "અનૌપચારિક / પ્રાયોગિક શિક્ષણ",
+  "eduSelfLearning": "સ્વ-શિક્ષિત (Self-Taught)",
+  "eduOther": "અન્ય",
+
+  "catGeneral": "સામાન્ય (General)",
+  "catOBC": "અન્ય પછાત વર્ગ (OBC)",
+  "catSC": "અનુસૂચિત જાતિ (SC)",
+  "catST": "અનુસૂચિત જનજાતિ (ST)",
+  "catEWS": "આર્થિક રીતે નબળા (EWS)"
 }

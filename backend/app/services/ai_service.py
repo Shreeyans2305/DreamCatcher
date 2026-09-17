@@ -66,6 +66,7 @@ class AIService:
         message: str,
         language: str = "en",
         session_id: Optional[UUID] = None,
+        is_voice_mode: bool = False,
     ) -> ChatResponse:
         """
         Provides empathetic, grounded, profile-aware career and scholarship guidance.
@@ -123,10 +124,27 @@ class AIService:
         # 5. Load conversation history
         conversation_history = cls._get_conversation_history(db, session_id)
 
-        # 6. Manage session
+        # 6. Incrementally extract and build profile from caller conversation
+        cls._update_profile_from_conversation(db, student, message, conversation_history)
+        db.refresh(student)
+
+        # Refresh extracted profile variables
+        edu_record = student.education_records[0] if student.education_records else None
+        edu_level = edu_record.education_level.value if edu_record and edu_record.education_level else "secondary"
+        edu_desc = edu_record.description if edu_record and edu_record.description else ""
+        skills_list = [s.skill.canonical_name for s in student.skills if s.skill]
+        interests_list = [i.interest.name for i in student.interests if i.interest]
+        aspirations_list = [a.aspiration_text for a in student.aspirations]
+        location_name = (
+            f"{student.location.village}, {student.location.district}, {student.location.state}"
+            if student.location
+            else "India"
+        )
+
+        # 7. Manage session
         session = cls._get_or_create_session(db, student_id, session_id, message)
 
-        # 7. Persist user message
+        # 8. Persist user message
         user_msg = ChatMessage(
             session_id=session.id,
             role=MessageRole.USER,
@@ -135,7 +153,7 @@ class AIService:
         db.add(user_msg)
         db.flush()
 
-        # 8. Generate response via Vertex AI
+        # 9. Generate response via Vertex AI
         client = _get_client()
         reply_text = None
         is_fallback = False
@@ -157,6 +175,7 @@ class AIService:
                     candidate_opps=candidate_opps[:6],
                     rag_context=rag_context,
                     conversation_history=conversation_history,
+                    is_voice_mode=is_voice_mode,
                 )
             except Exception as e:
                 logger.warning("Vertex AI generation failed: %s. Using local fallback.", e)
@@ -173,6 +192,7 @@ class AIService:
                 message=message,
                 language=language,
                 matched_refs=matched_refs,
+                is_voice_mode=is_voice_mode,
             )
             reply_text = fallback_resp["reply"]
             suggested_actions = fallback_resp["suggested"]
@@ -184,7 +204,7 @@ class AIService:
                 "Show me vocational courses nearby",
             ]
 
-        # 9. Persist assistant response
+        # 10. Persist assistant response
         assistant_msg = ChatMessage(
             session_id=session.id,
             role=MessageRole.ASSISTANT,
@@ -210,6 +230,141 @@ class AIService:
         )
 
     # ------------------------------------------------------------------
+    # Dynamic Profile Extraction during Conversation
+    # ------------------------------------------------------------------
+    @classmethod
+    def _update_profile_from_conversation(
+        cls,
+        db: Session,
+        student: Student,
+        message: str,
+        conversation_history: List[Dict[str, str]],
+    ):
+        """Incrementally extracts and persists profile information as the student talks."""
+        try:
+            from app.models.education import StudentEducation, EducationLevel, EducationStatus, DataSource
+            from app.models.aspiration import StudentAspiration
+            from app.services.student_service import StudentService
+            import re
+
+            msg = message.strip()
+            msg_lower = msg.lower()
+            updated = False
+
+            # 1. Name extraction if student is still "New Caller" / "Voice Caller"
+            if student.name.lower() in ("new caller", "new voice caller", "voice caller", "new user", "student"):
+                name_match = re.search(
+                    r"(?:mera naam|मेरा नाम|माझे नाव|my name is|i am|i'm|naam hai|नाम है|naam|नाम|name:?)\s+([A-Za-z\u0900-\u097F][a-zA-Z\u0900-\u097F\s]{1,30})",
+                    msg,
+                    re.IGNORECASE,
+                )
+                if name_match:
+                    raw_name = name_match.group(1).strip()
+                    raw_name = re.split(r"(?:\s+(?:hai|है|hoon|हूँ|आहे|from|se|से|aur|और|and|\.|\,)|$)", raw_name, flags=re.IGNORECASE)[0].strip()
+                    if raw_name and len(raw_name) >= 2:
+                        student.name = raw_name.title()
+                        updated = True
+                elif len(conversation_history) <= 2 and len(msg.split()) <= 3 and not any(w in msg_lower for w in ("hello", "hi", "namaste", "नमस्ते", "scholarship", "help", "kya", "क्या", "kaise", "कैसे")):
+                    clean_words = [w for w in msg.split() if w.isalpha() or '\u0900' <= w[0] <= '\u097F']
+                    if 1 <= len(clean_words) <= 3:
+                        student.name = " ".join(clean_words).title()
+                        updated = True
+
+            # 2. Education extraction
+            if not student.education_records:
+                detected_level = None
+                field_of_study = None
+
+                if any(w in msg_lower for w in ("12th", "12 vi", "12 वी", "12वीं", "12th pass", "hsc", "intermediate", "inter", "senior secondary", "बारहवीं")):
+                    detected_level = EducationLevel.SENIOR_SECONDARY
+                elif any(w in msg_lower for w in ("10th", "10 vi", "10 वी", "10वीं", "10th pass", "ssc", "matric", "high school", "secondary", "दसवीं")):
+                    detected_level = EducationLevel.SECONDARY
+                elif any(w in msg_lower for w in ("iti", "vocational", "fitter", "electrician trade", "copa", "wireman")):
+                    detected_level = EducationLevel.VOCATIONAL
+                elif any(w in msg_lower for w in ("diploma", "polytechnic")):
+                    detected_level = EducationLevel.DIPLOMA
+                elif any(w in msg_lower for w in ("btech", "b.tech", "bachelor", "bca", "bsc", "b.sc", "bcom", "b.com", "ba", "b.a", "degree", "graduate", "graduation", "college")):
+                    detected_level = EducationLevel.BACHELOR
+                elif any(w in msg_lower for w in ("8th", "8 vi", "8वीं", "7th", "6th", "upper primary", "middle school", "आठवीं")):
+                    detected_level = EducationLevel.UPPER_PRIMARY
+
+                if "science" in msg_lower or "विज्ञान" in msg_lower or "pcm" in msg_lower or "pcb" in msg_lower:
+                    field_of_study = "Science"
+                elif "commerce" in msg_lower or "वाणिज्य" in msg_lower:
+                    field_of_study = "Commerce"
+                elif "arts" in msg_lower or "कला" in msg_lower or "humanities" in msg_lower:
+                    field_of_study = "Arts"
+
+                if detected_level:
+                    edu = StudentEducation(
+                        student_id=student.id,
+                        education_level=detected_level,
+                        field_of_study=field_of_study,
+                        status=EducationStatus.COMPLETED if "pass" in msg_lower or "पास" in msg_lower or "complete" in msg_lower else EducationStatus.IN_PROGRESS,
+                        description=msg[:250],
+                        source=DataSource.STUDENT_REPORTED,
+                        confidence=0.9,
+                    )
+                    db.add(edu)
+                    updated = True
+
+            # 3. Aspiration extraction
+            if not student.aspirations:
+                aspiration_keywords = {
+                    "software": "Software Engineer & Programmer",
+                    "सॉफ्टवेयर": "Software Engineer & Programmer",
+                    "coding": "Software Developer",
+                    "कोडिंग": "Software Developer",
+                    "computer": "Computer Science & IT Professional",
+                    "कंप्यूटर": "Computer Science & IT Professional",
+                    "police": "Police Service & Law Enforcement",
+                    "पुलिस": "Police Service & Law Enforcement",
+                    "army": "Indian Armed Forces / Defense",
+                    "सेना": "Indian Armed Forces / Defense",
+                    "फौज": "Indian Armed Forces / Defense",
+                    "teacher": "School Teacher / Educator",
+                    "शिक्षक": "School Teacher / Educator",
+                    "अध्यापक": "School Teacher / Educator",
+                    "doctor": "Medical & Healthcare Professional",
+                    "डॉक्टर": "Medical & Healthcare Professional",
+                    "nurse": "Nursing & Healthcare Assistant",
+                    "नर्स": "Nursing & Healthcare Assistant",
+                    "mechanic": "Mechanical & Automobile Technician",
+                    "मैकेनिक": "Mechanical & Automobile Technician",
+                    "electrician": "Electrical Technician / Electrician",
+                    "इलेक्ट्रीशियन": "Electrical Technician / Electrician",
+                    "ias": "Civil Services / Administrative Officer",
+                    "ips": "Indian Police Service Officer",
+                    "bank": "Banking & Financial Services",
+                    "business": "Entrepreneurship & Small Business",
+                    "व्यापार": "Entrepreneurship & Small Business",
+                    "farming": "Modern Agriculture & Farming",
+                    "खेती": "Modern Agriculture & Farming",
+                    "किसान": "Modern Agriculture & Farming",
+                    "drone": "Drone Operator & Precision Agriculture",
+                    "solar": "Solar Energy Technician",
+                }
+                for kw, asp_title in aspiration_keywords.items():
+                    if kw in msg_lower:
+                        asp = StudentAspiration(
+                            student_id=student.id,
+                            aspiration_text=asp_title,
+                            priority=1,
+                            source="student_reported",
+                            confidence=0.9,
+                        )
+                        db.add(asp)
+                        updated = True
+                        break
+
+            if updated:
+                student.profile_completeness = StudentService.calculate_completeness(student)
+                db.commit()
+                db.refresh(student)
+        except Exception as e:
+            logger.debug("Profile extraction notice: %s", e)
+
+    # ------------------------------------------------------------------
     # Vertex AI response generation
     # ------------------------------------------------------------------
     @classmethod
@@ -228,6 +383,7 @@ class AIService:
         candidate_opps: List[Opportunity],
         rag_context: str,
         conversation_history: List[Dict[str, str]],
+        is_voice_mode: bool = False,
     ) -> tuple:
         """Generate a response using Vertex AI Gemini."""
         opps_context = "\n".join(
@@ -238,7 +394,42 @@ class AIService:
             ]
         )
 
-        system_prompt = f"""You are DreamCatcher AI, an inspiring, empathetic, and knowledgeable career mentor for rural and vernacular youth across India.
+        is_first_time_caller = (
+            student_name.lower() in ("new caller", "new voice caller", "voice caller", "new user", "friend")
+            or (not skills and not aspirations and not edu_desc)
+        )
+
+        if is_voice_mode:
+            system_prompt = f"""You are Pragati from DreamCatcher AI, speaking on a LIVE SPOKEN PHONE CALL with a student.
+You are a warm, encouraging, conversational mentor for Indian youth.
+
+Student Profile:
+- Name: {student_name}
+- Region: {location}
+- Highest Education: {edu_level}
+- Practical Background: {edu_desc}
+- Verified Skills: {', '.join(skills) if skills else 'Exploring'}
+- Dream Aspiration: {', '.join(aspirations) if aspirations else 'Undecided'}
+- Language: {language}
+
+Verified Opportunities Available:
+{opps_context if opps_context else 'No specific opportunities loaded.'}
+
+{f'''Knowledge Base Context:
+{rag_context}
+''' if rag_context else ''}
+
+STRICT VOICE CALL RULES (CRITICAL):
+1. SPOKEN BREVITY: This is an audio phone call. Keep every response SHORT, NATURAL, and PUNCHY — MAXIMUM 1 TO 2 SHORT SENTENCES (strictly under 35 words total). Always complete your sentences cleanly. Never drag on or speak long paragraphs.
+2. NO MARKDOWN: Never use asterisks (*, **), bullet points, numbered lists, markdown formatting, emojis (💡), headers (#), or URLs. Everything you write will be read aloud by text-to-speech.
+3. CONVERSATIONAL DIALOGUE:
+   - For a first-time caller whose profile is incomplete: Warmly acknowledge in 1 short sentence, and ask EXACTLY ONE simple question (e.g. asking for their education level or career goal). Never ask two questions at once.
+   - For ongoing guidance: Answer directly in 1 sentence, mention at most 1 matching scholarship/course by name, and finish with 1 simple follow-up question.
+4. LANGUAGE: Reply in natural spoken {language} (e.g., natural spoken conversational Hindi, Marathi, or English).
+5. NEVER sound like a search engine or report. Speak warmly like a real counselor talking over the phone.
+"""
+        else:
+            system_prompt = f"""You are DreamCatcher AI, an inspiring, empathetic, and knowledgeable career mentor for rural and vernacular youth across India.
 Your mission is to help first-generation students, underprivileged youth, and rural jobseekers navigate scholarships, vocational courses, ITI programs, entrance exams, and career roadmaps.
 
 Student Profile Context:
@@ -264,12 +455,26 @@ Guidelines:
    - 🎯 **Recommended Pathway:** (followed by a 1-2 sentence structured roadmap)
    - ⚠️ **Important Eligibility Notice:** (followed by key age, exam, or certificate criteria)
    - 💡 **Officer Guidance:** (followed by strategic advice or next steps)
-4. Keep answers concise (under 250 words) with clear bullet points.
+4. Keep responses focused and concise (under 120 words) with clear bullet points, except when the alert callouts require enough detail to be useful.
 5. Provide 2-3 immediate, actionable stepping stones.
-6. If the user writes in Hindi or requests Hindi, reply in natural conversational Hindi (Devanagari or Hinglish). If Marathi, in Marathi. Otherwise in clear English.
+6. If the user writes in Hindi or requests Hindi, reply in natural conversational Hindi (Devanagari or Hinglish). If Marathi or another regional language, reply in that language. Otherwise use clear English.
 7. NEVER make up opportunity names, deadlines, or URLs. Only reference data from the "Verified Opportunities" section above.
-8. At the very end, suggest 3 brief follow-up questions the student might want to ask (prefixed with "💡").
+8. At the very end, suggest 2-3 brief follow-up questions the student might want to ask (prefixed with "💡").
 9. For a new caller with missing profile details, act as an interviewer: ask for one or two missing facts at a time (name, village/state, education, work or skills, interests, and goal). Use facts already shared in conversation history and do not ask the same question again. Only give highly specific opportunity guidance after enough facts are available.
+
+First-Time Caller Conversational Interview Rules:
+{'''
+- This caller is talking to you for the first time and is building their profile right now during this conversation!
+- Ask for missing pieces of information step-by-step:
+    • If their name or village/city hasn't been shared yet: Warmly greet them and ask for their name and village/city.
+    • If they just told you their name/village: Greet them by name, acknowledge their village, and ask what their current education is.
+    • If they shared their education: Ask what trade or subjects they enjoy.
+    • If they shared their interests: Ask what their dream career goal is.
+    • Once education and goal are shared: Summarize their profile enthusiastically, recommend 1-2 matching opportunities/scholarships from the verified opportunities above, and give clear immediate next steps!
+- Never overwhelm the caller — ask only 1 focused question at a time.
+''' if is_first_time_caller else '''
+- Address the student by name and provide tailored guidance directly based on their verified profile and opportunities.
+'''}
 """
 
         # Build multi-turn contents
@@ -282,18 +487,27 @@ Guidelines:
         # Add current user message
         contents.append({"role": "user", "parts": [{"text": message}]})
 
+        max_tokens = 1024
+        temp = 0.6 if is_voice_mode else 0.7
+
         response = client.models.generate_content(
             model=settings.gemini_model,
             contents=contents,
             config={
                 "system_instruction": system_prompt,
-                "temperature": 0.7,
-                "max_output_tokens": 1024,
+                "temperature": temp,
+                "max_output_tokens": max_tokens,
             },
         )
 
         if response and response.text:
             reply = response.text.strip()
+
+            if is_voice_mode:
+                import re
+                reply = re.sub(r'[*#_`•💡]', '', reply)
+                reply = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', reply)
+                reply = re.sub(r'\s+', ' ', reply).strip()
 
             # Extract suggested actions from reply if present
             suggested = []
@@ -593,14 +807,48 @@ Rules:
         message: str,
         language: str,
         matched_refs: List[OpportunityReference],
+        is_voice_mode: bool = False,
     ) -> Dict[str, Any]:
         """
-        Synthesizes a detailed, culturally attuned response grounded directly in
+        Synthesizes a culturally attuned response grounded directly in
         the verified opportunities in the database.
         """
         msg_lower = message.lower()
         aspiration_text = aspirations[0] if aspirations else "your chosen ambition"
         first_name = student_name.split()[0] if student_name else "Friend"
+
+        if is_voice_mode:
+            top_opp = matched_refs[0].title if matched_refs else "National Scholarship schemes"
+            if "scholarship" in msg_lower or "money" in msg_lower or "fee" in msg_lower or "aid" in msg_lower:
+                if language.startswith("hi"):
+                    reply = f"नमस्ते {first_name}! आपकी पढ़ाई के लिए {top_opp} जैसी छात्रवृत्तियां उपलब्ध हैं। क्या आपका आय प्रमाण पत्र तैयार है?"
+                elif language.startswith("mr"):
+                    reply = f"नमस्कार {first_name}! तुमच्यासाठी {top_opp} ही शिष्यवृत्ती उपलब्ध आहे. तुमचे कागदपत्रे तयार आहेत का?"
+                else:
+                    reply = f"Namaste {first_name}! Scholarships like {top_opp} are available for your background. Do you have your income certificate ready?"
+            elif "course" in msg_lower or "iti" in msg_lower or "learn" in msg_lower or "training" in msg_lower:
+                if language.startswith("hi"):
+                    reply = f"नमस्ते {first_name}! आपके लिए सरकारी आईटीआई और पॉलिटेक्निक कोर्सेज बहुत अच्छे रहेंगे। आप किस ट्रेड में सीखना चाहते हैं?"
+                elif language.startswith("mr"):
+                    reply = f"नमस्कार {first_name}! शासकीय आयटीआय आणि पॉलिटेक्निक कोर्सेस उत्तम पर्याय आहेत. तुम्हाला कोणत्या ट्रेडमध्ये आवड आहे?"
+                else:
+                    reply = f"Hello {first_name}! Government ITIs and polytechnic courses are great pathways. Which trade are you interested in?"
+            else:
+                if language.startswith("hi"):
+                    reply = f"नमस्ते {first_name}! मैं आपकी करियर गाइड प्रगति हूँ। आप अभी कौन सी कक्षा में पढ़ रहे हैं?"
+                elif language.startswith("mr"):
+                    reply = f"नमस्कार {first_name}! मी तुमची मार्गदर्शक प्रगती आहे. तुमचे सध्याचे शिक्षण काय आहे?"
+                else:
+                    reply = f"Namaste {first_name}! I am your DreamCatcher career guide Pragati. What is your current class or education level?"
+
+            return {
+                "reply": reply,
+                "suggested": [
+                    "Which scholarships can I get?",
+                    "What documents do I need?",
+                    "Show vocational courses",
+                ],
+            }
 
         opp_bullet_points = ""
         for opp in matched_refs[:3]:

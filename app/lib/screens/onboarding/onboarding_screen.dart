@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/theme/design_tokens.dart';
 import '../../core/widgets/widgets.dart';
+import '../../data/india_locations.dart';
 import '../../data/models/reference.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/onboarding_provider.dart';
@@ -28,7 +29,7 @@ class OnboardingScreen extends StatelessWidget {
                     SizedBox(height: 16),
                     Text(
                       'Connecting to DreamCatcher...',
-                      style: TextStyle(fontSize: 16, color: DesignTokens.textSecondary),
+                      style: TextStyle(fontSize: 15, color: DesignTokens.textSecondary),
                     ),
                   ],
                 ),
@@ -43,12 +44,12 @@ class OnboardingScreen extends StatelessWidget {
                 // Form Page Content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     child: _buildStepContent(context, provider),
                   ),
                 ),
 
-                // Bottom Action Button (Max 1 Primary CTA per screen)
+                // Bottom Sticky Action Button
                 _buildBottomNav(context, provider),
               ],
             );
@@ -69,16 +70,25 @@ class OnboardingScreen extends StatelessWidget {
     ];
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: DesignTokens.border.withValues(alpha: 0.8))),
+        border: Border(
+          bottom: BorderSide(color: DesignTokens.border.withValues(alpha: 0.8)),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: DesignTokens.maroon900.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Row(
         children: [
           ProgressRing(
             progress: provider.stepProgress,
-            size: 52,
+            size: 50,
             strokeWidth: 5,
             showPercentage: true,
           ),
@@ -90,27 +100,39 @@ class OnboardingScreen extends StatelessWidget {
                 Text(
                   '${provider.currentStep + 1} / ${provider.totalSteps}',
                   style: GoogleFonts.inter(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: DesignTokens.primary,
+                    color: DesignTokens.slate600,
                   ),
                 ),
+                const SizedBox(height: 2),
                 Text(
                   stepTitles[provider.currentStep],
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: DesignTokens.textPrimary,
+                    letterSpacing: -0.3,
                   ),
                 ),
               ],
             ),
           ),
           if (provider.currentStep > 0)
-            IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
-              onPressed: provider.prevStep,
-              tooltip: l10n.btnBack,
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: DesignTokens.cream50,
+                border: Border.all(color: DesignTokens.border),
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: DesignTokens.maroon900),
+                onPressed: provider.prevStep,
+                tooltip: l10n.btnBack,
+              ),
             ),
         ],
       ),
@@ -133,6 +155,7 @@ class OnboardingScreen extends StatelessWidget {
         return const SizedBox.shrink();
     }
   }
+
   // ---------------------------------------------------------------------------
   // Step 0: Basic Info & Language
   // ---------------------------------------------------------------------------
@@ -141,25 +164,66 @@ class OnboardingScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Motivational Copy Block
         Text(
-          l10n.onboardingWelcome,
-          style: GoogleFonts.poppins(
+          "Let's build your future path",
+          style: GoogleFonts.inter(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: DesignTokens.textPrimary,
+            letterSpacing: -0.4,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
           l10n.onboardingSubtitle,
-          style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(
+            fontSize: 15,
+            color: DesignTokens.textSecondary,
+            height: 1.4,
+          ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
+
+        // Profile Photo Picker (Optional)
+        Center(
+          child: Column(
+            children: [
+              StudentAvatar(
+                avatarUrl: provider.avatarUrl,
+                name: provider.name.isNotEmpty ? provider.name : 'Student',
+                size: 78,
+                showEditBadge: true,
+                onTap: () {
+                  showAvatarPickerBottomSheet(
+                    context: context,
+                    hasExistingAvatar: provider.avatarUrl != null && provider.avatarUrl!.isNotEmpty,
+                    onAvatarSelected: provider.setAvatarUrl,
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Add Profile Photo (Optional)',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: DesignTokens.slate600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
 
         // Full Name
         Text(
           '${l10n.fullNameLabel} *',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: DesignTokens.textPrimary,
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -167,7 +231,7 @@ class OnboardingScreen extends StatelessWidget {
           onChanged: provider.setName,
           decoration: InputDecoration(
             hintText: l10n.fullNameHint,
-            prefixIcon: Icon(Icons.person_outline_rounded, color: DesignTokens.textMuted),
+            prefixIcon: const Icon(Icons.person_outline_rounded, color: DesignTokens.slate600, size: 20),
           ),
         ),
         const SizedBox(height: 20),
@@ -175,7 +239,11 @@ class OnboardingScreen extends StatelessWidget {
         // Phone Number
         Text(
           l10n.phoneLabel,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: DesignTokens.textPrimary,
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -184,7 +252,7 @@ class OnboardingScreen extends StatelessWidget {
           onChanged: provider.setPhone,
           decoration: InputDecoration(
             hintText: l10n.phoneHint,
-            prefixIcon: Icon(Icons.phone_outlined, color: DesignTokens.textMuted),
+            prefixIcon: const Icon(Icons.phone_outlined, color: DesignTokens.slate600, size: 20),
           ),
         ),
         const SizedBox(height: 20),
@@ -192,7 +260,11 @@ class OnboardingScreen extends StatelessWidget {
         // Preferred Language
         Text(
           l10n.preferredLanguageLabel,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: DesignTokens.textPrimary,
+          ),
         ),
         const SizedBox(height: 8),
         Builder(
@@ -201,8 +273,7 @@ class OnboardingScreen extends StatelessWidget {
             for (final l in provider.languages) {
               uniqueLangs[l.code] = l;
             }
-            final langList = uniqueLangs.values
-                .toList();
+            final langList = uniqueLangs.values.toList();
             final currentLang = provider.preferredLanguage;
             final effectiveLang = uniqueLangs.containsKey(currentLang)
                 ? currentLang
@@ -214,19 +285,23 @@ class OnboardingScreen extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
                 border: Border.all(color: DesignTokens.border),
+                boxShadow: DesignTokens.softShadow,
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: effectiveLang,
-                  hint: Text(l10n.selectLanguage),
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                  hint: Text(
+                    l10n.selectLanguage,
+                    style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textMuted),
+                  ),
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded, color: DesignTokens.slate600),
                   items: langList.map((lang) {
                     return DropdownMenuItem<String>(
                       value: lang.code,
                       child: Text(
                         '${lang.name} (${lang.nativeName})',
-                        style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textPrimary),
+                        style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textPrimary),
                       ),
                     );
                   }).toList(),
@@ -252,108 +327,187 @@ class OnboardingScreen extends StatelessWidget {
       children: [
         Text(
           '${l10n.stateLabel} & ${l10n.districtLabel}',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: DesignTokens.textPrimary,
+            letterSpacing: -0.3,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
           'Many government scholarships are reserved for specific states, districts, and rural regions.',
-          style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(
+            fontSize: 15,
+            color: DesignTokens.textSecondary,
+            height: 1.4,
+          ),
         ),
         const SizedBox(height: 24),
 
-        // Location Selector from Catalogue
-        Text(
-          '${l10n.districtLabel} *',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 8),
-        Builder(
-          builder: (context) {
-            final uniqueLocs = <String, LocationItem>{};
-            for (final loc in provider.locations) {
-              uniqueLocs[loc.id] = loc;
-            }
-            final locList = uniqueLocs.values.toList();
-            final currentId = provider.selectedLocationId;
-            final effectiveId = uniqueLocs.containsKey(currentId)
-                ? currentId
-                : (locList.isNotEmpty ? locList.first.id : null);
-
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
-                border: Border.all(color: DesignTokens.border),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  value: effectiveId,
-                  hint: Text(l10n.selectLanguage),
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                  items: locList.map((loc) {
-                    return DropdownMenuItem<String>(
-                      value: loc.id,
-                      child: Text(
-                        loc.displayName,
-                        style: GoogleFonts.inter(fontSize: 16),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (id) {
-                    if (id != null) provider.setLocationId(id);
-                  },
-                ),
-              ),
+        // Dynamic Indian State Selector
+        LocationSelectorField(
+          label: l10n.stateLabel,
+          value: provider.selectedState,
+          hintText: 'Select State or Union Territory',
+          icon: Icons.map_outlined,
+          isRequired: true,
+          onTap: () async {
+            final chosen = await showSearchableLocationPicker(
+              context,
+              title: '${l10n.stateLabel} (India)',
+              searchHint: 'Search state or UT (e.g. Maharashtra, Bihar, Tamil Nadu)...',
+              items: IndiaLocations.states,
+              selectedItem: provider.selectedState,
             );
+            if (chosen != null) {
+              provider.setStateSelection(chosen);
+            }
           },
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
 
-        // Rural / Urban toggle
+        // Dynamic District Selector
+        LocationSelectorField(
+          label: l10n.districtLabel,
+          value: provider.selectedDistrict,
+          hintText: 'Select District in ${provider.selectedState}',
+          icon: Icons.location_city_rounded,
+          isRequired: true,
+          onTap: () async {
+            final districts = provider.availableDistricts;
+            final chosen = await showSearchableLocationPicker(
+              context,
+              title: '${l10n.districtLabel} (${provider.selectedState})',
+              searchHint: 'Search district in ${provider.selectedState}...',
+              items: districts,
+              selectedItem: provider.selectedDistrict,
+            );
+            if (chosen != null) {
+              provider.setDistrictSelection(chosen);
+            }
+          },
+        ),
+        const SizedBox(height: 16),
+
+        // Optional Village / Taluka / Block
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
+            border: Border.all(color: DesignTokens.border),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.cottage_outlined, size: 18, color: DesignTokens.slate600),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Local Area Details (Optional)',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: DesignTokens.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Taluka / Tehsil / Block',
+                        hintStyle: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textMuted),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: DesignTokens.border),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: DesignTokens.border),
+                        ),
+                      ),
+                      style: GoogleFonts.inter(fontSize: 13),
+                      onChanged: provider.setTaluka,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Village / Ward',
+                        hintStyle: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textMuted),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: DesignTokens.border),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: DesignTokens.border),
+                        ),
+                      ),
+                      style: GoogleFonts.inter(fontSize: 13),
+                      onChanged: provider.setVillage,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+
+        // Rural / Urban toggle (Pill Selector)
         Text(
           l10n.areaTypeLabel,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 8),
         Row(
           children: [
-            _buildSelectionPill(
-              label: l10n.rural,
-              selected: provider.ruralUrban == 'rural',
-              onTap: () => provider.setRuralUrban('rural'),
+            Expanded(
+              child: _buildSelectionPill(
+                label: l10n.rural,
+                selected: provider.ruralUrban == 'rural',
+                onTap: () => provider.setRuralUrban('rural'),
+              ),
             ),
-            const SizedBox(width: 12),
-            _buildSelectionPill(
-              label: l10n.semiUrban,
-              selected: provider.ruralUrban == 'semi_urban',
-              onTap: () => provider.setRuralUrban('semi_urban'),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildSelectionPill(
+                label: l10n.semiUrban,
+                selected: provider.ruralUrban == 'semi_urban',
+                onTap: () => provider.setRuralUrban('semi_urban'),
+              ),
             ),
-            const SizedBox(width: 12),
-            _buildSelectionPill(
-              label: l10n.urban,
-              selected: provider.ruralUrban == 'urban',
-              onTap: () => provider.setRuralUrban('urban'),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildSelectionPill(
+                label: l10n.urban,
+                selected: provider.ruralUrban == 'urban',
+                onTap: () => provider.setRuralUrban('urban'),
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 22),
 
-        // Caste / Social Category
+        // Caste / Social Category (Pill Selector)
         Text(
           l10n.casteCategoryLabel,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 4),
         Text(
           'Used to identify reserved scholarships, coaching fee waivers, and state quotas.',
-          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.slate600),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -367,16 +521,17 @@ class OnboardingScreen extends StatelessWidget {
             );
           }).toList(),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
 
+        // Disabilities
         Text(
           'Do you have any disabilities?',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 4),
         Text(
           'This helps us find opportunities with relevant accessibility support and benefits.',
-          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.slate600),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -390,22 +545,17 @@ class OnboardingScreen extends StatelessWidget {
             );
           }).toList(),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 22),
 
         // Tribal Community / Tribe Affiliation
-        Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: provider.socialCategory == 'ST' || provider.tribe.isNotEmpty
-                ? DesignTokens.primaryLight
-                : Colors.white,
-            borderRadius: BorderRadius.circular(DesignTokens.radiusCard),
-            border: Border.all(
-              color: provider.socialCategory == 'ST' || provider.tribe.isNotEmpty
-                  ? DesignTokens.primary.withValues(alpha: 0.5)
-                  : DesignTokens.border,
-            ),
-          ),
+        RoundedCard(
+          padding: const EdgeInsets.all(16),
+          backgroundColor: provider.socialCategory == 'ST' || provider.tribe.isNotEmpty
+              ? DesignTokens.blushBg
+              : Colors.white,
+          borderColor: provider.socialCategory == 'ST' || provider.tribe.isNotEmpty
+              ? DesignTokens.blushBorder
+              : DesignTokens.border,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -414,7 +564,7 @@ class OnboardingScreen extends StatelessWidget {
                   const Icon(
                     Icons.diversity_3_rounded,
                     size: 20,
-                    color: DesignTokens.primary,
+                    color: DesignTokens.maroon900,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -422,7 +572,7 @@ class OnboardingScreen extends StatelessWidget {
                       'Tribe / Indigenous Community (Optional)',
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         color: DesignTokens.textPrimary,
                       ),
                     ),
@@ -434,7 +584,11 @@ class OnboardingScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(4),
                         child: Text(
                           'Clear',
-                          style: GoogleFonts.inter(fontSize: 12, color: DesignTokens.primary, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: DesignTokens.maroon900,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
@@ -443,9 +597,9 @@ class OnboardingScreen extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Crucial for Ministry of Tribal Affairs (MoTA), Eklavya, and PVTG schemes.',
-                style: GoogleFonts.inter(fontSize: 12, color: DesignTokens.textSecondary),
+                style: GoogleFonts.inter(fontSize: 12, color: DesignTokens.slate600),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
@@ -465,15 +619,15 @@ class OnboardingScreen extends StatelessWidget {
                   return ChoiceChip(
                     label: Text(t),
                     selected: isSel,
-                    selectedColor: DesignTokens.primary,
+                    selectedColor: DesignTokens.maroon900,
                     backgroundColor: Colors.white,
                     labelStyle: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
-                      color: isSel ? Colors.white : DesignTokens.textPrimary,
+                      color: isSel ? Colors.white : DesignTokens.slate600,
                     ),
                     side: BorderSide(
-                      color: isSel ? DesignTokens.primary : DesignTokens.border,
+                      color: isSel ? DesignTokens.maroon900 : DesignTokens.border,
                     ),
                     onSelected: (sel) {
                       provider.setTribe(sel ? t : '');
@@ -481,7 +635,7 @@ class OnboardingScreen extends StatelessWidget {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               TextFormField(
                 initialValue: provider.tribe,
                 key: ValueKey(provider.tribe),
@@ -489,17 +643,17 @@ class OnboardingScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: 'Or enter custom tribe / PVTG name...',
                   hintStyle: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textMuted),
-                  prefixIcon: const Icon(Icons.edit_outlined, size: 18),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  prefixIcon: const Icon(Icons.edit_outlined, size: 18, color: DesignTokens.slate600),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
-                    borderSide: BorderSide(color: DesignTokens.border),
+                    borderSide: const BorderSide(color: DesignTokens.border),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
-                    borderSide: BorderSide(color: DesignTokens.border),
+                    borderSide: const BorderSide(color: DesignTokens.border),
                   ),
                 ),
                 onChanged: provider.setTribe,
@@ -507,7 +661,7 @@ class OnboardingScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 22),
 
         // Family Income Bracket
         Row(
@@ -515,15 +669,20 @@ class OnboardingScreen extends StatelessWidget {
           children: [
             Text(
               l10n.incomeBracketLabel,
-              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+              style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: provider.familyIncome <= 25000
-                    ? DesignTokens.mintBg
-                    : DesignTokens.primaryLight,
+                    ? DesignTokens.sageBg
+                    : DesignTokens.blushBg,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+                border: Border.all(
+                  color: provider.familyIncome <= 25000
+                      ? DesignTokens.sageBorder
+                      : DesignTokens.blushBorder,
+                ),
               ),
               child: Text(
                 provider.familyIncome == 0
@@ -535,14 +694,14 @@ class OnboardingScreen extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: provider.familyIncome <= 25000
-                      ? DesignTokens.mintText
-                      : DesignTokens.primary,
+                      ? DesignTokens.sageText
+                      : DesignTokens.maroon900,
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         // Quick one-tap income pills
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -560,13 +719,14 @@ class OnboardingScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Slider(
           value: provider.familyIncome,
           min: 0,
           max: 800000,
           divisions: 32,
-          activeColor: DesignTokens.primary,
+          activeColor: DesignTokens.maroon900,
+          inactiveColor: DesignTokens.blush200,
           label: provider.familyIncome == 0
               ? '₹0 (Nil)'
               : '₹${(provider.familyIncome / 1000).round()}k',
@@ -574,15 +734,15 @@ class OnboardingScreen extends StatelessWidget {
         ),
         if (provider.familyIncome <= 25000)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: DesignTokens.mintBg,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: DesignTokens.mintText.withValues(alpha: 0.3)),
+              color: DesignTokens.sageBg,
+              borderRadius: BorderRadius.circular(DesignTokens.radiusSmall),
+              border: Border.all(color: DesignTokens.sageBorder),
             ),
             child: Row(
               children: [
-                const Icon(Icons.verified_rounded, size: 18, color: DesignTokens.mintText),
+                const Icon(Icons.verified_rounded, size: 18, color: DesignTokens.sageText),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -590,7 +750,7 @@ class OnboardingScreen extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: DesignTokens.mintText,
+                      color: DesignTokens.sageText,
                     ),
                   ),
                 ),
@@ -600,7 +760,7 @@ class OnboardingScreen extends StatelessWidget {
         else
           Text(
             'Income under ₹2.5L qualifies for maximum need-based financial aid.',
-            style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textMuted),
+            style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.slate600),
           ),
       ],
     );
@@ -630,23 +790,24 @@ class OnboardingScreen extends StatelessWidget {
       children: [
         Text(
           l10n.stepEducation,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: DesignTokens.textPrimary,
+            letterSpacing: -0.3,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
           'We value what you can actually do! Describe both formal education and practical skills learned at home or work.',
-          style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textSecondary, height: 1.4),
         ),
         const SizedBox(height: 24),
 
         // Education Level Dropdown
         Text(
           '${l10n.educationLevelLabel} *',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 8),
         Container(
@@ -655,6 +816,7 @@ class OnboardingScreen extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
             border: Border.all(color: DesignTokens.border),
+            boxShadow: DesignTokens.softShadow,
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -662,10 +824,11 @@ class OnboardingScreen extends StatelessWidget {
               value: levels.any((l) => l['val'] == provider.educationLevel)
                   ? provider.educationLevel
                   : 'secondary',
+              icon: const Icon(Icons.keyboard_arrow_down_rounded, color: DesignTokens.slate600),
               items: levels.map((lvl) {
                 return DropdownMenuItem<String>(
                   value: lvl['val'],
-                  child: Text(lvl['label']!, style: GoogleFonts.inter(fontSize: 16)),
+                  child: Text(lvl['label']!, style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textPrimary)),
                 );
               }).toList(),
               onChanged: (val) {
@@ -676,15 +839,15 @@ class OnboardingScreen extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Free-text practical learning (Crucial for rural students)
+        // Free-text practical learning
         Text(
           'Explain what you\'ve learned (Informal / Practical)',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 4),
         Text(
           'e.g. Worked at family workshop, repaired solar equipment, farm budgeting, computer basics...',
-          style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textMuted),
+          style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.slate600),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -709,23 +872,24 @@ class OnboardingScreen extends StatelessWidget {
       children: [
         Text(
           '${l10n.skillsTitle} & ${l10n.interestsTitle}',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: DesignTokens.textPrimary,
+            letterSpacing: -0.3,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
           'Select the skills you possess and fields you find exciting. We use these to map your career pathways.',
-          style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textSecondary, height: 1.4),
         ),
         const SizedBox(height: 24),
 
         // Skills Chips
         Text(
           l10n.skillsTitle,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -745,7 +909,7 @@ class OnboardingScreen extends StatelessWidget {
         // Interests Chips
         Text(
           l10n.interestsTitle,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: DesignTokens.textPrimary),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -774,16 +938,17 @@ class OnboardingScreen extends StatelessWidget {
       children: [
         Text(
           l10n.aspirationLabel,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: DesignTokens.textPrimary,
+            letterSpacing: -0.3,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
           'What is your dream job, ambition, or career goal? Dream big — we will help connect the stepping stones.',
-          style: GoogleFonts.inter(fontSize: 16, color: DesignTokens.textSecondary),
+          style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textSecondary, height: 1.4),
         ),
         const SizedBox(height: 24),
 
@@ -793,13 +958,13 @@ class OnboardingScreen extends StatelessWidget {
           onChanged: provider.setAspirationText,
           decoration: InputDecoration(
             hintText: l10n.aspirationHint,
-            prefixIcon: Icon(Icons.star_outline_rounded, color: DesignTokens.primary),
+            prefixIcon: const Icon(Icons.star_outline_rounded, color: DesignTokens.slate600, size: 22),
           ),
         ),
         const SizedBox(height: 24),
 
         // Stat preview card
-        StatBlock(
+        const StatBlock(
           stat: '38+ Opportunities',
           label: 'Ready to be matched deterministically against your new profile.',
           variant: StatBlockVariant.mint,
@@ -810,17 +975,26 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   // ---------------------------------------------------------------------------
-  // Bottom Navigation (1 Primary Action Button)
+  // Bottom Sticky CTA (Full-Width Maroon Pill)
   // ---------------------------------------------------------------------------
   Widget _buildBottomNav(BuildContext context, OnboardingProvider provider) {
     final l10n = AppLocalizations.of(context)!;
     final isLastStep = provider.currentStep == provider.totalSteps - 1;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: DesignTokens.border.withValues(alpha: 0.8))),
+        border: Border(
+          top: BorderSide(color: DesignTokens.border.withValues(alpha: 0.8)),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: DesignTokens.maroon900.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, -3),
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -828,7 +1002,7 @@ class OnboardingScreen extends StatelessWidget {
           if (provider.errorMessage != null) ...[
             Text(
               provider.errorMessage!,
-              style: const TextStyle(color: Colors.red, fontSize: 14),
+              style: const TextStyle(color: Colors.red, fontSize: 13),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -860,7 +1034,10 @@ class OnboardingScreen extends StatelessWidget {
                     width: 20,
                     child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                   )
-                : Text(isLastStep ? l10n.btnFinish : l10n.btnNext),
+                : Text(
+                    isLastStep ? l10n.btnFinish : l10n.btnNext,
+                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
           ),
         ],
       ),
@@ -877,28 +1054,43 @@ class OnboardingScreen extends StatelessWidget {
       selected: selected,
       label: label,
       child: Material(
-        color: selected ? DesignTokens.primary : Colors.white,
+        color: selected ? DesignTokens.maroon900 : Colors.white,
         borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
           child: Container(
-            constraints: const BoxConstraints(minHeight: DesignTokens.minTouchTarget),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            constraints: const BoxConstraints(minHeight: 44.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
               border: Border.all(
-                color: selected ? DesignTokens.primary : DesignTokens.border,
+                color: selected ? DesignTokens.maroon900 : DesignTokens.border,
                 width: 1.2,
               ),
+              boxShadow: selected
+                  ? [
+                      BoxShadow(
+                        color: DesignTokens.maroon900.withValues(alpha: 0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : [
+                      BoxShadow(
+                        color: DesignTokens.maroon900.withValues(alpha: 0.02),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
             ),
             child: Center(
               child: Text(
                 label,
                 style: GoogleFonts.inter(
-                  fontSize: 15,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                  color: selected ? Colors.white : DesignTokens.textPrimary,
+                  fontSize: 14,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  color: selected ? Colors.white : DesignTokens.slate600,
                 ),
               ),
             ),
@@ -918,34 +1110,43 @@ class OnboardingScreen extends StatelessWidget {
       selected: selected,
       label: label,
       child: Material(
-        color: selected ? DesignTokens.primary : Colors.white,
+        color: selected ? DesignTokens.maroon900 : Colors.white,
         borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
           child: Container(
-            constraints: const BoxConstraints(minHeight: DesignTokens.minTouchTarget),
+            constraints: const BoxConstraints(minHeight: 42.0),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
               border: Border.all(
-                color: selected ? DesignTokens.primary : DesignTokens.border,
+                color: selected ? DesignTokens.maroon900 : DesignTokens.border,
                 width: 1.2,
               ),
+              boxShadow: selected
+                  ? [
+                      BoxShadow(
+                        color: DesignTokens.maroon900.withValues(alpha: 0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                  : null,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (selected) ...[
-                  const Icon(Icons.check_rounded, color: Colors.white, size: 18),
+                  const Icon(Icons.check_rounded, color: Colors.white, size: 16),
                   const SizedBox(width: 6),
                 ],
                 Text(
                   label,
                   style: GoogleFonts.inter(
-                    fontSize: 15,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                    color: selected ? Colors.white : DesignTokens.textPrimary,
+                    fontSize: 14,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    color: selected ? Colors.white : DesignTokens.slate600,
                   ),
                 ),
               ],
@@ -964,18 +1165,18 @@ class OnboardingScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? DesignTokens.primary : Colors.white,
+          color: isSelected ? DesignTokens.maroon900 : Colors.white,
           borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
           border: Border.all(
-            color: isSelected ? DesignTokens.primary : DesignTokens.border,
+            color: isSelected ? DesignTokens.maroon900 : DesignTokens.border,
           ),
         ),
         child: Text(
           label,
           style: GoogleFonts.inter(
             fontSize: 12,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            color: isSelected ? Colors.white : DesignTokens.textPrimary,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected ? Colors.white : DesignTokens.slate600,
           ),
         ),
       ),

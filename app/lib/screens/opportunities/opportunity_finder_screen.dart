@@ -28,6 +28,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final langCode = Localizations.localeOf(context).languageCode;
     final provider = context.watch<OpportunitiesProvider>();
     final items = provider.filteredOpportunities;
 
@@ -53,7 +54,6 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                 onChanged: provider.setSearchQuery,
                 filterActive: provider.onlyEligible,
                 onFilterTap: () {
-                  // Toggle Only Eligible
                   provider.setOnlyEligible(!provider.onlyEligible);
                 },
               ),
@@ -65,7 +65,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
               selectedValue: provider.selectedType,
               onSelected: provider.setType,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
             // Secondary Eligibility Filter & Result Count Bar
             Padding(
@@ -74,11 +74,11 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${items.length} opportunities available',
+                    l10n.opportunitiesAvailable(items.length),
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: DesignTokens.textSecondary,
+                      color: DesignTokens.slate600,
                     ),
                   ),
                   InkWell(
@@ -88,14 +88,21 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: provider.onlyEligible
-                            ? DesignTokens.mintBg
+                            ? DesignTokens.sageBg
                             : Colors.white,
                         borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
                         border: Border.all(
                           color: provider.onlyEligible
-                              ? DesignTokens.mintBorder
+                              ? DesignTokens.sageBorder
                               : DesignTokens.border,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: DesignTokens.maroon900.withValues(alpha: 0.02),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
                       ),
                       child: Row(
                         children: [
@@ -103,20 +110,20 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                             provider.onlyEligible
                                 ? Icons.check_circle_rounded
                                 : Icons.check_circle_outline_rounded,
-                            size: 16,
+                            size: 15,
                             color: provider.onlyEligible
-                                ? DesignTokens.mintText
+                                ? DesignTokens.sageText
                                 : DesignTokens.textMuted,
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 5),
                           Text(
                             l10n.filterEligibleOnly,
                             style: GoogleFonts.inter(
-                              fontSize: 13,
+                              fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: provider.onlyEligible
-                                  ? DesignTokens.mintText
-                                  : DesignTokens.textSecondary,
+                                  ? DesignTokens.sageText
+                                  : DesignTokens.slate600,
                             ),
                           ),
                         ],
@@ -138,13 +145,14 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                       ? _buildEmptyState(context, provider)
                       : RefreshIndicator(
                           color: DesignTokens.primary,
+                          backgroundColor: Colors.white,
                           onRefresh: provider.fetchOpportunities,
                           child: ListView.builder(
-                            padding: const EdgeInsets.fromLTRB(16, 6, 16, 100),
+                            padding: const EdgeInsets.fromLTRB(16, 6, 16, 110),
                             itemCount: items.length,
                             itemBuilder: (context, index) {
                               final opp = items[index];
-                              return _buildCard(context, opp);
+                              return _buildCard(context, opp, langCode);
                             },
                           ),
                         ),
@@ -155,54 +163,58 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
     );
   }
 
-  Widget _buildCard(BuildContext context, Opportunity opp) {
+  Widget _buildCard(BuildContext context, Opportunity opp, String langCode) {
     final l10n = AppLocalizations.of(context)!;
     final elig = opp.eligibilityResult;
+    final localizedTitle = opp.getLocalizedTitle(langCode);
+    final localizedBenefit = opp.getLocalizedHighlightBenefit(l10n, langCode) ?? opp.highlightBenefit;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: RoundedCard(
         onTap: () => OpportunityDetailSheet.show(context, opp),
         padding: const EdgeInsets.all(18),
+        backgroundColor: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                // Type badge
+                // Type badge (Blush pill)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: DesignTokens.primaryLight,
+                    color: DesignTokens.blushBg,
                     borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+                    border: Border.all(color: DesignTokens.blushBorder),
                   ),
                   child: Text(
-                    opp.typeLabel,
+                    opp.getLocalizedTypeLabel(l10n),
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: DesignTokens.primary,
+                      color: DesignTokens.maroon900,
                     ),
                   ),
                 ),
                 const Spacer(),
-                // Eligibility badge
+                // Eligibility badge (Sage green)
                 if (elig != null)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: elig.isEligible ? DesignTokens.mintBg : DesignTokens.mustardBg,
+                      color: elig.isEligible ? DesignTokens.sageBg : DesignTokens.mustardBg,
                       borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
                       border: Border.all(
-                        color: elig.isEligible ? DesignTokens.mintBorder : DesignTokens.mustardBorder,
+                        color: elig.isEligible ? DesignTokens.sageBorder : DesignTokens.mustardBorder,
                       ),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           elig.isEligible ? Icons.check_circle_rounded : Icons.info_outline_rounded,
-                          size: 14,
-                          color: elig.isEligible ? DesignTokens.mintText : DesignTokens.mustardText,
+                          size: 13,
+                          color: elig.isEligible ? DesignTokens.sageText : DesignTokens.mustardText,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -210,7 +222,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: elig.isEligible ? DesignTokens.mintText : DesignTokens.mustardText,
+                            color: elig.isEligible ? DesignTokens.sageText : DesignTokens.mustardText,
                           ),
                         ),
                       ],
@@ -218,15 +230,16 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                   ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
             // Title
             Text(
-              opp.title,
-              style: GoogleFonts.poppins(
-                fontSize: 17,
+              localizedTitle,
+              style: GoogleFonts.inter(
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: DesignTokens.textPrimary,
+                height: 1.35,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -234,34 +247,54 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
             const SizedBox(height: 6),
 
             // Benefit
-            if (opp.highlightBenefit != null) ...[
+            if (localizedBenefit != null && localizedBenefit.isNotEmpty) ...[
               Text(
-                opp.highlightBenefit!,
+                localizedBenefit,
                 style: GoogleFonts.inter(
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: DesignTokens.primary,
+                  color: DesignTokens.maroon900.withValues(alpha: 0.85),
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 8),
             ],
 
-            // Rules summary line
-            if (elig != null && elig.totalRulesCount > 0) ...[
-              Text(
-                l10n.rulesPassed(elig.passedRulesCount, elig.totalRulesCount),
-                style: GoogleFonts.inter(
-                  fontSize: 13,
-                  color: elig.isEligible ? DesignTokens.mintText : DesignTokens.textMuted,
-                  fontWeight: elig.isEligible ? FontWeight.w600 : FontWeight.normal,
+            // Rules summary / footer line
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (elig != null && elig.totalRulesCount > 0)
+                  Text(
+                    l10n.rulesPassed(elig.passedRulesCount, elig.totalRulesCount),
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      color: elig.isEligible ? DesignTokens.sageText : DesignTokens.slate600,
+                      fontWeight: elig.isEligible ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  )
+                else
+                  Text(
+                    l10n.openToAllCriteria,
+                    style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.slate600),
+                  ),
+                Container(
+                  width: 26,
+                  height: 26,
+                  decoration: const BoxDecoration(
+                    color: DesignTokens.cream50,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 15,
+                    color: DesignTokens.maroon900,
+                  ),
                 ),
-              ),
-            ] else ...[
-              Text(
-                'Open to all candidates meeting basic requirements',
-                style: GoogleFonts.inter(fontSize: 13, color: DesignTokens.textMuted),
-              ),
-            ],
+              ],
+            ),
           ],
         ),
       ),
@@ -269,17 +302,18 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
   }
 
   Widget _buildEmptyState(BuildContext context, OpportunitiesProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.manage_search_rounded, size: 56, color: DesignTokens.textMuted),
+            const Icon(Icons.manage_search_rounded, size: 52, color: DesignTokens.textMuted),
             const SizedBox(height: 12),
             Text(
-              'No matching opportunities',
-              style: GoogleFonts.poppins(
+              l10n.noMatchingOpportunities,
+              style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: DesignTokens.textPrimary,
@@ -287,11 +321,11 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Try clearing your search query or disabling the "Eligible Only" filter.',
+              l10n.noMatchingOpportunitiesSubtitle,
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(fontSize: 15, color: DesignTokens.textSecondary),
+              style: GoogleFonts.inter(fontSize: 14, color: DesignTokens.textSecondary),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             OutlinedButton(
               onPressed: () {
                 _searchController.clear();
@@ -299,7 +333,7 @@ class _OpportunityFinderScreenState extends State<OpportunityFinderScreen> {
                 provider.setOnlyEligible(false);
                 provider.setType('all');
               },
-              child: Text(AppLocalizations.of(context)!.resetFilters),
+              child: Text(l10n.resetFilters),
             ),
           ],
         ),

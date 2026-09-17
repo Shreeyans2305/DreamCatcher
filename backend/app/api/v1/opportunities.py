@@ -40,6 +40,7 @@ def list_opportunities(
     state: Optional[str] = Query(None, description="Filter by state name (includes national/all-India)"),
     location_id: Optional[UUID] = Query(None, description="Filter by location ID"),
     search: Optional[str] = Query(None, description="Search in title and description"),
+    language: Optional[str] = Query(None, description="Preferred language code (e.g. hi, mr, bn, etc.)"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
@@ -47,7 +48,7 @@ def list_opportunities(
     params = PaginationParams(page=page, page_size=page_size)
     items, total = OpportunityService.list_opportunities(
         db, opp_type=type, status=status, state=state, location_id=location_id,
-        search=search,
+        search=search, language=language,
         limit=params.page_size, offset=params.offset,
     )
     return PaginatedResponse.create(
@@ -58,8 +59,12 @@ def list_opportunities(
 
 
 @router.get("/{opportunity_id}", response_model=OpportunityDetailResponse, summary="Get opportunity details")
-def get_opportunity(opportunity_id: UUID, db: Session = Depends(get_db)):
-    opp = OpportunityService.get_opportunity_detail(db, opportunity_id)
+def get_opportunity(
+    opportunity_id: UUID,
+    language: Optional[str] = Query(None, description="Preferred language code (e.g. hi, mr, bn, etc.)"),
+    db: Session = Depends(get_db),
+):
+    opp = OpportunityService.get_opportunity_detail(db, opportunity_id, language=language)
     if not opp:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Opportunity not found")
     return opp

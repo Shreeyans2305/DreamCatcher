@@ -71,12 +71,64 @@ class ReferenceService:
         return db.execute(select(Location).where(Location.id == location_id)).scalar_one_or_none()
 
     @staticmethod
-    def create_location(db: Session, data: LocationCreate) -> Location:
-        loc = Location(**data.model_dump())
+    def find_or_create_location(
+        db: Session,
+        country: str = "India",
+        state: Optional[str] = None,
+        district: Optional[str] = None,
+        taluka: Optional[str] = None,
+        village: Optional[str] = None,
+        pincode: Optional[str] = None,
+        rural_urban: RuralUrban = RuralUrban.UNKNOWN,
+    ) -> Location:
+        stmt = select(Location).where(Location.country == country)
+        if state:
+            stmt = stmt.where(func.lower(Location.state) == state.strip().lower())
+        else:
+            stmt = stmt.where(Location.state.is_(None))
+            
+        if district:
+            stmt = stmt.where(func.lower(Location.district) == district.strip().lower())
+        else:
+            stmt = stmt.where(Location.district.is_(None))
+
+        if taluka:
+            stmt = stmt.where(func.lower(Location.taluka) == taluka.strip().lower())
+        if village:
+            stmt = stmt.where(func.lower(Location.village) == village.strip().lower())
+        if pincode:
+            stmt = stmt.where(Location.pincode == pincode.strip())
+
+        loc = db.execute(stmt).scalars().first()
+        if loc:
+            return loc
+
+        loc = Location(
+            country=country.strip() if country else "India",
+            state=state.strip() if state else None,
+            district=district.strip() if district else None,
+            taluka=taluka.strip() if taluka else None,
+            village=village.strip() if village else None,
+            pincode=pincode.strip() if pincode else None,
+            rural_urban=rural_urban,
+        )
         db.add(loc)
         db.commit()
         db.refresh(loc)
         return loc
+
+    @staticmethod
+    def create_location(db: Session, data: LocationCreate) -> Location:
+        return ReferenceService.find_or_create_location(
+            db,
+            country=data.country,
+            state=data.state,
+            district=data.district,
+            taluka=data.taluka,
+            village=data.village,
+            pincode=data.pincode,
+            rural_urban=data.rural_urban,
+        )
 
     # --- Skills ---
     @staticmethod

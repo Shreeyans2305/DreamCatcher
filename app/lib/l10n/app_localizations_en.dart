@@ -216,4 +216,271 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveChanges => 'Save Changes';
+
+  @override
+  String opportunitiesAvailable(int count) {
+    return '$count opportunities available';
+  }
+
+  @override
+  String get opportunityTypeScholarship => 'Scholarship';
+
+  @override
+  String get opportunityTypeCourse => 'Vocational Course';
+
+  @override
+  String get opportunityTypeExam => 'Entrance Exam';
+
+  @override
+  String get opportunityTypeInternship => 'Internship / Fellowship';
+
+  @override
+  String get opportunityTypeGeneral => 'Opportunity';
+
+  @override
+  String get openToAllCriteria =>
+      'Open to all candidates meeting basic requirements';
+
+  @override
+  String get noMatchingOpportunities => 'No matching opportunities';
+
+  @override
+  String get noMatchingOpportunitiesSubtitle =>
+      'Try clearing your search query or disabling the \"Eligible Only\" filter.';
+
+  @override
+  String officialPortalOpening(String url) {
+    return 'Opening official portal: $url';
+  }
+
+  @override
+  String get statFinancialBenefit => 'Financial Benefit';
+
+  @override
+  String get statKeyDetails => 'Key Details';
+
+  @override
+  String get opportunityAbout => 'About this Opportunity';
+
+  @override
+  String yourProfileValue(String value) {
+    return 'Your profile: $value';
+  }
+
+  @override
+  String get openToAllGeneral =>
+      'Open to all students meeting standard general qualification.';
+
+  @override
+  String get locationNotSet => 'Location not set';
+
+  @override
+  String get demographicsTitle => 'Demographics & Quotas';
+
+  @override
+  String get socialCategoryLabel => 'Social Category & Caste';
+
+  @override
+  String get tribeLabel => 'Tribe Affiliation';
+
+  @override
+  String get annualIncomeLabel => 'Annual Family Income';
+
+  @override
+  String get areaClassificationLabel => 'Area Classification';
+
+  @override
+  String get educationSectionTitle => 'Education & Learning';
+
+  @override
+  String skillsSectionTitle(int count) {
+    return 'Skills ($count)';
+  }
+
+  @override
+  String interestsSectionTitle(int count) {
+    return 'Interests ($count)';
+  }
+
+  @override
+  String get careerAspirationTitle => 'Career Ambition / Dream';
+
+  @override
+  String get btnUpdate => 'Update';
+
+  @override
+  String get btnAddSkill => '+ Add Skill';
+
+  @override
+  String get btnAddInterest => '+ Add Interest';
+
+  @override
+  String get btnSwitchProfile => 'Switch / Reset Profile';
+
+  @override
+  String get noneSpecified => 'None specified';
+
+  @override
+  String get nilIncome => '₹0 (Nil Income / Under ₹25k)';
+
+  @override
+  String underIncome(String amount) {
+    return '₹$amount (Under ₹25,000)';
+  }
+
+  @override
+  String perYearIncome(String amount) {
+    return '₹$amount / year';
+  }
+
+  @override
+  String get noEducationDescription =>
+      'No informal or hands-on description added yet.';
+
+  @override
+  String get noSkillsAdded =>
+      'No skills added yet. Tap \"+ Add Skill\" to link skills from our catalogue.';
+
+  @override
+  String get noInterestsAdded =>
+      'No interests added yet. Tap \"+ Add Interest\" to pick fields you enjoy.';
+
+  @override
+  String get noAspirationAdded => 'No aspiration added yet.';
+
+  @override
+  String get qualifiesFullWaiver =>
+      '✓ Qualifies for 100% full fee waiver and maximum need-based scholarships.';
+
+  @override
+  String get dialogAddSkillTitle => 'Add a New Skill';
+
+  @override
+  String get dialogAllSkillsAdded =>
+      'All available catalogue skills are already added!';
+
+  @override
+  String get dialogAddInterestTitle => 'Add a Field of Interest';
+
+  @override
+  String get dialogAllInterestsAdded =>
+      'All available interests are already added!';
+
+  @override
+  String get dialogUpdateEducationTitle => 'Update Education & Learning';
+
+  @override
+  String get dialogEduLevelLabel => 'Education Level';
+
+  @override
+  String get dialogEduDescLabel => 'Hands-on / Informal Learning Description';
+
+  @override
+  String get dialogEduDescHint => 'What have you learned to do practically?';
+
+  @override
+  String get dialogAspirationTitle => 'Your Career Goal / Ambition';
+
+  @override
+  String get dialogAspirationHint =>
+      'e.g. Agricultural Drone Pilot, Electrical Contractor...';
+
+  @override
+  String get dialogDemographicsTitle => 'Update Demographics & Quotas';
+
+  @override
+  String get dialogCasteQuotaLabel => 'Social Category / Caste Quota';
+
+  @override
+  String get dialogTribeLabel => 'Tribe / Community (Optional)';
+
+  @override
+  String get dialogTribeSubtitle =>
+      'Unlocks specific Ministry of Tribal Affairs (MoTA) and PVTG programs.';
+
+  @override
+  String get dialogTribeCustomHint => 'Or enter custom tribe / PVTG name...';
+
+  @override
+  String get dialogIncomeLabel => 'Family Income';
+
+  @override
+  String get btnCancel => 'Cancel';
+
+  @override
+  String get btnSave => 'Save';
+
+  @override
+  String snackbarSkillAdded(String name) {
+    return 'Added skill: $name';
+  }
+
+  @override
+  String snackbarInterestAdded(String name) {
+    return 'Added interest: $name';
+  }
+
+  @override
+  String get snackbarEducationUpdated =>
+      'Education details updated successfully!';
+
+  @override
+  String get snackbarAspirationUpdated => 'Aspiration updated!';
+
+  @override
+  String get snackbarDemographicsUpdated =>
+      'Demographics & quota eligibility updated!';
+
+  @override
+  String snackbarError(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get eduPrimary => 'Primary School (Up to 5th)';
+
+  @override
+  String get eduUpperPrimary => 'Middle School (6th - 8th)';
+
+  @override
+  String get eduSecondary => '10th Pass (Secondary)';
+
+  @override
+  String get eduSeniorSecondary => '12th Pass (Higher Secondary)';
+
+  @override
+  String get eduDiploma => 'Diploma / Polytechnic';
+
+  @override
+  String get eduVocational => 'Vocational / ITI';
+
+  @override
+  String get eduBachelor => 'Bachelor\'s Degree';
+
+  @override
+  String get eduMaster => 'Master\'s Degree';
+
+  @override
+  String get eduInformal => 'Informal / Practical Learning';
+
+  @override
+  String get eduSelfLearning => 'Self-Taught';
+
+  @override
+  String get eduOther => 'Other';
+
+  @override
+  String get catGeneral => 'General';
+
+  @override
+  String get catOBC => 'OBC';
+
+  @override
+  String get catSC => 'SC';
+
+  @override
+  String get catST => 'ST';
+
+  @override
+  String get catEWS => 'EWS';
 }

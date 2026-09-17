@@ -25,7 +25,7 @@ class FloatingBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
@@ -33,9 +33,9 @@ class FloatingBottomNav extends StatelessWidget {
             borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.25),
-                blurRadius: 20,
-                offset: const Offset(0, 6),
+                color: DesignTokens.maroon900.withValues(alpha: 0.35),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -57,15 +57,18 @@ class FloatingBottomNav extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
                         minWidth: DesignTokens.minTouchTarget,
-                        minHeight: DesignTokens.minTouchTarget,
+                        minHeight: 44.0,
                       ),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
                         curve: Curves.easeInOut,
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSelected ? 16 : 12,
+                          vertical: 9,
+                        ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? DesignTokens.primary
+                              ? DesignTokens.blush200
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
                         ),
@@ -75,18 +78,18 @@ class FloatingBottomNav extends StatelessWidget {
                             Icon(
                               item.icon,
                               color: isSelected
-                                  ? Colors.white
-                                  : Colors.white.withValues(alpha: 0.7),
-                              size: 22,
+                                  ? DesignTokens.maroon900
+                                  : Colors.white.withValues(alpha: 0.65),
+                              size: 21,
                             ),
                             if (isSelected) ...[
-                              const SizedBox(width: 6),
+                              const SizedBox(width: 7),
                               Text(
                                 item.label,
                                 style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: DesignTokens.maroon900,
                                 ),
                               ),
                             ],

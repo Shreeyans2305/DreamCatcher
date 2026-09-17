@@ -1,4 +1,236 @@
 {
   "@@locale": "or",
-  "appTitle": "ଡ୍ରିମକ୍ୟାଚର", "tagline": "ପାଦେ ପାଦେ ଆପଣଙ୍କ ଭବିଷ୍ୟତ ଆବିଷ୍କାର କରନ୍ତୁ", "navDashboard": "ମୁଖ୍ୟପୃଷ୍ଠା", "navOpportunities": "ସୁଯୋଗ", "navChat": "ସହାୟକ", "navProfile": "ପ୍ରୋଫାଇଲ", "onboardingWelcome": "ଆସନ୍ତୁ ଆପଣଙ୍କ ଭବିଷ୍ୟତ ପଥ ଗଢ଼ିବା", "onboardingSubtitle": "ଆପଣଙ୍କ ବିଷୟରେ କିଛି କୁହନ୍ତୁ, ଯାହାଦ୍ୱାରା ଆମେ ଆପଣଙ୍କ ପାଇଁ ଉପଯୁକ୍ତ ବୃତ୍ତି, ପାଠ୍ୟକ୍ରମ, ପରୀକ୍ଷା ଏବଂ ଚାକିରି ଖୋଜିପାରିବୁ।", "stepBasic": "ମୌଳିକ ସୂଚନା", "stepLocation": "ସ୍ଥାନ ଓ ପୃଷ୍ଠଭୂମି", "stepEducation": "ଶିକ୍ଷା ଓ ଦକ୍ଷତା", "stepAspirations": "ଆପଣଙ୍କ ଲକ୍ଷ୍ୟ", "fullNameLabel": "ପୂର୍ଣ୍ଣ ନାମ", "fullNameHint": "ଉଦାହରଣ: ଆରବ ଶର୍ମା", "phoneLabel": "ଫୋନ ନମ୍ବର", "phoneHint": "ଉଦାହରଣ: +91 98765 43210", "preferredLanguageLabel": "ପସନ୍ଦର ଭାଷା", "selectLanguage": "ଆପଣଙ୍କ ଭାଷା ବାଛନ୍ତୁ", "stateLabel": "ରାଜ୍ୟ", "districtLabel": "ଜିଲ୍ଲା", "areaTypeLabel": "ଅଞ୍ଚଳର ପ୍ରକାର", "rural": "ଗ୍ରାମୀଣ", "urban": "ସହରୀ", "semiUrban": "ଅର୍ଦ୍ଧ-ସହରୀ", "casteCategoryLabel": "ସାମାଜିକ ବର୍ଗ", "incomeBracketLabel": "ବାର୍ଷିକ ପାରିବାରିକ ଆୟ", "educationLevelLabel": "ସର୍ବୋଚ୍ଚ ଶିକ୍ଷା ସ୍ତର", "skillsTitle": "ଆପଣଙ୍କ ଦକ୍ଷତା", "interestsTitle": "ଆପଣଙ୍କ ପସନ୍ଦର କ୍ଷେତ୍ର", "aspirationLabel": "ଆପଣଙ୍କ ସ୍ୱପ୍ନର ଚାକିରି କିମ୍ବା ଲକ୍ଷ୍ୟ କଣ?", "aspirationHint": "ଉଦାହରଣ: କୃଷି ଡ୍ରୋନ ପାଇଲଟ, ଇଲେକ୍ଟ୍ରିସିଆନ, ସିଭିଲ ଇଞ୍ଜିନିୟର...", "btnNext": "ଆଗକୁ ବଢ଼ନ୍ତୁ", "btnBack": "ପଛକୁ", "btnFinish": "ପ୍ରୋଫାଇଲ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ", "saving": "ଆପଣଙ୍କ ପ୍ରୋଫାଇଲ ସଂରକ୍ଷଣ ହେଉଛି...", "dashboardCompleteness": "ପ୍ରୋଫାଇଲ ସମ୍ପୂର୍ଣ୍ଣତା", "dashboardMatchedOpps": "ମେଳ ଖାଉଥିବା ସୁଯୋଗ", "topOpportunitiesTitle": "ଆପଣଙ୍କ ପାଇଁ ଶ୍ରେଷ୍ଠ ସୁଯୋଗ", "viewAll": "ସବୁ ଦେଖନ୍ତୁ", "searchHint": "ବୃତ୍ତି, ପାଠ୍ୟକ୍ରମ, ପରୀକ୍ଷା ଖୋଜନ୍ତୁ...", "filterAll": "ସବୁ", "filterScholarships": "ବୃତ୍ତି", "filterCourses": "ପାଠ୍ୟକ୍ରମ", "filterExams": "ପରୀକ୍ଷା", "filterInternships": "ଇଣ୍ଟର୍ନସିପ", "filterEligibleOnly": "କେବଳ ଯୋଗ୍ୟ", "resetFilters": "ଫିଲ୍ଟର ପୁନଃସେଟ କରନ୍ତୁ", "eligibleBadge": "ଯୋଗ୍ୟ", "notEligibleBadge": "ମାନଦଣ୍ଡ ଯାଞ୍ଚ କରନ୍ତୁ", "eligibilityReasoningTitle": "ଯୋଗ୍ୟତା ବିବରଣୀ", "applyNow": "ସରକାରୀ ପୋର୍ଟାଲରେ ଆବେଦନ କରନ୍ତୁ", "noOpportunitiesFound": "ମେଳ ଖାଉଥିବା ସୁଯୋଗ ମିଳିଲା ନାହିଁ।", "assistantTitle": "ଏଆଇ କ୍ୟାରିୟର ଗାଇଡ", "assistantSubtitle": "ଆପଣଙ୍କ ଯାତ୍ରା ପାଇଁ ବ୍ୟକ୍ତିଗତ ପରାମର୍ଶ", "chatInputHint": "କ୍ୟାରିୟର କିମ୍ବା ବୃତ୍ତି ବିଷୟରେ ପଚାରନ୍ତୁ...", "send": "ପଠାନ୍ତୁ", "editProfile": "ପ୍ରୋଫାଇଲ ସମ୍ପାଦନ କରନ୍ତୁ", "addSkill": "ଦକ୍ଷତା ଯୋଡନ୍ତୁ", "addInterest": "ଆଗ୍ରହ ଯୋଡନ୍ତୁ", "saveChanges": "ପରିବର୍ତ୍ତନ ସଂରକ୍ଷଣ କରନ୍ତୁ"
+  "appTitle": "ଡ୍ରିମକ୍ୟାଚର",
+  "tagline": "ପାଦେ ପାଦେ ଆପଣଙ୍କ ଭବିଷ୍ୟତ ଆବିଷ୍କାର କରନ୍ତୁ",
+  
+  "navDashboard": "ମୁଖ୍ୟପୃଷ୍ଠା",
+  "navOpportunities": "ସୁଯୋଗ",
+  "navChat": "ସହାୟକ",
+  "navProfile": "ପ୍ରୋଫାଇଲ",
+
+  "onboardingWelcome": "ଆସନ୍ତୁ ଆପଣଙ୍କ ଭବିଷ୍ୟତର ରାସ୍ତା ତିଆରି କରିବା",
+  "onboardingSubtitle": "ଆପଣଙ୍କ ବିଷୟରେ କିଛି ଜଣାନ୍ତୁ ଯାହାଦ୍ୱାରା ଆମେ ଆପଣଙ୍କ ପାଇଁ ଉପଯୁକ୍ତ ବୃତ୍ତି (Scholarship), ପାଠ୍ୟକ୍ରମ, ପରୀକ୍ଷା ଏବଂ ଚାକିରି ଖୋଜିପାରିବା।",
+  "stepBasic": "ମୌଳିକ ସୂଚନା",
+  "stepLocation": "ସ୍ଥାନ ଏବଂ ପୃଷ୍ଠଭୂମି",
+  "stepEducation": "ଶିକ୍ଷା ଏବଂ ଦକ୍ଷତା",
+  "stepAspirations": "ଆପଣଙ୍କ ଲକ୍ଷ୍ୟ",
+  
+  "fullNameLabel": "ପୂରା ନାମ",
+  "fullNameHint": "ଯଥା: ଆରଭ ଶର୍ମା",
+  "phoneLabel": "ଫୋନ ନମ୍ବର",
+  "phoneHint": "ଯଥା: +91 98765 43210",
+  "preferredLanguageLabel": "ପସନ୍ଦର ଭାଷା",
+  "selectLanguage": "ଆପଣଙ୍କ ଭାଷା ବାଛନ୍ତୁ",
+  
+  "stateLabel": "ରାଜ୍ୟ",
+  "districtLabel": "ଜିଲ୍ଲା",
+  "areaTypeLabel": "ଅଞ୍ଚଳ ପ୍ରକାର",
+  "rural": "ଗ୍ରାମାଞ୍ଚଳ",
+  "urban": "ସହରାଞ୍ଚଳ",
+  "semiUrban": "ଅର୍ଦ୍ଧ-ସହରାଞ୍ଚଳ",
+  
+  "casteCategoryLabel": "ସାମାଜିକ ବର୍ଗ",
+  "incomeBracketLabel": "ବାର୍ଷିକ ପାରିବାରିକ ଆୟ",
+  
+  "educationLevelLabel": "ସର୍ବୋଚ୍ଚ ଶିକ୍ଷା ସ୍ତର",
+  "informalLearningLabel": "ଆପଣ କଣ ଶିଖିଛନ୍ତି? (ବ୍ୟାବହାରିକ/ଅଣଆନୁଷ୍ଠାନିକ)",
+  "informalLearningHint": "ଯଥା: ସୌର ପମ୍ପ ମରାମତି, ଔଷଧ ଦୋକାନରେ ସାହାଯ୍ୟ, କୃଷି ହିସାବ...",
+  
+  "skillsTitle": "ଆପଣଙ୍କ ଦକ୍ଷତା (Skills)",
+  "interestsTitle": "ପସନ୍ଦର କ୍ଷେତ୍ର (Interests)",
+  "aspirationLabel": "ଆପଣଙ୍କ ସ୍ୱପ୍ନର ଚାକିରି କିମ୍ବା ଲକ୍ଷ୍ୟ କଣ?",
+  "aspirationHint": "ଯଥା: କୃଷି ଡ୍ରୋନ ପାଇଲଟ, ଇଲେକ୍ଟ୍ରିସିଆନ, ସିଭିଲ ଇଞ୍ଜିନିୟର...",
+
+  "btnNext": "ଆଗକୁ ବଢ଼ନ୍ତୁ",
+  "btnBack": "ପଛକୁ",
+  "btnFinish": "ପ୍ରୋଫାଇଲ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ",
+  "saving": "ପ୍ରୋଫାଇଲ ସଂରକ୍ଷଣ ହେଉଛି...",
+
+  "greeting": "ନମସ୍କାର, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCompleteness": "ପ୍ରୋଫାଇଲ ସମ୍ପୂର୍ଣ୍ଣତା",
+  "dashboardMatchedOpps": "ମେଳ ଖାଉଥିବା ସୁଯୋଗ",
+  "dashboardActiveDeadlines": "ନିକଟବର୍ତ୍ତୀ ଶେଷ ତାରିଖ",
+  "topOpportunitiesTitle": "ଆପଣଙ୍କ ପାଇଁ ପ୍ରମୁଖ ସୁଯୋଗ",
+  "viewAll": "ସବୁ ଦେଖନ୍ତୁ",
+  "socialProofDistrict": "ଆପଣଙ୍କ ଜିଲ୍ଲାର {count} ଜଣ ଛାତ୍ର ଏହି ସପ୍ତାହରେ ଆବେଦନ କରିଛନ୍ତି",
+  "@socialProofDistrict": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchHint": "ଛାତ୍ରବୃତ୍ତି, ପାଠ୍ୟକ୍ରମ, ପରୀକ୍ଷା ଖୋଜନ୍ତୁ...",
+  "filterAll": "ସମସ୍ତ",
+  "filterScholarships": "ଛାତ୍ରବୃତ୍ତି (Scholarships)",
+  "filterCourses": "ପାଠ୍ୟକ୍ରମ",
+  "filterExams": "ପ୍ରବେଶିକା ପରୀକ୍ଷା",
+  "filterInternships": "ଇଣ୍ଟର୍ନସିପ",
+  "filterEligibleOnly": "କେବଳ ଯୋଗ୍ୟ",
+  "resetFilters": "ଫିଲ୍ଟର ପୁନଃସେଟ କରନ୍ତୁ",
+  "eligibleBadge": "ଯୋଗ୍ୟ (Eligible)",
+  "notEligibleBadge": "ଯୋଗ୍ୟତା ଯାଞ୍ଚ କରନ୍ତୁ",
+  "rulesPassed": "{total} ରୁ {passed} ଟି ସର୍ତ୍ତ ପୂରଣ ହୋଇଛି",
+  "@rulesPassed": {
+    "placeholders": {
+      "passed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "eligibilityReasoningTitle": "ଯୋଗ୍ୟତା ବିବରଣୀ",
+  "applyNow": "ଅଫିସିଆଲ ପୋର୍ଟାଲରେ ଆବେଦନ କରନ୍ତୁ",
+  "noOpportunitiesFound": "କୌଣସି ସୁଯୋଗ ମିଳିଲା ନାହିଁ। ଫିଲ୍ଟର ବଦଳାଇ ଚେଷ୍ଟା କରନ୍ତୁ।",
+
+  "assistantTitle": "ଏଆଇ କ୍ୟାରିୟର ମାର୍ଗଦର୍ଶକ",
+  "assistantSubtitle": "ଆପଣଙ୍କ ଯାତ୍ରା ପାଇଁ ବ୍ୟକ୍ତିଗତ ପରାମର୍ଶ",
+  "chatInputHint": "କ୍ୟାରିୟର କିମ୍ବା ବୃତ୍ତି ବିଷୟରେ ଯାହା ପଚାରିବାକୁ ଚାହାଁନ୍ତି...",
+  "send": "ପଠାନ୍ତୁ",
+
+  "editProfile": "ପ୍ରୋଫାଇଲ ସମ୍ପାଦନ କରନ୍ତୁ",
+  "addSkill": "ଦକ୍ଷତା ଯୋଡ଼ନ୍ତୁ",
+  "addInterest": "ଆଗ୍ରହ ଯୋଡ଼ନ୍ତୁ",
+  "saveChanges": "ପରିବର୍ତ୍ତନ ସାଇତନ୍ତୁ",
+
+  "opportunitiesAvailable": "{count} ଟି ସୁଯୋଗ ଉପଲବ୍ଧ ଅଛି",
+  "@opportunitiesAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "opportunityTypeScholarship": "ଛାତ୍ରବୃତ୍ତି",
+  "opportunityTypeCourse": "ଧନ୍ଦାମୂଳକ ପାଠ୍ୟକ୍ରମ",
+  "opportunityTypeExam": "ପ୍ରବେଶିକା ପରୀକ୍ଷା",
+  "opportunityTypeInternship": "ଇଣ୍ଟର୍ନସିପ / ଫେଲୋସିପ",
+  "opportunityTypeGeneral": "ସୁଯୋଗ",
+  "openToAllCriteria": "ମୌଳିକ ଯୋଗ୍ୟତା ପୂରଣ କରୁଥିବା ସମସ୍ତ ପ୍ରାର୍ଥୀଙ୍କ ପାଇଁ ଖୋଲା",
+  "noMatchingOpportunities": "କୌଣସି ମେଳ ଖାଉଥିବା ସୁଯୋଗ ମିଳିଲା ନାହିଁ",
+  "noMatchingOpportunitiesSubtitle": "ଅନ୍ୟ କିଛି ଖୋଜନ୍ତୁ କିମ୍ବା 'କେବଳ ଯୋଗ୍ୟ' ଫିଲ୍ଟର ବନ୍ଦ କରନ୍ତୁ।",
+  "officialPortalOpening": "ଅଫିସିଆଲ ପୋର୍ଟାଲ ଖୋଲାଯାଉଛି: {url}",
+  "@officialPortalOpening": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "statFinancialBenefit": "ଆର୍ଥିକ ଲାଭ",
+  "statKeyDetails": "ମୁଖ୍ୟ ବିବରଣୀ",
+  "opportunityAbout": "ଏହି ସୁଯୋଗ ବିଷୟରେ",
+  "yourProfileValue": "ଆପଣଙ୍କ ପ୍ରୋଫାଇଲ: {value}",
+  "@yourProfileValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "openToAllGeneral": "ସାଧାରଣ ଯୋଗ୍ୟତା ପୂରଣ କରୁଥିବା ସମସ୍ତ ଛାତ୍ରଙ୍କ ପାଇଁ ଉପଲବ୍ଧ।",
+
+  "locationNotSet": "ସ୍ଥାନ ନିର୍ଦ୍ଧାରିତ ହୋଇନାହିଁ",
+  "demographicsTitle": "ଜନସାଂଖ୍ୟିକ ବିବରଣୀ ଏବଂ ସଂରକ୍ଷଣ କୋଟା",
+  "socialCategoryLabel": "ସାମାଜିକ ବର୍ଗ ଓ ଜାତି",
+  "tribeLabel": "ଜନଜାତି ସମ୍ପୃକ୍ତି",
+  "annualIncomeLabel": "ବାର୍ଷିକ ପାରିବାରିକ ଆୟ",
+  "areaClassificationLabel": "ଅଞ୍ଚଳ ବର୍ଗୀକରଣ",
+  "educationSectionTitle": "ଶିକ୍ଷା ଏବଂ ଶିକ୍ଷଣ",
+  "skillsSectionTitle": "ଦକ୍ଷତା ({count})",
+  "@skillsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "interestsSectionTitle": "ପସନ୍ଦର କ୍ଷେତ୍ର ({count})",
+  "@interestsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "careerAspirationTitle": "କ୍ୟାରିୟର ଲକ୍ଷ୍ୟ / ସ୍ୱପ୍ନ",
+  "btnUpdate": "ଅପଡେଟ କରନ୍ତୁ",
+  "btnAddSkill": "+ ଦକ୍ଷତା ଯୋଡ଼ନ୍ତୁ",
+  "btnAddInterest": "+ ଆଗ୍ରହ ଯୋଡ଼ନ୍ତୁ",
+  "btnSwitchProfile": "ପ୍ରୋଫାଇଲ ବଦଳାନ୍ତୁ / ରିସେଟ କରନ୍ତୁ",
+  "noneSpecified": "କିଛି ଉଲ୍ଲେଖ ନାହିଁ",
+  "nilIncome": "₹0 (ଶୂନ୍ୟ ଆୟ / ₹25,000 ରୁ କମ)",
+  "underIncome": "₹{amount} (₹25,000 ରୁ କମ)",
+  "@underIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "perYearIncome": "₹{amount} / ବର୍ଷ",
+  "@perYearIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "noEducationDescription": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ବ୍ୟାବହାରିକ ଅଭିଜ୍ଞତା ଯୋଡ଼ା ହୋଇନାହିଁ।",
+  "noSkillsAdded": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ଦକ୍ଷତା ଯୋଡ଼ା ହୋଇନାହିଁ। ତାଲିକାରୁ ଯୋଡ଼ିବା ପାଇଁ '+ ଦକ୍ଷତା ଯୋଡ଼ନ୍ତୁ' କ୍ଲିକ କରନ୍ତୁ।",
+  "noInterestsAdded": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ପସନ୍ଦ ଯୋଡ଼ା ହୋଇନାହିଁ। କ୍ଷେତ୍ର ବାଛିବା ପାଇଁ '+ ଆଗ୍ରହ ଯୋଡ଼ନ୍ତୁ' କ୍ଲିକ କରନ୍ତୁ।",
+  "noAspirationAdded": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ଲକ୍ଷ୍ୟ ଯୋଡ଼ା ହୋଇନାହିଁ।",
+  "qualifiesFullWaiver": "✓ ୧୦୦% ସମ୍ପୂର୍ଣ୍ଣ ଫି ଛାଡ଼ ଏବଂ ସର୍ବାଧିକ ବୃତ୍ତି ପାଇଁ ଯୋଗ୍ୟ।",
+
+  "dialogAddSkillTitle": "ନୂତନ ଦକ୍ଷତା ଯୋଡ଼ନ୍ତୁ",
+  "dialogAllSkillsAdded": "ତାଲିକାର ସମସ୍ତ ଦକ୍ଷତା ପୂର୍ବରୁ ଯୋଡ଼ା ହୋଇସାରିଛି!",
+  "dialogAddInterestTitle": "ଆଗ୍ରହର କ୍ଷେତ୍ର ଯୋଡ଼ନ୍ତୁ",
+  "dialogAllInterestsAdded": "ସମସ୍ତ ଉପଲବ୍ଧ ଆଗ୍ରହ ପୂର୍ବରୁ ଯୋଡ଼ା ହୋଇସାରିଛି!",
+  "dialogUpdateEducationTitle": "ଶିକ୍ଷା ଓ ବ୍ୟାବହାରିକ ଅଭିଜ୍ଞତା ଅପଡେଟ କରନ୍ତୁ",
+  "dialogEduLevelLabel": "ଶିକ୍ଷା ସ୍ତର",
+  "dialogEduDescLabel": "ବ୍ୟାବହାରିକ / ଅଣଆନୁଷ୍ଠାନିକ ଶିକ୍ଷାର ବିବରଣୀ",
+  "dialogEduDescHint": "ଆପଣ ବ୍ୟବହାରିକ ଭାବରେ କଣ କାମ ଶିଖିଛନ୍ତି?",
+  "dialogAspirationTitle": "ଆପଣଙ୍କ କ୍ୟାରିୟର ଲକ୍ଷ୍ୟ / ଆକାଂକ୍ଷା",
+  "dialogAspirationHint": "ଯଥା: କୃଷି ଡ୍ରୋନ ପାଇଲଟ, ଇଲେକ୍ଟ୍ରିକାଲ ଠିକାଦାର...",
+  "dialogDemographicsTitle": "ଜନସଂଖ୍ୟା ଏବଂ କୋଟା ଅପଡେଟ କରନ୍ତୁ",
+  "dialogCasteQuotaLabel": "ସାମାଜିକ ବର୍ଗ / ଜାତି କୋଟା",
+  "dialogTribeLabel": "ଜନଜାତି / ସମ୍ପ୍ରଦାୟ (ଐଚ୍ଛିକ)",
+  "dialogTribeSubtitle": "ଜନଜାତି କଲ୍ୟାଣ ମନ୍ତ୍ରଣାଳୟ (MoTA) ଏବଂ PVTG ବିଶେଷ ଯୋଜନାକୁ ସକ୍ରିୟ କରେ।",
+  "dialogTribeCustomHint": "କିମ୍ବା ଆପଣଙ୍କ ଜନଜାତି / PVTG ନାମ ଲେଖନ୍ତୁ...",
+  "dialogIncomeLabel": "ପାରିବାରିକ ଆୟ",
+  "btnCancel": "ବାତିଲ",
+  "btnSave": "ସାଇତନ୍ତୁ",
+
+  "snackbarSkillAdded": "ଦକ୍ଷତା ଯୋଡ଼ାଗଲା: {name}",
+  "@snackbarSkillAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarInterestAdded": "ଆଗ୍ରହ ଯୋଡ଼ାଗଲା: {name}",
+  "@snackbarInterestAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarEducationUpdated": "ଶିକ୍ଷା ବିବରଣୀ ସଫଳତାର ସହ ଅପଡେଟ ହେଲା!",
+  "snackbarAspirationUpdated": "କ୍ୟାରିୟର ଲକ୍ଷ୍ୟ ଅପଡେଟ ହେଲା!",
+  "snackbarDemographicsUpdated": "ଜନସଂଖ୍ୟା ଏବଂ କୋଟା ଯୋଗ୍ୟତା ଅପଡେଟ ହେଲା!",
+  "snackbarError": "ତ୍ରୁଟି: {error}",
+  "@snackbarError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "eduPrimary": "ପ୍ରାଥମିକ ବିଦ୍ୟାଳୟ (୫ମ ଶ୍ରେଣୀ ପର୍ଯ୍ୟନ୍ତ)",
+  "eduUpperPrimary": "ଉଚ୍ଚ ପ୍ରାଥମିକ ବିଦ୍ୟାଳୟ (୬ଷ୍ଠ - ୮ମ)",
+  "eduSecondary": "୧୦ମ ପାସ (ମାଟ୍ରିକ/ମାଧ୍ୟମିକ)",
+  "eduSeniorSecondary": "୧୨ମ ପାସ (ଯୁକ୍ତ ଦୁଇ/ଉଚ୍ଚ ମାଧ୍ୟମିକ)",
+  "eduDiploma": "ଡିପ୍ଲୋମା / ପଲିଟେକ୍ନିକ",
+  "eduVocational": "ଧନ୍ଦାମୂଳକ / ଆଇଟିଆଇ (ITI)",
+  "eduBachelor": "ସ୍ନାତକ ଡିଗ୍ରୀ (Bachelor's)",
+  "eduMaster": "ସ୍ନାତକୋତ୍ତର ଡିଗ୍ରୀ (Master's)",
+  "eduInformal": "ଅଣଆନୁଷ୍ଠାନିକ / ବ୍ୟାବହାରିକ ଶିକ୍ଷା",
+  "eduSelfLearning": "ସ୍ୱୟଂ-ଶିକ୍ଷିତ (Self-Taught)",
+  "eduOther": "ଅନ୍ୟାନ୍ୟ",
+
+  "catGeneral": "ସାଧାରଣ ବର୍ଗ (General)",
+  "catOBC": "ଅନ୍ୟାନ୍ୟ ପଛୁଆ ବର୍ଗ (OBC)",
+  "catSC": "ଅନୁସୂଚିତ ଜାତି (SC)",
+  "catST": "ଅନୁସୂଚିତ ଜନଜାତି (ST)",
+  "catEWS": "ଆର୍ଥିକ ଦୁର୍ବଳ ବର୍ଗ (EWS)"
 }

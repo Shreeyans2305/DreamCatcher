@@ -24,3 +24,11 @@ class VoiceQueryResponse(BaseModel):
     student_id: UUID
     stt_confidence: Optional[float] = None
     referenced_opportunities: list[OpportunityReference] = Field(default_factory=list)
+
+class VoiceSynthesisRequest(BaseModel):
+    text: str = Field(..., min_length=1)
+    language: str = Field("hi", max_length=10)
+
+class VoiceSynthesisResponse(BaseModel):
+    audio_response: str
+    audio_format: str = "MP3"

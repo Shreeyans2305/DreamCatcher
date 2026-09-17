@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/design_tokens.dart';
 
-enum StatBlockVariant { mustard, mint, lavender }
+enum StatBlockVariant { blush, mint, lavender, mustard, sage }
 
 class StatBlock extends StatelessWidget {
   final String stat;
@@ -16,7 +16,7 @@ class StatBlock extends StatelessWidget {
     required this.stat,
     required this.label,
     this.icon,
-    this.variant = StatBlockVariant.mustard,
+    this.variant = StatBlockVariant.blush,
     this.onTap,
   });
 
@@ -27,10 +27,10 @@ class StatBlock extends StatelessWidget {
     Color textCol;
 
     switch (variant) {
-      case StatBlockVariant.mustard:
-        bg = DesignTokens.mustardBg;
-        border = DesignTokens.mustardBorder;
-        textCol = DesignTokens.mustardText;
+      case StatBlockVariant.blush:
+        bg = DesignTokens.blushBg;
+        border = DesignTokens.blushBorder;
+        textCol = DesignTokens.blushText;
         break;
       case StatBlockVariant.mint:
         bg = DesignTokens.mintBg;
@@ -42,6 +42,16 @@ class StatBlock extends StatelessWidget {
         border = DesignTokens.lavenderBorder;
         textCol = DesignTokens.lavenderText;
         break;
+      case StatBlockVariant.sage:
+        bg = DesignTokens.sageBg;
+        border = DesignTokens.sageBorder;
+        textCol = DesignTokens.sageText;
+        break;
+      case StatBlockVariant.mustard:
+        bg = DesignTokens.mustardBg;
+        border = DesignTokens.mustardBorder;
+        textCol = DesignTokens.mustardText;
+        break;
     }
 
     Widget content = Container(
@@ -50,6 +60,13 @@ class StatBlock extends StatelessWidget {
         color: bg,
         borderRadius: BorderRadius.circular(DesignTokens.radiusCard),
         border: Border.all(color: border, width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: DesignTokens.maroon900.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,18 +77,19 @@ class StatBlock extends StatelessWidget {
             children: [
               Text(
                 stat,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: textCol,
                   height: 1.2,
+                  letterSpacing: -0.5,
                 ),
               ),
               if (icon != null)
                 Icon(
                   icon,
-                  color: textCol.withValues(alpha: 0.8),
-                  size: 24,
+                  color: textCol.withValues(alpha: 0.75),
+                  size: 22,
                 ),
             ],
           ),
@@ -79,9 +97,9 @@ class StatBlock extends StatelessWidget {
           Text(
             label,
             style: GoogleFonts.inter(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: textCol.withValues(alpha: 0.9),
+              color: textCol.withValues(alpha: 0.85),
               height: 1.3,
             ),
             maxLines: 2,

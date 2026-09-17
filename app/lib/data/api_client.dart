@@ -125,14 +125,40 @@ class DreamCatcherApiClient {
     return [];
   }
 
-  Future<List<LocationItem>> fetchLocations({int page = 1, int pageSize = 50}) async {
-    final res = await _get('/locations', {'page': page, 'page_size': pageSize});
+  Future<List<LocationItem>> fetchLocations({int page = 1, int pageSize = 50, String? state, String? district}) async {
+    final params = <String, dynamic>{'page': page, 'page_size': pageSize};
+    if (state != null && state.isNotEmpty) params['state'] = state;
+    if (district != null && district.isNotEmpty) params['district'] = district;
+    final res = await _get('/locations', params);
     if (res is Map && res['items'] is List) {
       return (res['items'] as List)
           .map((e) => LocationItem.fromJson(e as Map<String, dynamic>))
           .toList();
     }
     return [];
+  }
+
+  Future<LocationItem> findOrCreateLocation({
+    String country = 'India',
+    required String state,
+    required String district,
+    String? taluka,
+    String? village,
+    String? pincode,
+    String ruralUrban = 'unknown',
+  }) async {
+    final payload = <String, dynamic>{
+      'country': country,
+      'state': state.trim(),
+      'district': district.trim(),
+      'rural_urban': ruralUrban,
+    };
+    if (taluka != null && taluka.trim().isNotEmpty) payload['taluka'] = taluka.trim();
+    if (village != null && village.trim().isNotEmpty) payload['village'] = village.trim();
+    if (pincode != null && pincode.trim().isNotEmpty) payload['pincode'] = pincode.trim();
+
+    final res = await _post('/locations/find-or-create', payload);
+    return LocationItem.fromJson(res as Map<String, dynamic>);
   }
 
   Future<List<SkillItem>> fetchSkills({int page = 1, int pageSize = 50}) async {
@@ -165,6 +191,7 @@ class DreamCatcherApiClient {
     String? dateOfBirth,
     String? gender,
     String? locationId,
+    String? avatarUrl,
     String preferredLanguage = 'en',
   }) async {
     final payload = <String, dynamic>{
@@ -176,6 +203,7 @@ class DreamCatcherApiClient {
     if (dateOfBirth != null) payload['date_of_birth'] = dateOfBirth;
     if (gender != null) payload['gender'] = gender;
     if (locationId != null) payload['location_id'] = locationId;
+    if (avatarUrl != null && avatarUrl.isNotEmpty) payload['avatar_url'] = avatarUrl;
 
     final res = await _post('/students', payload);
     return StudentProfile.fromJson(res as Map<String, dynamic>);
@@ -271,6 +299,7 @@ class DreamCatcherApiClient {
     String? type,
     String? search,
     String? state,
+    String? language,
     int page = 1,
     int pageSize = 30,
   }) async {
@@ -282,6 +311,7 @@ class DreamCatcherApiClient {
     if (type != null && type.isNotEmpty && type != 'all') query['type'] = type;
     if (search != null && search.trim().isNotEmpty) query['search'] = search.trim();
     if (state != null && state.isNotEmpty) query['state'] = state;
+    if (language != null && language.isNotEmpty) query['language'] = language;
 
     final res = await _get('/opportunities', query);
     if (res is Map && res['items'] is List) {
@@ -292,8 +322,9 @@ class DreamCatcherApiClient {
     return [];
   }
 
-  Future<Opportunity> getOpportunity(String opportunityId) async {
-    final res = await _get('/opportunities/$opportunityId');
+  Future<Opportunity> getOpportunity(String opportunityId, {String? language}) async {
+    final query = (language != null && language.isNotEmpty) ? {'language': language} : null;
+    final res = await _get('/opportunities/$opportunityId', query);
     return Opportunity.fromJson(res as Map<String, dynamic>);
   }
 

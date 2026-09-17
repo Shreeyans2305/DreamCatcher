@@ -11,7 +11,7 @@ import uuid
 import enum
 from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, Enum, Float, ForeignKey, String
+from sqlalchemy import Boolean, Date, Enum, Float, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -53,6 +53,7 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         ForeignKey("locations.id", ondelete="SET NULL"),
         nullable=True,
     )
+    avatar_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     profile_completeness: Mapped[float] = mapped_column(
         Float,
         nullable=False,

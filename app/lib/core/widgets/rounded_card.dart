@@ -23,13 +23,13 @@ class RoundedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget card = Container(
+    Widget cardContent = Container(
       margin: margin,
       decoration: BoxDecoration(
         color: backgroundColor ?? DesignTokens.cardSurface,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: borderColor ?? DesignTokens.border.withValues(alpha: 0.6),
+          color: borderColor ?? DesignTokens.border.withValues(alpha: 0.7),
           width: 1.0,
         ),
         boxShadow: DesignTokens.softShadow,
@@ -46,14 +46,17 @@ class RoundedCard extends StatelessWidget {
     if (onTap != null) {
       return Material(
         color: Colors.transparent,
+        borderRadius: BorderRadius.circular(borderRadius),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(borderRadius),
-          child: card,
+          splashColor: DesignTokens.maroon900.withValues(alpha: 0.06),
+          highlightColor: DesignTokens.maroon900.withValues(alpha: 0.03),
+          child: cardContent,
         ),
       );
     }
 
-    return card;
+    return cardContent;
   }
 }

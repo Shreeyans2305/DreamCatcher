@@ -93,6 +93,40 @@ void main() {
         profileCompleteness: 0.75,
       );
       expect(student.completenessPercentage, 75);
+      expect(student.copyWith(avatarUrl: 'base64-photo', profileCompleteness: 0.80).completenessPercentage, 80);
+      expect(student.copyWith(avatarUrl: 'base64-photo').avatarUrl, 'base64-photo');
+    });
+
+    test('StudentProfile avatar can complete a stale 95% server score', () {
+      final student = StudentProfile(
+        id: 'std-2',
+        name: 'Aarav Sharma',
+        phone: '9876543210',
+        email: 'aarav@example.com',
+        dateOfBirth: '2005-01-01',
+        gender: 'male',
+        locationId: 'loc-1',
+        avatarUrl: 'base64-photo',
+        profileCompleteness: 0.95,
+        educationRecords: [
+          StudentEducation(
+            id: 'edu-1',
+            educationLevel: 'secondary',
+            status: 'completed',
+          ),
+        ],
+        skills: [
+          StudentSkill(id: 'skill-1', skillId: 'skill-1'),
+        ],
+        interests: [
+          StudentInterest(id: 'interest-1', interestId: 'interest-1'),
+        ],
+        aspirations: [
+          StudentAspiration(id: 'aspiration-1', aspirationText: 'Engineer'),
+        ],
+      );
+
+      expect(student.completenessPercentage, 100);
     });
   });
 }

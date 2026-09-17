@@ -44,24 +44,40 @@ class FilterChipRow<T> extends StatelessWidget {
               selected: isSelected,
               label: item.label,
               child: Material(
-                color: isSelected ? DesignTokens.navDarkSurface : Colors.white,
+                color: isSelected ? DesignTokens.maroon900 : Colors.white,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+                elevation: 0,
                 child: InkWell(
                   onTap: () => onSelected(item.value),
                   borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
                   child: Container(
                     constraints: const BoxConstraints(
-                      minHeight: DesignTokens.minTouchTarget,
+                      minHeight: 44.0,
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
                       border: Border.all(
                         color: isSelected
-                            ? DesignTokens.navDarkSurface
+                            ? DesignTokens.maroon900
                             : DesignTokens.border,
                         width: 1.2,
                       ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: DesignTokens.maroon900.withValues(alpha: 0.15),
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: DesignTokens.maroon900.withValues(alpha: 0.02),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -72,20 +88,20 @@ class FilterChipRow<T> extends StatelessWidget {
                             size: 18,
                             color: isSelected
                                 ? Colors.white
-                                : DesignTokens.textSecondary,
+                                : DesignTokens.slate600,
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 7),
                         ],
                         Text(
                           item.label,
                           style: GoogleFonts.inter(
-                            fontSize: 15,
+                            fontSize: 14,
                             fontWeight: isSelected
-                                ? FontWeight.w600
+                                ? FontWeight.w700
                                 : FontWeight.w500,
                             color: isSelected
                                 ? Colors.white
-                                : DesignTokens.textSecondary,
+                                : DesignTokens.slate600,
                           ),
                         ),
                       ],

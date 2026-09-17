@@ -1,3 +1,5 @@
+import '../../core/localization/opportunity_translator.dart';
+import '../../l10n/app_localizations.dart';
 import 'eligibility.dart';
 import 'reference.dart';
 
@@ -139,6 +141,18 @@ class Opportunity {
     }
   }
 
+  String getLocalizedTypeLabel(AppLocalizations l10n) {
+    return OpportunityTranslator.getTypeLabel(type, l10n);
+  }
+
+  String getLocalizedTitle(String langCode) {
+    return OpportunityTranslator.getTitle(title, langCode);
+  }
+
+  String? getLocalizedDescription(String langCode) {
+    return OpportunityTranslator.getDescription(description, title, langCode);
+  }
+
   String? get highlightBenefit {
     if (scholarship?.amount != null) {
       return '₹${scholarship!.amount!.toStringAsFixed(0)} ${scholarship?.recurrence ?? "award"}';
@@ -153,6 +167,19 @@ class Opportunity {
       return entranceExam!.conductingBody;
     }
     return null;
+  }
+
+  String? getLocalizedHighlightBenefit(AppLocalizations l10n, String langCode) {
+    return OpportunityTranslator.getHighlightBenefit(
+      type: type,
+      amount: scholarship?.amount,
+      recurrence: scholarship?.recurrence,
+      stipend: internship?.stipend,
+      duration: course?.duration,
+      conductingBody: entranceExam?.conductingBody,
+      l10n: l10n,
+      langCode: langCode,
+    );
   }
 
   factory Opportunity.fromJson(Map<String, dynamic> json) {

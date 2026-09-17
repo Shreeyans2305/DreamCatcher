@@ -15,6 +15,7 @@ class ChatRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=2000, description="Student query or message")
     language: Optional[str] = Field("en", description="Preferred language code (e.g. en, hi, mr, bn)")
     session_id: Optional[UUID] = Field(None, description="Existing session ID for multi-turn context")
+    is_voice_mode: Optional[bool] = Field(False, description="Whether this request is from an active voice call")
 
 
 class OpportunityReference(BaseModel):

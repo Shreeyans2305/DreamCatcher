@@ -86,6 +86,20 @@ def create_location(data: LocationCreate, db: Session = Depends(get_db)):
     return ReferenceService.create_location(db, data)
 
 
+@router.post("/locations/find-or-create", response_model=LocationResponse, summary="Find or create location by State/District")
+def find_or_create_location(data: LocationCreate, db: Session = Depends(get_db)):
+    return ReferenceService.find_or_create_location(
+        db,
+        country=data.country,
+        state=data.state,
+        district=data.district,
+        taluka=data.taluka,
+        village=data.village,
+        pincode=data.pincode,
+        rural_urban=data.rural_urban,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Skills
 # ---------------------------------------------------------------------------

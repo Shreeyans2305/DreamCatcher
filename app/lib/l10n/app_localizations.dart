@@ -507,6 +507,474 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Changes'**
   String get saveChanges;
+
+  /// No description provided for @opportunitiesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} opportunities available'**
+  String opportunitiesAvailable(int count);
+
+  /// No description provided for @opportunityTypeScholarship.
+  ///
+  /// In en, this message translates to:
+  /// **'Scholarship'**
+  String get opportunityTypeScholarship;
+
+  /// No description provided for @opportunityTypeCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Vocational Course'**
+  String get opportunityTypeCourse;
+
+  /// No description provided for @opportunityTypeExam.
+  ///
+  /// In en, this message translates to:
+  /// **'Entrance Exam'**
+  String get opportunityTypeExam;
+
+  /// No description provided for @opportunityTypeInternship.
+  ///
+  /// In en, this message translates to:
+  /// **'Internship / Fellowship'**
+  String get opportunityTypeInternship;
+
+  /// No description provided for @opportunityTypeGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'Opportunity'**
+  String get opportunityTypeGeneral;
+
+  /// No description provided for @openToAllCriteria.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to all candidates meeting basic requirements'**
+  String get openToAllCriteria;
+
+  /// No description provided for @noMatchingOpportunities.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching opportunities'**
+  String get noMatchingOpportunities;
+
+  /// No description provided for @noMatchingOpportunitiesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try clearing your search query or disabling the \"Eligible Only\" filter.'**
+  String get noMatchingOpportunitiesSubtitle;
+
+  /// No description provided for @officialPortalOpening.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening official portal: {url}'**
+  String officialPortalOpening(String url);
+
+  /// No description provided for @statFinancialBenefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial Benefit'**
+  String get statFinancialBenefit;
+
+  /// No description provided for @statKeyDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Details'**
+  String get statKeyDetails;
+
+  /// No description provided for @opportunityAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About this Opportunity'**
+  String get opportunityAbout;
+
+  /// No description provided for @yourProfileValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile: {value}'**
+  String yourProfileValue(String value);
+
+  /// No description provided for @openToAllGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to all students meeting standard general qualification.'**
+  String get openToAllGeneral;
+
+  /// No description provided for @locationNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Location not set'**
+  String get locationNotSet;
+
+  /// No description provided for @demographicsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demographics & Quotas'**
+  String get demographicsTitle;
+
+  /// No description provided for @socialCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Category & Caste'**
+  String get socialCategoryLabel;
+
+  /// No description provided for @tribeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tribe Affiliation'**
+  String get tribeLabel;
+
+  /// No description provided for @annualIncomeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Family Income'**
+  String get annualIncomeLabel;
+
+  /// No description provided for @areaClassificationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Area Classification'**
+  String get areaClassificationLabel;
+
+  /// No description provided for @educationSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Education & Learning'**
+  String get educationSectionTitle;
+
+  /// No description provided for @skillsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills ({count})'**
+  String skillsSectionTitle(int count);
+
+  /// No description provided for @interestsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests ({count})'**
+  String interestsSectionTitle(int count);
+
+  /// No description provided for @careerAspirationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Career Ambition / Dream'**
+  String get careerAspirationTitle;
+
+  /// No description provided for @btnUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get btnUpdate;
+
+  /// No description provided for @btnAddSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add Skill'**
+  String get btnAddSkill;
+
+  /// No description provided for @btnAddInterest.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add Interest'**
+  String get btnAddInterest;
+
+  /// No description provided for @btnSwitchProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch / Reset Profile'**
+  String get btnSwitchProfile;
+
+  /// No description provided for @noneSpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'None specified'**
+  String get noneSpecified;
+
+  /// No description provided for @nilIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'₹0 (Nil Income / Under ₹25k)'**
+  String get nilIncome;
+
+  /// No description provided for @underIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'₹{amount} (Under ₹25,000)'**
+  String underIncome(String amount);
+
+  /// No description provided for @perYearIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'₹{amount} / year'**
+  String perYearIncome(String amount);
+
+  /// No description provided for @noEducationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No informal or hands-on description added yet.'**
+  String get noEducationDescription;
+
+  /// No description provided for @noSkillsAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'No skills added yet. Tap \"+ Add Skill\" to link skills from our catalogue.'**
+  String get noSkillsAdded;
+
+  /// No description provided for @noInterestsAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'No interests added yet. Tap \"+ Add Interest\" to pick fields you enjoy.'**
+  String get noInterestsAdded;
+
+  /// No description provided for @noAspirationAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'No aspiration added yet.'**
+  String get noAspirationAdded;
+
+  /// No description provided for @qualifiesFullWaiver.
+  ///
+  /// In en, this message translates to:
+  /// **'✓ Qualifies for 100% full fee waiver and maximum need-based scholarships.'**
+  String get qualifiesFullWaiver;
+
+  /// No description provided for @dialogAddSkillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a New Skill'**
+  String get dialogAddSkillTitle;
+
+  /// No description provided for @dialogAllSkillsAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'All available catalogue skills are already added!'**
+  String get dialogAllSkillsAdded;
+
+  /// No description provided for @dialogAddInterestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Field of Interest'**
+  String get dialogAddInterestTitle;
+
+  /// No description provided for @dialogAllInterestsAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'All available interests are already added!'**
+  String get dialogAllInterestsAdded;
+
+  /// No description provided for @dialogUpdateEducationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Education & Learning'**
+  String get dialogUpdateEducationTitle;
+
+  /// No description provided for @dialogEduLevelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Education Level'**
+  String get dialogEduLevelLabel;
+
+  /// No description provided for @dialogEduDescLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hands-on / Informal Learning Description'**
+  String get dialogEduDescLabel;
+
+  /// No description provided for @dialogEduDescHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What have you learned to do practically?'**
+  String get dialogEduDescHint;
+
+  /// No description provided for @dialogAspirationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Career Goal / Ambition'**
+  String get dialogAspirationTitle;
+
+  /// No description provided for @dialogAspirationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Agricultural Drone Pilot, Electrical Contractor...'**
+  String get dialogAspirationHint;
+
+  /// No description provided for @dialogDemographicsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Demographics & Quotas'**
+  String get dialogDemographicsTitle;
+
+  /// No description provided for @dialogCasteQuotaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Category / Caste Quota'**
+  String get dialogCasteQuotaLabel;
+
+  /// No description provided for @dialogTribeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tribe / Community (Optional)'**
+  String get dialogTribeLabel;
+
+  /// No description provided for @dialogTribeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocks specific Ministry of Tribal Affairs (MoTA) and PVTG programs.'**
+  String get dialogTribeSubtitle;
+
+  /// No description provided for @dialogTribeCustomHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Or enter custom tribe / PVTG name...'**
+  String get dialogTribeCustomHint;
+
+  /// No description provided for @dialogIncomeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Income'**
+  String get dialogIncomeLabel;
+
+  /// No description provided for @btnCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get btnCancel;
+
+  /// No description provided for @btnSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get btnSave;
+
+  /// No description provided for @snackbarSkillAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added skill: {name}'**
+  String snackbarSkillAdded(String name);
+
+  /// No description provided for @snackbarInterestAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added interest: {name}'**
+  String snackbarInterestAdded(String name);
+
+  /// No description provided for @snackbarEducationUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Education details updated successfully!'**
+  String get snackbarEducationUpdated;
+
+  /// No description provided for @snackbarAspirationUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Aspiration updated!'**
+  String get snackbarAspirationUpdated;
+
+  /// No description provided for @snackbarDemographicsUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Demographics & quota eligibility updated!'**
+  String get snackbarDemographicsUpdated;
+
+  /// No description provided for @snackbarError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String snackbarError(String error);
+
+  /// No description provided for @eduPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary School (Up to 5th)'**
+  String get eduPrimary;
+
+  /// No description provided for @eduUpperPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle School (6th - 8th)'**
+  String get eduUpperPrimary;
+
+  /// No description provided for @eduSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'10th Pass (Secondary)'**
+  String get eduSecondary;
+
+  /// No description provided for @eduSeniorSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'12th Pass (Higher Secondary)'**
+  String get eduSeniorSecondary;
+
+  /// No description provided for @eduDiploma.
+  ///
+  /// In en, this message translates to:
+  /// **'Diploma / Polytechnic'**
+  String get eduDiploma;
+
+  /// No description provided for @eduVocational.
+  ///
+  /// In en, this message translates to:
+  /// **'Vocational / ITI'**
+  String get eduVocational;
+
+  /// No description provided for @eduBachelor.
+  ///
+  /// In en, this message translates to:
+  /// **'Bachelor\'s Degree'**
+  String get eduBachelor;
+
+  /// No description provided for @eduMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Master\'s Degree'**
+  String get eduMaster;
+
+  /// No description provided for @eduInformal.
+  ///
+  /// In en, this message translates to:
+  /// **'Informal / Practical Learning'**
+  String get eduInformal;
+
+  /// No description provided for @eduSelfLearning.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-Taught'**
+  String get eduSelfLearning;
+
+  /// No description provided for @eduOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get eduOther;
+
+  /// No description provided for @catGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get catGeneral;
+
+  /// No description provided for @catOBC.
+  ///
+  /// In en, this message translates to:
+  /// **'OBC'**
+  String get catOBC;
+
+  /// No description provided for @catSC.
+  ///
+  /// In en, this message translates to:
+  /// **'SC'**
+  String get catSC;
+
+  /// No description provided for @catST.
+  ///
+  /// In en, this message translates to:
+  /// **'ST'**
+  String get catST;
+
+  /// No description provided for @catEWS.
+  ///
+  /// In en, this message translates to:
+  /// **'EWS'**
+  String get catEWS;
 }
 
 class _AppLocalizationsDelegate

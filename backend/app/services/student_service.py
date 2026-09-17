@@ -26,14 +26,14 @@ from app.services.opportunity_service import OpportunityService
 
 class StudentService:
     @staticmethod
-    def calculate_completeness(student: Student) -> float:
+    def calculate_completeness(student: Student, db: Optional[Session] = None) -> float:
         score = 0.0
-        # Core demographic fields
-        if student.name:
+        # Core demographic fields (0.50 max)
+        if student.name and student.name.strip():
             score += 0.15
-        if student.phone:
+        if student.phone and student.phone.strip():
             score += 0.10
-        if student.email:
+        if student.email and student.email.strip():
             score += 0.05
         if student.date_of_birth:
             score += 0.05
@@ -41,16 +41,41 @@ class StudentService:
             score += 0.05
         if student.location_id:
             score += 0.10
-
-        # Sub-resources
-        if student.education_records:
-            score += 0.20
-        if student.skills:
-            score += 0.15
-        if student.interests:
-            score += 0.10
-        if student.aspirations:
+        if getattr(student, "avatar_url", None) and student.avatar_url.strip():
             score += 0.05
+
+        # Sub-resources (0.50 max)
+        if db is not None and getattr(student, "id", None) is not None:
+            edu_count = db.execute(
+                select(func.count(StudentEducation.id)).where(StudentEducation.student_id == student.id)
+            ).scalar_one()
+            skill_count = db.execute(
+                select(func.count(StudentSkill.id)).where(StudentSkill.student_id == student.id)
+            ).scalar_one()
+            interest_count = db.execute(
+                select(func.count(StudentInterest.id)).where(StudentInterest.student_id == student.id)
+            ).scalar_one()
+            aspiration_count = db.execute(
+                select(func.count(StudentAspiration.id)).where(StudentAspiration.student_id == student.id)
+            ).scalar_one()
+
+            if edu_count > 0:
+                score += 0.20
+            if skill_count > 0:
+                score += 0.15
+            if interest_count > 0:
+                score += 0.10
+            if aspiration_count > 0:
+                score += 0.05
+        else:
+            if student.education_records:
+                score += 0.20
+            if student.skills:
+                score += 0.15
+            if student.interests:
+                score += 0.10
+            if student.aspirations:
+                score += 0.05
 
         return round(min(1.0, max(0.1, score)), 2)
 
@@ -61,7 +86,7 @@ class StudentService:
         db.add(student)
         db.commit()
         db.refresh(student)
-        student.profile_completeness = StudentService.calculate_completeness(student)
+        student.profile_completeness = StudentService.calculate_completeness(student, db=db)
         db.commit()
         db.refresh(student)
         return student
@@ -137,7 +162,7 @@ class StudentService:
         for field, value in data.model_dump(exclude_unset=True).items():
             setattr(student, field, value)
 
-        student.profile_completeness = StudentService.calculate_completeness(student)
+        student.profile_completeness = StudentService.calculate_completeness(student, db=db)
         db.commit()
         return StudentService.get_student_detail(db, student_id)
 
@@ -168,7 +193,7 @@ class StudentService:
                 sub = StudentSubject(student_education_id=edu.id, **sub_in.model_dump())
                 db.add(sub)
 
-        student.profile_completeness = StudentService.calculate_completeness(student)
+        student.profile_completeness = StudentService.calculate_completeness(student, db=db)
         db.commit()
         # Eager load subjects for response
         return db.execute(
@@ -191,7 +216,7 @@ class StudentService:
         db.commit()
         student = StudentService.get_student_detail(db, student_id)
         if student:
-            student.profile_completeness = StudentService.calculate_completeness(student)
+            student.profile_completeness = StudentService.calculate_completeness(student, db=db)
             db.commit()
         return True
 
@@ -212,13 +237,15 @@ class StudentService:
             existing.years_experience = data.years_experience
             existing.source = data.source
             existing.confidence = data.confidence
+            student.profile_completeness = StudentService.calculate_completeness(student, db=db)
             db.commit()
             db.refresh(existing)
             return existing
 
         sk = StudentSkill(student_id=student_id, **data.model_dump())
         db.add(sk)
-        student.profile_completeness = StudentService.calculate_completeness(student)
+        db.flush()
+        student.profile_completeness = StudentService.calculate_completeness(student, db=db)
         db.commit()
         db.refresh(sk)
         return sk
@@ -237,7 +264,7 @@ class StudentService:
         db.commit()
         student = StudentService.get_student_detail(db, student_id)
         if student:
-            student.profile_completeness = StudentService.calculate_completeness(student)
+            student.profile_completeness = StudentService.calculate_completeness(student, db=db)
             db.commit()
         return True
 
@@ -257,13 +284,15 @@ class StudentService:
             existing.strength = data.strength
             existing.source = data.source
             existing.confidence = data.confidence
+            student.profile_completeness = StudentService.calculate_completeness(student, db=db)
             db.commit()
             db.refresh(existing)
             return existing
 
         st_interest = StudentInterest(student_id=student_id, **data.model_dump())
         db.add(st_interest)
-        student.profile_completeness = StudentService.calculate_completeness(student)
+        db.flush()
+        student.profile_completeness = StudentService.calculate_completeness(student, db=db)
         db.commit()
         db.refresh(st_interest)
         return st_interest
@@ -282,7 +311,7 @@ class StudentService:
         db.commit()
         student = StudentService.get_student_detail(db, student_id)
         if student:
-            student.profile_completeness = StudentService.calculate_completeness(student)
+            student.profile_completeness = StudentService.calculate_completeness(student, db=db)
             db.commit()
         return True
 
@@ -294,7 +323,8 @@ class StudentService:
 
         asp = StudentAspiration(student_id=student_id, **data.model_dump())
         db.add(asp)
-        student.profile_completeness = StudentService.calculate_completeness(student)
+        db.flush()
+        student.profile_completeness = StudentService.calculate_completeness(student, db=db)
         db.commit()
         db.refresh(asp)
         return asp

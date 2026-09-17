@@ -1,5 +1,32 @@
 import 'reference.dart';
 
+enum CompletenessStepId {
+  education,
+  skills,
+  interests,
+  aspirations,
+  location,
+  phone,
+  avatar,
+  demographics,
+}
+
+class ProfileCompletenessStep {
+  final CompletenessStepId id;
+  final String title;
+  final String description;
+  final int points;
+  final bool isCompleted;
+
+  const ProfileCompletenessStep({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.points,
+    required this.isCompleted,
+  });
+}
+
 class StudentEducation {
   final String id;
   final String? institutionName;
@@ -112,6 +139,7 @@ class StudentProfile {
   final String? dateOfBirth;
   final String? gender;
   final String? locationId;
+  final String? avatarUrl;
   final String preferredLanguage;
   final double profileCompleteness; // 0.0 to 1.0
   final LocationItem? location;
@@ -128,6 +156,7 @@ class StudentProfile {
     this.dateOfBirth,
     this.gender,
     this.locationId,
+    this.avatarUrl,
     this.preferredLanguage = 'en',
     this.profileCompleteness = 0.0,
     this.location,
@@ -137,7 +166,123 @@ class StudentProfile {
     this.aspirations = const [],
   });
 
-  int get completenessPercentage => (profileCompleteness * 100).round();
+  StudentProfile copyWith({
+    Object? avatarUrl = _unset,
+    double? profileCompleteness,
+  }) {
+    return StudentProfile(
+      id: id,
+      name: name,
+      phone: phone,
+      email: email,
+      dateOfBirth: dateOfBirth,
+      gender: gender,
+      locationId: locationId,
+      avatarUrl: identical(avatarUrl, _unset) ? this.avatarUrl : avatarUrl as String?,
+      preferredLanguage: preferredLanguage,
+      profileCompleteness: profileCompleteness ?? this.profileCompleteness,
+      location: location,
+      educationRecords: educationRecords,
+      skills: skills,
+      interests: interests,
+      aspirations: aspirations,
+    );
+  }
+
+  /// Accurately computes profile completeness based on all demographic fields,
+  /// avatar photo, location, and associated sub-resources.
+  double get effectiveCompleteness {
+    double score = 0.0;
+    if (name.trim().isNotEmpty) score += 0.15;
+    if (phone != null && phone!.trim().isNotEmpty) score += 0.10;
+    if (email != null && email!.trim().isNotEmpty) score += 0.05;
+    if (dateOfBirth != null && dateOfBirth!.trim().isNotEmpty) score += 0.05;
+    if (gender != null && gender!.trim().isNotEmpty) score += 0.05;
+    if (locationId != null || location != null) score += 0.10;
+    if (avatarUrl != null && avatarUrl!.trim().isNotEmpty) score += 0.05;
+
+    if (educationRecords.isNotEmpty) score += 0.20;
+    if (skills.isNotEmpty) score += 0.15;
+    if (interests.isNotEmpty) score += 0.10;
+    if (aspirations.isNotEmpty) score += 0.05;
+
+    final calculatedScore = score.clamp(0.1, 1.0);
+    final reportedScore = profileCompleteness.clamp(0.0, 1.0);
+    return double.parse(
+      (calculatedScore > reportedScore ? calculatedScore : reportedScore).toStringAsFixed(2),
+    );
+  }
+
+  int get completenessPercentage => (effectiveCompleteness * 100).round().clamp(10, 100);
+
+  /// Breakdown of all steps required to reach 100% profile completion
+  List<ProfileCompletenessStep> get completenessSteps {
+    return [
+      ProfileCompletenessStep(
+        id: CompletenessStepId.education,
+        title: 'Education Details',
+        description: 'Add qualification level, school or college',
+        points: 20,
+        isCompleted: educationRecords.isNotEmpty,
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.skills,
+        title: 'Skills & Practical Strengths',
+        description: 'List technical, vocational, or creative skills',
+        points: 15,
+        isCompleted: skills.isNotEmpty,
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.location,
+        title: 'State & District Location',
+        description: 'Set your state and district for state scheme quotas',
+        points: 10,
+        isCompleted: locationId != null || location != null,
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.interests,
+        title: 'Career Interests',
+        description: 'Pick domains you want to explore or pursue',
+        points: 10,
+        isCompleted: interests.isNotEmpty,
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.phone,
+        title: 'Contact Phone Number',
+        description: 'Add your active mobile number for scholarship alerts',
+        points: 10,
+        isCompleted: phone != null && phone!.trim().isNotEmpty,
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.demographics,
+        title: 'Date of Birth & Gender',
+        description: 'Specify demographic details for age & gender reservations',
+        points: 10,
+        isCompleted: (dateOfBirth != null && dateOfBirth!.trim().isNotEmpty) ||
+            (gender != null && gender!.trim().isNotEmpty),
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.avatar,
+        title: 'Profile Picture',
+        description: 'Upload a picture from your camera or gallery',
+        points: 5,
+        isCompleted: avatarUrl != null && avatarUrl!.trim().isNotEmpty,
+      ),
+      ProfileCompletenessStep(
+        id: CompletenessStepId.aspirations,
+        title: 'Career Aspiration',
+        description: 'Add your target goal or ambition for AI matching',
+        points: 5,
+        isCompleted: aspirations.isNotEmpty,
+      ),
+    ];
+  }
+
+  List<ProfileCompletenessStep> get missingSteps =>
+      completenessSteps.where((s) => !s.isCompleted).toList();
+
+  List<ProfileCompletenessStep> get completedSteps =>
+      completenessSteps.where((s) => s.isCompleted).toList();
 
   factory StudentProfile.fromJson(Map<String, dynamic> json) {
     return StudentProfile(
@@ -148,6 +293,7 @@ class StudentProfile {
       dateOfBirth: json['date_of_birth'] as String?,
       gender: json['gender'] as String?,
       locationId: json['location_id'] as String?,
+      avatarUrl: json['avatar_url'] as String?,
       preferredLanguage: json['preferred_language'] as String? ?? 'en',
       profileCompleteness: (json['profile_completeness'] as num?)?.toDouble() ?? 0.0,
       location: json['location'] != null ? LocationItem.fromJson(json['location']) : null,
@@ -170,3 +316,5 @@ class StudentProfile {
     );
   }
 }
+
+const Object _unset = Object();

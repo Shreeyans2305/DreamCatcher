@@ -1,4 +1,236 @@
 {
   "@@locale": "te",
-  "appTitle": "డ్రీమ్‌క్యాచర్", "tagline": "అడుగు అడుగునా మీ భవిష్యత్తును కనుగొనండి", "navDashboard": "హోమ్", "navOpportunities": "అవకాశాలు", "navChat": "సహాయకుడు", "navProfile": "ప్రొఫైల్", "onboardingWelcome": "మీ భవిష్యత్తు మార్గాన్ని నిర్మిద్దాం", "onboardingSubtitle": "మీ గురించి కొంత చెప్పండి; మీకు సరైన స్కాలర్‌షిప్‌లు, కోర్సులు, పరీక్షలు మరియు ఉద్యోగాలను కనుగొనడంలో సహాయపడతాం.", "stepBasic": "ప్రాథమిక సమాచారం", "stepLocation": "ప్రదేశం మరియు నేపథ్యం", "stepEducation": "విద్య మరియు నైపుణ్యాలు", "stepAspirations": "మీ లక్ష్యాలు", "fullNameLabel": "పూర్తి పేరు", "fullNameHint": "ఉదా: ఆరవ్ శర్మ", "phoneLabel": "ఫోన్ నంబర్", "phoneHint": "ఉదా: +91 98765 43210", "preferredLanguageLabel": "ఇష్టమైన భాష", "selectLanguage": "మీ భాషను ఎంచుకోండి", "stateLabel": "రాష్ట్రం", "districtLabel": "జిల్లా", "areaTypeLabel": "ప్రాంతం రకం", "rural": "గ్రామీణ", "urban": "పట్టణ", "semiUrban": "సెమీ అర్బన్", "casteCategoryLabel": "సామాజిక వర్గం", "incomeBracketLabel": "వార్షిక కుటుంబ ఆదాయం", "educationLevelLabel": "అత్యధిక విద్యా స్థాయి", "skillsTitle": "మీ నైపుణ్యాలు", "interestsTitle": "మీకు నచ్చిన రంగాలు", "aspirationLabel": "మీ కలల ఉద్యోగం లేదా ఆశయం ఏమిటి?", "aspirationHint": "ఉదా: వ్యవసాయ డ్రోన్ పైలట్, ఎలక్ట్రీషియన్, సివిల్ ఇంజనీర్...", "btnNext": "కొనసాగించండి", "btnBack": "వెనుకకు", "btnFinish": "ప్రొఫైల్ పూర్తి చేయండి", "saving": "మీ ప్రొఫైల్ సేవ్ అవుతోంది...", "dashboardCompleteness": "ప్రొఫైల్ పూర్తి స్థాయి", "dashboardMatchedOpps": "సరిపోలిన అవకాశాలు", "topOpportunitiesTitle": "మీ కోసం ఉత్తమ అవకాశాలు", "viewAll": "అన్నీ చూడండి", "searchHint": "స్కాలర్‌షిప్‌లు, కోర్సులు, పరీక్షలను వెతకండి...", "filterAll": "అన్నీ", "filterScholarships": "స్కాలర్‌షిప్‌లు", "filterCourses": "కోర్సులు", "filterExams": "పరీక్షలు", "filterInternships": "ఇంటర్న్‌షిప్‌లు", "filterEligibleOnly": "అర్హత ఉన్నవి మాత్రమే", "resetFilters": "ఫిల్టర్‌లను రీసెట్ చేయండి", "eligibleBadge": "అర్హత ఉంది", "notEligibleBadge": "నిబంధనలు చూడండి", "eligibilityReasoningTitle": "అర్హత వివరాలు", "applyNow": "అధికారిక పోర్టల్‌లో దరఖాస్తు చేయండి", "noOpportunitiesFound": "సరిపోలే అవకాశాలు ఏవీ లేవు.", "assistantTitle": "ఏఐ కెరీర్ గైడ్", "assistantSubtitle": "మీ ప్రయాణానికి వ్యక్తిగత సలహా", "chatInputHint": "కెరీర్ లేదా స్కాలర్‌షిప్‌ల గురించి అడగండి...", "send": "పంపండి", "editProfile": "ప్రొఫైల్‌ను సవరించండి", "addSkill": "నైపుణ్యాన్ని జోడించండి", "addInterest": "ఆసక్తిని జోడించండి", "saveChanges": "మార్పులను సేవ్ చేయండి"
+  "appTitle": "డ్రీమ్‌క్యాచర్",
+  "tagline": "మీ భవిష్యత్తును అంచెలంచెలుగా కనుగొనండి",
+  
+  "navDashboard": "హోమ్",
+  "navOpportunities": "అవకాశాలు",
+  "navChat": "సహాయకుడు",
+  "navProfile": "ప్రొఫైల్",
+
+  "onboardingWelcome": "మీ భవిష్యత్ మార్గాన్ని నిర్మిద్దాం",
+  "onboardingSubtitle": "మీకు తగిన స్కాలర్‌షిప్‌లు, కోర్సులు, పరీక్షలు మరియు ఉద్యోగాలను కనుగొనడానికి మీ గురించి కొంచెం చెప్పండి.",
+  "stepBasic": "ప్రాథమిక సమాచారం",
+  "stepLocation": "ప్రాంతం మరియు నేపథ్యం",
+  "stepEducation": "విద్య మరియు నైపుణ్యాలు",
+  "stepAspirations": "మీ లక్ష్యాలు",
+  
+  "fullNameLabel": "పూర్తి పేరు",
+  "fullNameHint": "ఉదా: ఆరవ్ శర్మ",
+  "phoneLabel": "ఫోన్ నంబర్",
+  "phoneHint": "ఉదా: +91 98765 43210",
+  "preferredLanguageLabel": "ప్రాధాన్యత గల భాష",
+  "selectLanguage": "మీ భాషను ఎంచుకోండి",
+  
+  "stateLabel": "రాష్ట్రం",
+  "districtLabel": "జిల్లా",
+  "areaTypeLabel": "ప్రాంత రకం",
+  "rural": "గ్రామీణ",
+  "urban": "పట్టణ",
+  "semiUrban": "అర్థ-పట్టణ",
+  
+  "casteCategoryLabel": "సామాజిక వర్గం",
+  "incomeBracketLabel": "వార్షిక కుటుంబ ఆదాయం",
+  
+  "educationLevelLabel": "గరిష్ట విద్యా స్థాయి",
+  "informalLearningLabel": "మీరు ఏమి నేర్చుకున్నారు? (ఆచరణాత్మక/అనధికారిక)",
+  "informalLearningHint": "ఉదా: సోలార్ పంప్ మరమ్మతు, మందుల దుకాణంలో సహాయం, వ్యవసాయ లెక్కలు...",
+  
+  "skillsTitle": "మీ నైపుణ్యాలు (Skills)",
+  "interestsTitle": "ఇష్టమైన రంగాలు (Interests)",
+  "aspirationLabel": "మీ కలల ఉద్యోగం లేదా ఆశయం ఏమిటి?",
+  "aspirationHint": "ఉదా: అగ్రికల్చరల్ డ్రోన్ పైలట్, ఎలక్ట్రీషియన్, సివిల్ ఇంజనీర్...",
+
+  "btnNext": "కొనసాగించండి",
+  "btnBack": "వెనుకకు",
+  "btnFinish": "ప్రొఫైల్ పూర్తి చేయండి",
+  "saving": "ప్రొఫైల్ సేవ్ చేయబడుతోంది...",
+
+  "greeting": "నమస్కారం, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCompleteness": "ప్రొఫైల్ సంపూర్ణత",
+  "dashboardMatchedOpps": "సరిపోలిన అవకాశాలు",
+  "dashboardActiveDeadlines": "సమీపిస్తున్న గడువులు",
+  "topOpportunitiesTitle": "మీ కోసం అగ్ర అవకాశాలు",
+  "viewAll": "అన్నీ చూడండి",
+  "socialProofDistrict": "మీ జిల్లాలోని {count} మంది విద్యార్థులు ఈ వారం దరఖాస్తు చేసుకున్నారు",
+  "@socialProofDistrict": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchHint": "స్కాలర్‌షిప్‌లు, కోర్సులు, పరీక్షలను శోధించండి...",
+  "filterAll": "అన్నీ",
+  "filterScholarships": "స్కాలర్‌షిప్‌లు",
+  "filterCourses": "కోర్సులు",
+  "filterExams": "ప్రవేశ పరీక్షలు",
+  "filterInternships": "ఇంటర్న్‌షిప్",
+  "filterEligibleOnly": "అర్హులు మాత్రమే",
+  "resetFilters": "ఫిల్టర్లను రీసెట్ చేయండి",
+  "eligibleBadge": "అర్హత ఉంది (Eligible)",
+  "notEligibleBadge": "అర్హతను తనిఖీ చేయండి",
+  "rulesPassed": "{total} లో {passed} నిబంధనలు నెరవేరాయి",
+  "@rulesPassed": {
+    "placeholders": {
+      "passed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "eligibilityReasoningTitle": "అర్హత వివరాలు",
+  "applyNow": "అధికారిక పోర్టల్‌లో దరఖాస్తు చేయండి",
+  "noOpportunitiesFound": "ఎలాంటి అవకాశాలు కనుగొనబడలేదు. ఫిల్టర్లను మార్చడానికి ప్రయత్నించండి.",
+
+  "assistantTitle": "AI కెరీర్ గైడ్",
+  "assistantSubtitle": "మీ ప్రయాణం కోసం వ్యక్తిగత సలహా",
+  "chatInputHint": "కెరీర్ లేదా స్కాలర్‌షిప్ గురించి ఏదైనా అడగండి...",
+  "send": "పంపండి",
+
+  "editProfile": "ప్రొఫైల్ సవరించండి",
+  "addSkill": "నైపుణ్యాన్ని జోడించండి",
+  "addInterest": "ఆసక్తిని జోడించండి",
+  "saveChanges": "మార్పులను సేవ్ చేయండి",
+
+  "opportunitiesAvailable": "{count} అవకాశాలు అందుబాటులో ఉన్నాయి",
+  "@opportunitiesAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "opportunityTypeScholarship": "స్కాలర్‌షిప్",
+  "opportunityTypeCourse": "వృత్తిపరమైన కోర్సు",
+  "opportunityTypeExam": "ప్రవేశ పరీక్ష",
+  "opportunityTypeInternship": "ఇంటర్న్‌షిప్ / ఫెలోషిప్",
+  "opportunityTypeGeneral": "అవకాశం",
+  "openToAllCriteria": "ప్రాథమిక అర్హతలు ఉన్న అభ్యర్థులందరికీ అందుబాటులో ఉంది",
+  "noMatchingOpportunities": "సరిపోలే అవకాశాలు లేవు",
+  "noMatchingOpportunitiesSubtitle": "శోధనను మార్చండి లేదా 'అర్హులు మాత్రమే' ఫిల్టర్‌ను తీసివేయండి.",
+  "officialPortalOpening": "అధికారిక పోర్టల్ తెరవబడుతోంది: {url}",
+  "@officialPortalOpening": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "statFinancialBenefit": "ఆర్థిక ప్రయోజనం",
+  "statKeyDetails": "ముఖ్య వివరాలు",
+  "opportunityAbout": "ఈ అవకాశం గురించి",
+  "yourProfileValue": "మీ ప్రొఫైల్: {value}",
+  "@yourProfileValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "openToAllGeneral": "సాధారణ అర్హతలను పూర్తి చేసిన విద్యార్థులందరికీ అందుబాటులో ఉంది.",
+
+  "locationNotSet": "ప్రాంతం నిర్ణయించబడలేదు",
+  "demographicsTitle": "జనాభా వివరాలు మరియు రిజర్వేషన్ కోటా",
+  "socialCategoryLabel": "సామాజిక వర్గం మరియు కులం",
+  "tribeLabel": "గిరిజన అనుబంధం",
+  "annualIncomeLabel": "వార్షిక కుటుంబ ఆదాయం",
+  "areaClassificationLabel": "ప్రాంత వర్గీకరణ",
+  "educationSectionTitle": "విద్య మరియు అభ్యాసం",
+  "skillsSectionTitle": "నైపుణ్యాలు ({count})",
+  "@skillsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "interestsSectionTitle": "ఆసక్తి గల రంగాలు ({count})",
+  "@interestsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "careerAspirationTitle": "కెరీర్ లక్ష్యం / కల",
+  "btnUpdate": "అప్‌డేట్ చేయండి",
+  "btnAddSkill": "+ నైపుణ్యం జోడించండి",
+  "btnAddInterest": "+ ఆసక్తి జోడించండి",
+  "btnSwitchProfile": "ప్రొఫైల్ మార్చండి / రీసెట్ చేయండి",
+  "noneSpecified": "ఏదీ పేర్కొనబడలేదు",
+  "nilIncome": "₹0 (ఆదాయం లేదు / ₹25,000 కంటే తక్కువ)",
+  "underIncome": "₹{amount} (₹25,000 కంటే తక్కువ)",
+  "@underIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "perYearIncome": "₹{amount} / సంవత్సరం",
+  "@perYearIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "noEducationDescription": "ఇప్పటివరకు ఎలాంటి ఆచరణాత్మక అనుభవం జోడించబడలేదు.",
+  "noSkillsAdded": "ఇంకా నైపుణ్యాలు జోడించబడలేదు. జాబితా నుండి జోడించడానికి '+ నైపుణ్యం జోడించండి' నొక్కండి.",
+  "noInterestsAdded": "ఇంకా ఆసక్తులు జోడించబడలేదు. రంగాన్ని ఎంచుకోవడానికి '+ ఆసక్తి జోడించండి' నొక్కండి.",
+  "noAspirationAdded": "ఇంకా ఎలాంటి లక్ష్యం జోడించబడలేదు.",
+  "qualifiesFullWaiver": "✓ 100% పూర్తి ఫీజు మినహాయింపు మరియు గరిష్ట స్కాలర్‌షిప్‌కు అర్హులు.",
+
+  "dialogAddSkillTitle": "కొత్త నైపుణ్యాన్ని జోడించండి",
+  "dialogAllSkillsAdded": "జాబితాలోని అన్ని నైపుణ్యాలు ఇప్పటికే జోడించబడ్డాయి!",
+  "dialogAddInterestTitle": "ఆసక్తి రంగాన్ని జోడించండి",
+  "dialogAllInterestsAdded": "అందుబాటులో ఉన్న అన్ని ఆసక్తులు ఇప్పటికే జోడించబడ్డాయి!",
+  "dialogUpdateEducationTitle": "విద్య మరియు ఆచరణాత్మక వివరాలను అప్‌డేట్ చేయండి",
+  "dialogEduLevelLabel": "విద్యా స్థాయి",
+  "dialogEduDescLabel": "ఆచరణాత్మక / అనధికారిక అభ్యాస వివరణ",
+  "dialogEduDescHint": "మీరు ఆచరణాత్మకంగా ఏ పని నేర్చుకున్నారు?",
+  "dialogAspirationTitle": "మీ కెరీర్ లక్ష్యం / ఆశయం",
+  "dialogAspirationHint": "ఉదా: అగ్రికల్చరల్ డ్రోన్ పైలట్, ఎలక్ట్రికల్ కాంట్రాక్టర్...",
+  "dialogDemographicsTitle": "జనాభా వివరాలు & కోటాను అప్‌డేట్ చేయండి",
+  "dialogCasteQuotaLabel": "సామాజిక వర్గం / కుల కోటా",
+  "dialogTribeLabel": "తెగ / సంఘం (ఐచ్ఛికం)",
+  "dialogTribeSubtitle": "గిరిజన వ్యవహారాల మంత్రిత్వ శాఖ (MoTA) మరియు PVTG ప్రత్యేక పథకాలను అన్‌లాక్ చేస్తుంది.",
+  "dialogTribeCustomHint": "లేదా మీ తెగ / PVTG పేరును నమోదు చేయండి...",
+  "dialogIncomeLabel": "కుటుంబ ఆదాయం",
+  "btnCancel": "రద్దు చేయండి",
+  "btnSave": "సేవ్ చేయండి",
+
+  "snackbarSkillAdded": "నైపుణ్యం జోడించబడింది: {name}",
+  "@snackbarSkillAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarInterestAdded": "ఆసక్తి జోడించబడింది: {name}",
+  "@snackbarInterestAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarEducationUpdated": "విద్యా వివరాలు విజయవంతంగా అప్‌డేట్ చేయబడ్డాయి!",
+  "snackbarAspirationUpdated": "కెరీర్ లక్ష్యం అప్‌డేట్ చేయబడింది!",
+  "snackbarDemographicsUpdated": "జనాభా వివరాలు మరియు కోటా అర్హత అప్‌డేట్ చేయబడ్డాయి!",
+  "snackbarError": "లోపం: {error}",
+  "@snackbarError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "eduPrimary": "ప్రాథమిక పాఠశాల (5వ తరగతి వరకు)",
+  "eduUpperPrimary": "ప్రాథమికోన్నత పాఠశాల (6వ - 8వ)",
+  "eduSecondary": "10వ తరగతి ఉత్తీర్ణత (సెకండరీ)",
+  "eduSeniorSecondary": "12వ తరగతి ఉత్తీర్ణత (హయ్యర్ సెకండరీ)",
+  "eduDiploma": "డిప్లొమా / పాలిటెక్నిక్",
+  "eduVocational": "వృత్తి విద్య / ITI",
+  "eduBachelor": "డిగ్రీ (Bachelor's)",
+  "eduMaster": "పీజీ డిగ్రీ (Master's)",
+  "eduInformal": "అనధికారిక / ప్రాక్టికల్ అభ్యాసం",
+  "eduSelfLearning": "స్వీయ-అభ్యాసం (Self-Taught)",
+  "eduOther": "ఇతర",
+
+  "catGeneral": "జనరల్ (General)",
+  "catOBC": "ఇతర వెనుకబడిన తరగతులు (OBC)",
+  "catSC": "షెడ్యూల్డ్ కులాలు (SC)",
+  "catST": "షెడ్యూల్డ్ తెగలు (ST)",
+  "catEWS": "ఆర్థికంగా బలహీన వర్గాలు (EWS)"
 }

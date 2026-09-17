@@ -15,7 +15,7 @@ class ProgressRing extends StatelessWidget {
     super.key,
     required this.progress,
     this.size = 72.0,
-    this.strokeWidth = 7.0,
+    this.strokeWidth = 6.0,
     this.progressColor,
     this.backgroundColor,
     this.showPercentage = true,
@@ -25,39 +25,48 @@ class ProgressRing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final clampedProgress = progress.clamp(0.0, 1.0);
-    final percentageInt = (clampedProgress * 100).round();
 
     return SizedBox(
       width: size,
       height: size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: size,
-            height: size,
-            child: CircularProgressIndicator(
-              value: clampedProgress,
-              strokeWidth: strokeWidth,
-              strokeCap: StrokeCap.round,
-              backgroundColor: backgroundColor ?? DesignTokens.border.withValues(alpha: 0.6),
-              valueColor: AlwaysStoppedAnimation<Color>(
-                progressColor ?? DesignTokens.primary,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0.0, end: clampedProgress),
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeOutCubic,
+        builder: (context, animatedValue, _) {
+          final percentageInt = (animatedValue * 100).round();
+
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: size,
+                height: size,
+                child: CircularProgressIndicator(
+                  value: animatedValue,
+                  strokeWidth: strokeWidth,
+                  strokeCap: StrokeCap.round,
+                  backgroundColor: backgroundColor ?? DesignTokens.blush200,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    progressColor ?? DesignTokens.primary,
+                  ),
+                ),
               ),
-            ),
-          ),
-          if (centerWidget != null)
-            centerWidget!
-          else if (showPercentage)
-            Text(
-              '$percentageInt%',
-              style: GoogleFonts.poppins(
-                fontSize: size * 0.26,
-                fontWeight: FontWeight.bold,
-                color: DesignTokens.textPrimary,
-              ),
-            ),
-        ],
+              if (centerWidget != null)
+                centerWidget!
+              else if (showPercentage)
+                Text(
+                  '$percentageInt%',
+                  style: GoogleFonts.inter(
+                    fontSize: size * 0.26,
+                    fontWeight: FontWeight.bold,
+                    color: DesignTokens.textPrimary,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

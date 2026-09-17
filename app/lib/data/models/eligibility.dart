@@ -1,3 +1,5 @@
+import '../../core/localization/opportunity_translator.dart';
+
 class RuleEvaluationItem {
   final String rule;
   final String ruleType;
@@ -42,6 +44,16 @@ class RuleEvaluationItem {
       default:
         return '$ruleType must be $expectedValue';
     }
+  }
+
+  String getLocalizedDescription(String langCode) {
+    return OpportunityTranslator.getRuleDescription(
+      ruleType: ruleType,
+      operator: operator,
+      value: expectedValue,
+      fallbackDesc: plainLanguageDescription,
+      langCode: langCode,
+    );
   }
 
   factory RuleEvaluationItem.fromJson(Map<String, dynamic> json) {

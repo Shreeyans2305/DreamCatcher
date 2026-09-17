@@ -35,13 +35,20 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-dreamcatcher}:${POSTGRES_PASSWORD:-dreamcatcher_dev_password}@db:5432/${POSTGRES_DB:-dreamcatcher}
-      VECTOR_DIM: ${VECTOR_DIM:-1536}
+      VECTOR_DIM: ${VECTOR_DIM:-768}
       APP_ENV: ${APP_ENV:-development}
       APP_DEBUG: ${APP_DEBUG:-true}
+      USE_VERTEX_AI: ${USE_VERTEX_AI:-true}
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID:-dreamcatcher-507515}
+      GCP_LOCATION: ${GCP_LOCATION:-us-central1}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-004}
+      GOOGLE_APPLICATION_CREDENTIALS: /root/.config/gcloud/application_default_credentials.json
     ports:
       - "${APP_PORT:-8000}:8000"
     volumes:
       - ./backend:/app
+      - ~/.config/gcloud:/root/.config/gcloud:ro
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 volumes:

@@ -15,6 +15,7 @@ from app.models.exam import EntranceExam
 from app.models.internship import Internship
 from app.models.eligibility import EligibilityRule, RuleOperator, RuleType, GroupOperator
 from app.models.location import Location
+from app.models.translation import Translation
 from app.schemas.opportunity import (
     OpportunityCreate, OpportunityUpdate,
     EligibilityRuleCreate, RuleEvaluationItem, EligibilityCheckResult,
@@ -62,13 +63,42 @@ class OpportunityService:
         return OpportunityService.get_opportunity_detail(db, opp.id)  # type: ignore
 
     @staticmethod
+    def apply_translations(db: Session, opportunities: List[Opportunity], language: Optional[str]) -> List[Opportunity]:
+        if not language or language == "en" or not opportunities:
+            return opportunities
+
+        opp_ids = [opp.id for opp in opportunities]
+        translations = list(
+            db.execute(
+                select(Translation).where(
+                    Translation.entity_type == "opportunity",
+                    Translation.entity_id.in_(opp_ids),
+                    Translation.language_code == language,
+                )
+            ).scalars().all()
+        )
+
+        trans_map: Dict[UUID, Dict[str, str]] = {}
+        for t in translations:
+            trans_map.setdefault(t.entity_id, {})[t.field] = t.translated_text
+
+        for opp in opportunities:
+            if opp.id in trans_map:
+                if "title" in trans_map[opp.id]:
+                    opp.title = trans_map[opp.id]["title"]
+                if "description" in trans_map[opp.id]:
+                    opp.description = trans_map[opp.id]["description"]
+
+        return opportunities
+
+    @staticmethod
     def get_opportunity(db: Session, opportunity_id: UUID) -> Optional[Opportunity]:
         return db.execute(
             select(Opportunity).where(Opportunity.id == opportunity_id)
         ).scalar_one_or_none()
 
     @staticmethod
-    def get_opportunity_detail(db: Session, opportunity_id: UUID) -> Optional[Opportunity]:
+    def get_opportunity_detail(db: Session, opportunity_id: UUID, language: Optional[str] = None) -> Optional[Opportunity]:
         stmt = (
             select(Opportunity)
             .options(
@@ -82,7 +112,10 @@ class OpportunityService:
             )
             .where(Opportunity.id == opportunity_id)
         )
-        return db.execute(stmt).scalar_one_or_none()
+        opp = db.execute(stmt).scalar_one_or_none()
+        if opp and language and language != "en":
+            OpportunityService.apply_translations(db, [opp], language)
+        return opp
 
     @staticmethod
     def list_opportunities(
@@ -92,6 +125,7 @@ class OpportunityService:
         state: Optional[str] = None,
         location_id: Optional[UUID] = None,
         search: Optional[str] = None,
+        language: Optional[str] = None,
         limit: int = 20,
         offset: int = 0,
     ) -> Tuple[List[Opportunity], int]:
@@ -146,6 +180,8 @@ class OpportunityService:
                 .limit(limit)
             ).scalars().all()
         )
+        if language and language != "en":
+            OpportunityService.apply_translations(db, items, language)
         return items, total
 
     @staticmethod

@@ -1,4 +1,236 @@
 {
   "@@locale": "mr",
-  "appTitle": "ड्रीमकॅचर", "tagline": "पायरी पायरीने तुमचे भविष्य शोधा", "navDashboard": "मुख्यपृष्ठ", "navOpportunities": "संधी", "navChat": "सहाय्यक", "navProfile": "प्रोफाइल", "onboardingWelcome": "तुमच्या भविष्याची वाटचाल सुरू करूया", "onboardingSubtitle": "तुमच्याबद्दल थोडी माहिती द्या, म्हणजे आम्ही तुमच्यासाठी योग्य शिष्यवृत्ती, अभ्यासक्रम, परीक्षा आणि नोकऱ्या शोधू शकू.", "stepBasic": "मूलभूत माहिती", "stepLocation": "ठिकाण व पार्श्वभूमी", "stepEducation": "शिक्षण व कौशल्ये", "stepAspirations": "तुमची ध्येये", "fullNameLabel": "पूर्ण नाव", "fullNameHint": "उदा. आरव शर्मा", "phoneLabel": "फोन नंबर", "phoneHint": "उदा. +91 98765 43210", "preferredLanguageLabel": "प्राधान्य भाषा", "selectLanguage": "तुमची भाषा निवडा", "stateLabel": "राज्य", "districtLabel": "जिल्हा", "areaTypeLabel": "क्षेत्राचा प्रकार", "rural": "ग्रामीण", "urban": "शहरी", "semiUrban": "निमशहरी", "casteCategoryLabel": "सामाजिक प्रवर्ग", "incomeBracketLabel": "वार्षिक कौटुंबिक उत्पन्न", "educationLevelLabel": "सर्वोच्च शिक्षण पातळी", "skillsTitle": "तुमची कौशल्ये", "interestsTitle": "तुम्हाला आवडणारी क्षेत्रे", "aspirationLabel": "तुमची स्वप्नातील नोकरी किंवा महत्त्वाकांक्षा काय आहे?", "aspirationHint": "उदा. कृषी ड्रोन पायलट, इलेक्ट्रिशियन, स्थापत्य अभियंता...", "btnNext": "पुढे चला", "btnBack": "मागे", "btnFinish": "प्रोफाइल पूर्ण करा", "saving": "तुमचे प्रोफाइल जतन होत आहे...", "dashboardCompleteness": "प्रोफाइल पूर्णता", "dashboardMatchedOpps": "जुळलेल्या संधी", "topOpportunitiesTitle": "तुमच्यासाठी उत्तम संधी", "viewAll": "सर्व पहा", "searchHint": "शिष्यवृत्ती, अभ्यासक्रम, परीक्षा शोधा...", "filterAll": "सर्व", "filterScholarships": "शिष्यवृत्ती", "filterCourses": "अभ्यासक्रम", "filterExams": "परीक्षा", "filterInternships": "इंटर्नशिप", "filterEligibleOnly": "फक्त पात्र", "resetFilters": "फिल्टर रीसेट करा", "eligibleBadge": "पात्र", "notEligibleBadge": "निकष तपासा", "eligibilityReasoningTitle": "पात्रतेचा तपशील", "applyNow": "अधिकृत पोर्टलवर अर्ज करा", "noOpportunitiesFound": "जुळणाऱ्या संधी सापडल्या नाहीत.", "assistantTitle": "एआय करिअर मार्गदर्शक", "assistantSubtitle": "तुमच्या वाटचालीसाठी वैयक्तिक सल्ला", "chatInputHint": "करिअर किंवा शिष्यवृत्तीबद्दल विचारा...", "send": "पाठवा", "editProfile": "प्रोफाइल संपादित करा", "addSkill": "कौशल्य जोडा", "addInterest": "आवड जोडा", "saveChanges": "बदल जतन करा"
+  "appTitle": "ड्रीमकॅचर",
+  "tagline": "पायरी पायरीने तुमचे भविष्य शोधा",
+  
+  "navDashboard": "मुख्यपृष्ठ",
+  "navOpportunities": "संधी",
+  "navChat": "सहाय्यक",
+  "navProfile": "प्रोफाइल",
+
+  "onboardingWelcome": "तुमच्या भविष्याची वाटचाल सुरू करूया",
+  "onboardingSubtitle": "तुमच्याबद्दल थोडी माहिती द्या, म्हणजे आम्ही तुमच्यासाठी योग्य शिष्यवृत्ती, अभ्यासक्रम, परीक्षा आणि नोकऱ्या शोधू शकू.",
+  "stepBasic": "मूलभूत माहिती",
+  "stepLocation": "ठिकाण व पार्श्वभूमी",
+  "stepEducation": "शिक्षण व कौशल्ये",
+  "stepAspirations": "तुमची ध्येये",
+  
+  "fullNameLabel": "पूर्ण नाव",
+  "fullNameHint": "उदा. आरव शर्मा",
+  "phoneLabel": "फोन नंबर",
+  "phoneHint": "उदा. +91 98765 43210",
+  "preferredLanguageLabel": "प्राधान्य भाषा",
+  "selectLanguage": "तुमची भाषा निवडा",
+  
+  "stateLabel": "राज्य",
+  "districtLabel": "जिल्हा",
+  "areaTypeLabel": "क्षेत्राचा प्रकार",
+  "rural": "ग्रामीण",
+  "urban": "शहरी",
+  "semiUrban": "निमशहरी",
+  
+  "casteCategoryLabel": "सामाजिक प्रवर्ग",
+  "incomeBracketLabel": "वार्षिक कौटुंबिक उत्पन्न",
+  
+  "educationLevelLabel": "सर्वोच्च शिक्षण पातळी",
+  "informalLearningLabel": "तुम्ही काय शिकला आहात? (व्यावहारिक/अनौपचारिक)",
+  "informalLearningHint": "उदा. सौर पंप दुरुस्ती, औषध दुकानात मदत, शेतीचा हिशेब...",
+  
+  "skillsTitle": "तुमची कौशल्ये",
+  "interestsTitle": "तुम्हाला आवडणारी क्षेत्रे",
+  "aspirationLabel": "तुमची स्वप्नातील नोकरी किंवा महत्त्वाकांक्षा काय आहे?",
+  "aspirationHint": "उदा. कृषी ड्रोन पायलट, इलेक्ट्रिशियन, सिव्हिल इंजिनिअर...",
+
+  "btnNext": "पुढे चला",
+  "btnBack": "मागे",
+  "btnFinish": "प्रोफाइल पूर्ण करा",
+  "saving": "तुमचे प्रोफाइल जतन होत आहे...",
+
+  "greeting": "नमस्कार, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCompleteness": "प्रोफाइल पूर्णता",
+  "dashboardMatchedOpps": "जुळलेल्या संधी",
+  "dashboardActiveDeadlines": "जवळ आलेल्या अंतिम मुदती",
+  "topOpportunitiesTitle": "तुमच्यासाठी उत्तम संधी",
+  "viewAll": "सर्व पहा",
+  "socialProofDistrict": "तुमच्या जिल्ह्यातील {count} विद्यार्थ्यांनी या आठवड्यात अर्ज केला",
+  "@socialProofDistrict": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchHint": "शिष्यवृत्ती, अभ्यासक्रम, परीक्षा शोधा...",
+  "filterAll": "सर्व",
+  "filterScholarships": "शिष्यवृत्ती",
+  "filterCourses": "अभ्यासक्रम",
+  "filterExams": "प्रवेश परीक्षा",
+  "filterInternships": "इंटर्नशिप",
+  "filterEligibleOnly": "फक्त पात्र",
+  "resetFilters": "फिल्टर रीसेट करा",
+  "eligibleBadge": "पात्र",
+  "notEligibleBadge": "निकष तपासा",
+  "rulesPassed": "{total} पैकी {passed} अटी पूर्ण झाल्या",
+  "@rulesPassed": {
+    "placeholders": {
+      "passed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "eligibilityReasoningTitle": "पात्रतेचा तपशील",
+  "applyNow": "अधिकृत पोर्टलवर अर्ज करा",
+  "noOpportunitiesFound": "जुळणाऱ्या संधी सापडल्या नाहीत. फिल्टर बदलून पहा.",
+
+  "assistantTitle": "एआय करिअर मार्गदर्शक",
+  "assistantSubtitle": "तुमच्या वाटचालीसाठी वैयक्तिक सल्ला",
+  "chatInputHint": "करिअर किंवा शिष्यवृत्तीबद्दल विचारा...",
+  "send": "पाठवा",
+
+  "editProfile": "प्रोफाइल संपादित करा",
+  "addSkill": "कौशल्य जोडा",
+  "addInterest": "आवड जोडा",
+  "saveChanges": "बदल जतन करा",
+
+  "opportunitiesAvailable": "{count} संधी उपलब्ध आहेत",
+  "@opportunitiesAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "opportunityTypeScholarship": "शिष्यवृत्ती",
+  "opportunityTypeCourse": "व्यावसायिक अभ्यासक्रम",
+  "opportunityTypeExam": "प्रवेश परीक्षा",
+  "opportunityTypeInternship": "इंटर्नशिप / फेलोशिप",
+  "opportunityTypeGeneral": "संधी",
+  "openToAllCriteria": "मूलभूत पात्रता पूर्ण करणाऱ्या सर्व विद्यार्थ्यांसाठी खुले",
+  "noMatchingOpportunities": "कोणतीही जुळणारी संधी सापडली नाही",
+  "noMatchingOpportunitiesSubtitle": "शोध संज्ञा बदला किंवा 'फक्त पात्र' फिल्टर बंद करा.",
+  "officialPortalOpening": "अधिकृत पोर्टल उघडत आहे: {url}",
+  "@officialPortalOpening": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "statFinancialBenefit": "आर्थिक लाभ",
+  "statKeyDetails": "महत्त्वाचा तपशील",
+  "opportunityAbout": "या संधीबद्दल माहिती",
+  "yourProfileValue": "तुमचे प्रोफाइल: {value}",
+  "@yourProfileValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "openToAllGeneral": "सामान्य पात्रता पूर्ण करणाऱ्या सर्व विद्यार्थ्यांसाठी उपलब्ध.",
+
+  "locationNotSet": "स्थान सेट केलेले नाही",
+  "demographicsTitle": "लोकसंख्याशास्त्र आणि आरक्षण कोटा",
+  "socialCategoryLabel": "सामाजिक प्रवर्ग व जात",
+  "tribeLabel": "आदिवासी जमात",
+  "annualIncomeLabel": "वार्षिक कौटुंबिक उत्पन्न",
+  "areaClassificationLabel": "क्षेत्र वर्गीकरण",
+  "educationSectionTitle": "शिक्षण आणि शिकणे",
+  "skillsSectionTitle": "कौशल्ये ({count})",
+  "@skillsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "interestsSectionTitle": "आवडणारी क्षेत्रे ({count})",
+  "@interestsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "careerAspirationTitle": "करिअर ध्येय / स्वप्न",
+  "btnUpdate": "अपडेट करा",
+  "btnAddSkill": "+ कौशल्य जोडा",
+  "btnAddInterest": "+ आवड जोडा",
+  "btnSwitchProfile": "प्रोफाइल बदला / रीसेट करा",
+  "noneSpecified": "काहीही नमूद नाही",
+  "nilIncome": "₹0 (शून्य उत्पन्न / ₹25,000 पेक्षा कमी)",
+  "underIncome": "₹{amount} (₹25,000 पेक्षा कमी)",
+  "@underIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "perYearIncome": "₹{amount} / वर्ष",
+  "@perYearIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "noEducationDescription": "अद्याप कोणताही व्यावहारिक अनुभव जोडलेला नाही.",
+  "noSkillsAdded": "अद्याप कोणतीही कौशल्ये जोडलेली नाहीत. कॅटलॉगमधून जोडण्यासाठी '+ कौशल्य जोडा' वर टॅप करा.",
+  "noInterestsAdded": "अद्याप कोणतीही आवड जोडलेली नाही. आवडीचे क्षेत्र निवडण्यासाठी '+ आवड जोडा' वर टॅप करा.",
+  "noAspirationAdded": "अद्याप कोणतेही ध्येय जोडलेले नाही.",
+  "qualifiesFullWaiver": "✓ 100% पूर्ण फी माफी आणि कमाल शिष्यवृत्तीसाठी पात्र.",
+
+  "dialogAddSkillTitle": "नवीन कौशल्य जोडा",
+  "dialogAllSkillsAdded": "कॅटलॉगमधील सर्व उपलब्ध कौशल्ये आधीच जोडली गेली आहेत!",
+  "dialogAddInterestTitle": "आवडीचे क्षेत्र जोडा",
+  "dialogAllInterestsAdded": "सर्व उपलब्ध आवडी आधीच जोडल्या गेल्या आहेत!",
+  "dialogUpdateEducationTitle": "शिक्षण आणि व्यावहारिक माहिती अपडेट करा",
+  "dialogEduLevelLabel": "शिक्षण पातळी",
+  "dialogEduDescLabel": "व्यावहारिक / अनौपचारिक शिक्षणाचे वर्णन",
+  "dialogEduDescHint": "तुम्ही प्रत्यक्ष काय काम शिकला आहात?",
+  "dialogAspirationTitle": "तुमचे करिअर ध्येय / महत्त्वाकांक्षा",
+  "dialogAspirationHint": "उदा. कृषी ड्रोन पायलट, इलेक्ट्रिकल कंत्राटदार...",
+  "dialogDemographicsTitle": "लोकसंख्याशास्त्र आणि कोटा अपडेट करा",
+  "dialogCasteQuotaLabel": "सामाजिक प्रवर्ग / जात कोटा",
+  "dialogTribeLabel": "जमात / समुदाय (पर्यायी)",
+  "dialogTribeSubtitle": "आदिवासी कार्य मंत्रालय (MoTA) आणि PVTG विशेष योजना अनलॉक करते.",
+  "dialogTribeCustomHint": "किंवा तुमच्या जमातीचे / PVTG नाव प्रविष्ट करा...",
+  "dialogIncomeLabel": "कौटुंबिक उत्पन्न",
+  "btnCancel": "रद्द करा",
+  "btnSave": "जतन करा",
+
+  "snackbarSkillAdded": "कौशल्य जोडले: {name}",
+  "@snackbarSkillAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarInterestAdded": "आवड जोडली: {name}",
+  "@snackbarInterestAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarEducationUpdated": "शिक्षणाचा तपशील यशस्वीरित्या अपडेट केला!",
+  "snackbarAspirationUpdated": "करिअर ध्येय अपडेट झाले!",
+  "snackbarDemographicsUpdated": "लोकसंख्याशास्त्र आणि कोटा पात्रता अपडेट केली!",
+  "snackbarError": "त्रुटी: {error}",
+  "@snackbarError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "eduPrimary": "प्राथमिक शाळा (५ वी पर्यंत)",
+  "eduUpperPrimary": "माध्यमिक शाळा (६ वी - ८ वी)",
+  "eduSecondary": "१० वी उत्तीर्ण (माध्यमिक)",
+  "eduSeniorSecondary": "१२ वी उत्तीर्ण (उच्च माध्यमिक)",
+  "eduDiploma": "डिप्लोमा / पॉलिटेक्निक",
+  "eduVocational": "व्यावसायिक / ITI",
+  "eduBachelor": "पदवी (Bachelor's)",
+  "eduMaster": "व्युत्पन्न पदवी (Master's)",
+  "eduInformal": "अनौपचारिक / प्रात्यक्षिक शिक्षण",
+  "eduSelfLearning": "स्व-अध्ययन (Self-Taught)",
+  "eduOther": "इतर",
+
+  "catGeneral": "खुला प्रवर्ग (General)",
+  "catOBC": "इतर मागासवर्गीय (OBC)",
+  "catSC": "अनुसूचित जाती (SC)",
+  "catST": "अनुसूचित जमाती (ST)",
+  "catEWS": "आर्थिक दुर्बल घटक (EWS)"
 }

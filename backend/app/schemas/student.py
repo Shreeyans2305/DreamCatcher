@@ -152,6 +152,7 @@ class StudentBase(BaseModel):
     date_of_birth: Optional[date] = None
     gender: Optional[Gender] = None
     location_id: Optional[UUID] = None
+    avatar_url: Optional[str] = None
     preferred_language: str = Field("en", max_length=10)
 
 
@@ -166,6 +167,7 @@ class StudentUpdate(BaseModel):
     date_of_birth: Optional[date] = None
     gender: Optional[Gender] = None
     location_id: Optional[UUID] = None
+    avatar_url: Optional[str] = None
     preferred_language: Optional[str] = Field(None, max_length=10)
 
 

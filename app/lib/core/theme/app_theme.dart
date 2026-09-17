@@ -18,28 +18,31 @@ class AppTheme {
         onError: Colors.white,
       ),
       textTheme: baseTextTheme.copyWith(
-        headlineLarge: GoogleFonts.poppins(
-          fontSize: 28,
+        headlineLarge: GoogleFonts.inter(
+          fontSize: 30,
           fontWeight: FontWeight.bold,
           color: DesignTokens.textPrimary,
-          height: 1.3,
+          height: 1.2,
+          letterSpacing: -0.5,
         ),
-        headlineMedium: GoogleFonts.poppins(
+        headlineMedium: GoogleFonts.inter(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: DesignTokens.textPrimary,
-          height: 1.35,
+          height: 1.25,
+          letterSpacing: -0.3,
         ),
-        headlineSmall: GoogleFonts.poppins(
+        headlineSmall: GoogleFonts.inter(
           fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           color: DesignTokens.textPrimary,
-          height: 1.35,
+          height: 1.3,
         ),
-        titleLarge: GoogleFonts.poppins(
+        titleLarge: GoogleFonts.inter(
           fontSize: 18,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           color: DesignTokens.textPrimary,
+          height: 1.3,
         ),
         titleMedium: GoogleFonts.inter(
           fontSize: 16,
@@ -47,19 +50,19 @@ class AppTheme {
           color: DesignTokens.textPrimary,
         ),
         bodyLarge: GoogleFonts.inter(
-          fontSize: 17,
+          fontSize: 16,
           fontWeight: FontWeight.normal,
           color: DesignTokens.textPrimary,
           height: 1.5,
         ),
         bodyMedium: GoogleFonts.inter(
-          fontSize: 16, // Enforcing minimum 16sp rule
+          fontSize: 15,
           fontWeight: FontWeight.normal,
           color: DesignTokens.textSecondary,
           height: 1.45,
         ),
         labelLarge: GoogleFonts.inter(
-          fontSize: 16,
+          fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -78,7 +81,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
           textStyle: GoogleFonts.inter(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -94,7 +97,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
           textStyle: GoogleFonts.inter(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -107,18 +110,18 @@ class AppTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
-          borderSide: const BorderSide(color: DesignTokens.border),
+          borderSide: const BorderSide(color: DesignTokens.border, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
-          borderSide: const BorderSide(color: DesignTokens.border),
+          borderSide: const BorderSide(color: DesignTokens.border, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(DesignTokens.radiusInput),
-          borderSide: const BorderSide(color: DesignTokens.primary, width: 2),
+          borderSide: const BorderSide(color: DesignTokens.primary, width: 1.8),
         ),
         hintStyle: GoogleFonts.inter(
-          fontSize: 16,
+          fontSize: 15,
           color: DesignTokens.textMuted,
         ),
       ),

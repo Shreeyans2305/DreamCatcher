@@ -25,26 +25,26 @@ class AppSearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
-        border: Border.all(color: DesignTokens.border),
+        border: Border.all(color: DesignTokens.border, width: 1.0),
         boxShadow: DesignTokens.softShadow,
       ),
       child: Row(
         children: [
           const SizedBox(width: 16),
-          const Icon(Icons.search_rounded, color: DesignTokens.textMuted, size: 24),
-          const SizedBox(width: 8),
+          const Icon(Icons.search_rounded, color: DesignTokens.slate600, size: 22),
+          const SizedBox(width: 10),
           Expanded(
             child: TextField(
               controller: controller,
               onChanged: onChanged,
               style: GoogleFonts.inter(
-                fontSize: 16,
+                fontSize: 15,
                 color: DesignTokens.textPrimary,
               ),
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: GoogleFonts.inter(
-                  fontSize: 16,
+                  fontSize: 15,
                   color: DesignTokens.textMuted,
                 ),
                 border: InputBorder.none,
@@ -62,34 +62,34 @@ class AppSearchBar extends StatelessWidget {
                 button: true,
                 label: AppLocalizations.of(context)!.filterEligibleOnly,
                 child: Material(
-                  color: DesignTokens.primary,
+                  color: filterActive ? DesignTokens.maroon900 : DesignTokens.cream50,
                   shape: const CircleBorder(),
                   child: InkWell(
                     onTap: onFilterTap,
                     customBorder: const CircleBorder(),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
-                        minWidth: DesignTokens.minTouchTarget,
-                        minHeight: DesignTokens.minTouchTarget,
+                        minWidth: 42,
+                        minHeight: 42,
                       ),
                       child: Center(
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.tune_rounded,
-                              color: Colors.white,
-                              size: 22,
+                              color: filterActive ? Colors.white : DesignTokens.maroon900,
+                              size: 20,
                             ),
                             if (filterActive)
                               Positioned(
-                                top: 8,
-                                right: 8,
+                                top: 6,
+                                right: 6,
                                 child: Container(
-                                  width: 8,
-                                  height: 8,
+                                  width: 7,
+                                  height: 7,
                                   decoration: const BoxDecoration(
-                                    color: Colors.white,
+                                    color: DesignTokens.blush200,
                                     shape: BoxShape.circle,
                                   ),
                                 ),

@@ -22,7 +22,12 @@ from app.schemas.assistant import (
     EmbedAllResponse,
 )
 from app.services.ai_service import AIService
-from app.schemas.voice import VoiceQueryRequest, VoiceQueryResponse
+from app.schemas.voice import (
+    VoiceQueryRequest,
+    VoiceQueryResponse,
+    VoiceSynthesisRequest,
+    VoiceSynthesisResponse,
+)
 from app.services.voice_service import VoiceService
 
 router = APIRouter(prefix="/assistant", tags=["AI Assistant"])
@@ -42,6 +47,14 @@ def voice_query(request: VoiceQueryRequest, db: Session = Depends(get_db)):
         )
     except ValueError as error:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"Voice service unavailable: {error}")
+
+@voice_router.post("/synthesize", response_model=VoiceSynthesisResponse, summary="Synthesize a call response")
+def synthesize_voice(request: VoiceSynthesisRequest):
+    try:
+        audio_response, audio_format = VoiceService.synthesize(request.text, request.language)
+        return VoiceSynthesisResponse(audio_response=audio_response, audio_format=audio_format)
     except Exception as error:
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"Voice service unavailable: {error}")
 
@@ -72,6 +85,7 @@ def chat_with_assistant(
             message=request.message,
             language=request.language or "en",
             session_id=request.session_id,
+            is_voice_mode=request.is_voice_mode or False,
         )
     except Exception as e:
         raise HTTPException(

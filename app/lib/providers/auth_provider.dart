@@ -15,6 +15,7 @@ class AuthProvider extends ChangeNotifier {
   String _disabilityStatus = 'Prefer not to say';
   double _familyIncome = 0;
   String _ruralUrban = 'rural';
+  String? _avatarUrl;
 
   AuthProvider(this._apiClient) {
     _loadPersistedSession();
@@ -31,6 +32,7 @@ class AuthProvider extends ChangeNotifier {
   String get disabilityStatus => _disabilityStatus;
   double get familyIncome => _familyIncome;
   String get ruralUrban => _ruralUrban;
+  String? get avatarUrl => _currentStudent?.avatarUrl ?? _avatarUrl;
 
   static const String _prefStudentIdKey = 'dreamcatcher_active_student_id';
   static const String _prefCategoryKey = 'dreamcatcher_social_category';
@@ -38,6 +40,7 @@ class AuthProvider extends ChangeNotifier {
   static const String _prefIncomeKey = 'dreamcatcher_family_income';
   static const String _prefRuralUrbanKey = 'dreamcatcher_rural_urban';
   static const String _prefLanguageKey = 'dreamcatcher_preferred_language';
+  static const String _prefAvatarKey = 'dreamcatcher_avatar_url';
 
   void _parseDemographicsFromStudent(StudentProfile student) {
     if (student.educationRecords.isNotEmpty) {
@@ -78,6 +81,7 @@ class AuthProvider extends ChangeNotifier {
       _familyIncome = prefs.getDouble(_prefIncomeKey) ?? 0;
       _ruralUrban = prefs.getString(_prefRuralUrbanKey) ?? 'rural';
       _preferredLanguage = savedLanguage ?? 'en';
+      _avatarUrl = prefs.getString(_prefAvatarKey);
 
       if (savedId != null && savedId.isNotEmpty) {
         debugPrint('Found saved student session ID: $savedId');
@@ -85,24 +89,12 @@ class AuthProvider extends ChangeNotifier {
           _currentStudent = await _apiClient.getStudent(savedId);
           if (_currentStudent != null) {
             if (savedLanguage == null) _preferredLanguage = _currentStudent!.preferredLanguage;
+            if (_currentStudent!.avatarUrl != null) _avatarUrl = _currentStudent!.avatarUrl;
             _parseDemographicsFromStudent(_currentStudent!);
           }
         } catch (e) {
           debugPrint('Failed to load student from backend: $e. Session expired or wiped.');
           await prefs.remove(_prefStudentIdKey);
-        }
-      } else {
-        // Seamlessly auto-connect to verified student Sunil Murmu
-        try {
-          _currentStudent = await _apiClient.getStudent('f8767ba0-fa95-4c4c-8af0-f745b9180a47');
-          if (_currentStudent != null) {
-            if (savedLanguage == null) _preferredLanguage = _currentStudent!.preferredLanguage;
-            _parseDemographicsFromStudent(_currentStudent!);
-            await prefs.setString(_prefStudentIdKey, _currentStudent!.id);
-            debugPrint('Auto-connected to verified student: ${_currentStudent!.name}');
-          }
-        } catch (e) {
-          debugPrint('Default student auto-connect error: $e');
         }
       }
     } catch (e) {
@@ -161,6 +153,41 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateLocation({
+    required String state,
+    required String district,
+    String? taluka,
+    String? village,
+    String? pincode,
+    String? ruralUrban,
+  }) async {
+    if (ruralUrban != null) {
+      _ruralUrban = ruralUrban;
+      notifyListeners();
+    }
+
+    try {
+      final loc = await _apiClient.findOrCreateLocation(
+        state: state,
+        district: district,
+        taluka: taluka,
+        village: village,
+        pincode: pincode,
+        ruralUrban: ruralUrban ?? _ruralUrban,
+      );
+
+      if (_currentStudent != null) {
+        _currentStudent = await _apiClient.updateStudent(
+          _currentStudent!.id,
+          {'location_id': loc.id},
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error updating location: $e');
+    }
+  }
+
   Future<void> setCurrentStudent(StudentProfile student) async {
     _currentStudent = student;
     _preferredLanguage = student.preferredLanguage;
@@ -202,6 +229,42 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error refreshing profile: $e');
+    }
+  }
+
+  Future<void> updateAvatar(String? avatarUrl) async {
+    final previousAvatar = _currentStudent?.avatarUrl;
+    _avatarUrl = avatarUrl;
+    if (_currentStudent != null) {
+      var completeness = _currentStudent!.effectiveCompleteness;
+      final hadAvatar = previousAvatar != null && previousAvatar.trim().isNotEmpty;
+      final hasAvatar = avatarUrl != null && avatarUrl.trim().isNotEmpty;
+      if (!hadAvatar && hasAvatar) completeness += 0.05;
+      if (hadAvatar && !hasAvatar) completeness -= 0.05;
+      _currentStudent = _currentStudent!.copyWith(
+        avatarUrl: avatarUrl,
+        profileCompleteness: completeness.clamp(0.1, 1.0),
+      );
+    }
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (avatarUrl != null && avatarUrl.isNotEmpty) {
+        await prefs.setString(_prefAvatarKey, avatarUrl);
+      } else {
+        await prefs.remove(_prefAvatarKey);
+      }
+
+      if (_currentStudent != null) {
+        _currentStudent = await _apiClient.updateStudent(
+          _currentStudent!.id,
+          {'avatar_url': avatarUrl},
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error updating avatar: $e');
     }
   }
 

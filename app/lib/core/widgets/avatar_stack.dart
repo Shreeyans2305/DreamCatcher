@@ -17,13 +17,14 @@ class AvatarStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const avatarSize = 34.0;
-    const overlap = 12.0;
+    const overlap = 10.0;
 
-    final colors = [
-      const Color(0xFFF97316),
-      const Color(0xFF0EA5E9),
-      const Color(0xFF10B981),
-      const Color(0xFF8B5CF6),
+    final avatarThemes = [
+      (bg: DesignTokens.blush200, text: DesignTokens.maroon900),
+      (bg: DesignTokens.success, text: Colors.white),
+      (bg: DesignTokens.accentLav, text: DesignTokens.maroon900),
+      (bg: DesignTokens.accentMint, text: DesignTokens.maroon900),
+      (bg: DesignTokens.maroon900, text: Colors.white),
     ];
 
     return Row(
@@ -41,13 +42,13 @@ class AvatarStack extends StatelessWidget {
                     height: avatarSize,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: colors[i % colors.length],
-                      border: Border.all(color: Colors.white, width: 2.0),
+                      color: avatarThemes[i % avatarThemes.length].bg,
+                      border: Border.all(color: Colors.white, width: 2.2),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
+                          color: DesignTokens.maroon900.withValues(alpha: 0.1),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -57,7 +58,7 @@ class AvatarStack extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: avatarThemes[i % avatarThemes.length].text,
                       ),
                     ),
                   ),
@@ -65,15 +66,15 @@ class AvatarStack extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 12),
         Expanded(
           child: Text(
             label,
             style: GoogleFonts.inter(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               color: DesignTokens.textSecondary,
-              height: 1.3,
+              height: 1.35,
             ),
           ),
         ),

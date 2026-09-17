@@ -66,6 +66,30 @@ def test_create_and_get_location(client: TestClient):
     assert get_res.status_code == 200
     assert get_res.json()["district"] == "Kutch"
 
+    # Find or create location (idempotent lookup)
+    foc_res = client.post("/api/v1/locations/find-or-create", json={
+        "country": "India",
+        "state": "Gujarat",
+        "district": "Kutch",
+        "taluka": "Bhuj",
+        "village": "Madhapar",
+        "pincode": "370020",
+        "rural_urban": "rural",
+    })
+    assert foc_res.status_code == 200
+    assert foc_res.json()["id"] == loc["id"]
+
+    # Find or create for a new state/district
+    foc_new = client.post("/api/v1/locations/find-or-create", json={
+        "country": "India",
+        "state": "Tamil Nadu",
+        "district": "Coimbatore",
+        "rural_urban": "urban",
+    })
+    assert foc_new.status_code == 200
+    assert foc_new.json()["state"] == "Tamil Nadu"
+    assert foc_new.json()["district"] == "Coimbatore"
+
 
 def test_skills_crud(client: TestClient):
     import uuid

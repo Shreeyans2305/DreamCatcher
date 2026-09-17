@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../data/api_client.dart';
+import '../data/india_locations.dart';
 import '../data/models/reference.dart';
 import 'auth_provider.dart';
 
@@ -14,7 +15,14 @@ class OnboardingProvider extends ChangeNotifier {
   String _name = '';
   String _phone = '';
   String _preferredLanguage = 'en';
+  String? _avatarUrl;
   
+  String _selectedState = IndiaLocations.defaultState;
+  String _selectedDistrict = IndiaLocations.defaultDistrict(IndiaLocations.defaultState);
+  String _taluka = '';
+  String _village = '';
+  String _pincode = '';
+
   String? _selectedLocationId;
   LocationItem? _selectedLocation;
   String _ruralUrban = 'rural';
@@ -56,6 +64,15 @@ class OnboardingProvider extends ChangeNotifier {
   String get name => _name;
   String get phone => _phone;
   String get preferredLanguage => _preferredLanguage;
+  String? get avatarUrl => _avatarUrl;
+
+  String get selectedState => _selectedState;
+  String get selectedDistrict => _selectedDistrict;
+  String get taluka => _taluka;
+  String get village => _village;
+  String get pincode => _pincode;
+  List<String> get availableDistricts => IndiaLocations.getDistricts(_selectedState);
+
   String? get selectedLocationId =>
       _selectedLocationId ?? (_locations.isNotEmpty ? _locations.first.id : null);
   LocationItem? get selectedLocation {
@@ -98,11 +115,47 @@ class OnboardingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setAvatarUrl(String? val) {
+    _avatarUrl = val;
+    notifyListeners();
+  }
+
+  void setStateSelection(String state) {
+    _selectedState = state;
+    final districts = IndiaLocations.getDistricts(state);
+    if (!districts.contains(_selectedDistrict)) {
+      _selectedDistrict = districts.isNotEmpty ? districts.first : '';
+    }
+    notifyListeners();
+  }
+
+  void setDistrictSelection(String district) {
+    _selectedDistrict = district;
+    notifyListeners();
+  }
+
+  void setTaluka(String val) {
+    _taluka = val;
+    notifyListeners();
+  }
+
+  void setVillage(String val) {
+    _village = val;
+    notifyListeners();
+  }
+
+  void setPincode(String val) {
+    _pincode = val;
+    notifyListeners();
+  }
+
   void setLocationId(String id) {
     _selectedLocationId = id;
     final loc = _locations.cast<LocationItem?>().firstWhere((l) => l?.id == id, orElse: () => null);
     if (loc != null) {
       _selectedLocation = loc;
+      if (loc.state != null && loc.state!.isNotEmpty) _selectedState = loc.state!;
+      if (loc.district != null && loc.district!.isNotEmpty) _selectedDistrict = loc.district!;
       if (loc.ruralUrban.isNotEmpty && loc.ruralUrban != 'unknown') {
         _ruralUrban = loc.ruralUrban;
       }
@@ -113,8 +166,12 @@ class OnboardingProvider extends ChangeNotifier {
   void setLocation(LocationItem? loc) {
     _selectedLocation = loc;
     _selectedLocationId = loc?.id;
-    if (loc != null && loc.ruralUrban.isNotEmpty && loc.ruralUrban != 'unknown') {
-      _ruralUrban = loc.ruralUrban;
+    if (loc != null) {
+      if (loc.state != null && loc.state!.isNotEmpty) _selectedState = loc.state!;
+      if (loc.district != null && loc.district!.isNotEmpty) _selectedDistrict = loc.district!;
+      if (loc.ruralUrban.isNotEmpty && loc.ruralUrban != 'unknown') {
+        _ruralUrban = loc.ruralUrban;
+      }
     }
     notifyListeners();
   }
@@ -238,8 +295,24 @@ class OnboardingProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final locId = selectedLocationId;
-      final validLocId = (locId != null && _uuidRegex.hasMatch(locId)) ? locId : null;
+      String? validLocId;
+      try {
+        final loc = await _apiClient.findOrCreateLocation(
+          state: _selectedState,
+          district: _selectedDistrict,
+          taluka: _taluka.trim().isNotEmpty ? _taluka.trim() : null,
+          village: _village.trim().isNotEmpty ? _village.trim() : null,
+          pincode: _pincode.trim().isNotEmpty ? _pincode.trim() : null,
+          ruralUrban: _ruralUrban,
+        );
+        validLocId = loc.id;
+        _selectedLocation = loc;
+        _selectedLocationId = loc.id;
+      } catch (e) {
+        debugPrint('Dynamic location creation fallback: $e');
+        final locId = selectedLocationId;
+        validLocId = (locId != null && _uuidRegex.hasMatch(locId)) ? locId : null;
+      }
 
       // 1. Create Student
       final student = await _apiClient.createStudent(
@@ -247,6 +320,7 @@ class OnboardingProvider extends ChangeNotifier {
         phone: _phone.trim().isNotEmpty ? _phone.trim() : null,
         locationId: validLocId,
         preferredLanguage: _preferredLanguage,
+        avatarUrl: _avatarUrl,
       );
 
       // 2. Add Education Record (formal + informal learning description + real demographics)

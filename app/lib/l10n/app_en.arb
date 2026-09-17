@@ -98,5 +98,139 @@
   "editProfile": "Edit Profile",
   "addSkill": "Add Skill",
   "addInterest": "Add Interest",
-  "saveChanges": "Save Changes"
+  "saveChanges": "Save Changes",
+
+  "opportunitiesAvailable": "{count} opportunities available",
+  "@opportunitiesAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "opportunityTypeScholarship": "Scholarship",
+  "opportunityTypeCourse": "Vocational Course",
+  "opportunityTypeExam": "Entrance Exam",
+  "opportunityTypeInternship": "Internship / Fellowship",
+  "opportunityTypeGeneral": "Opportunity",
+  "openToAllCriteria": "Open to all candidates meeting basic requirements",
+  "noMatchingOpportunities": "No matching opportunities",
+  "noMatchingOpportunitiesSubtitle": "Try clearing your search query or disabling the \"Eligible Only\" filter.",
+  "officialPortalOpening": "Opening official portal: {url}",
+  "@officialPortalOpening": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "statFinancialBenefit": "Financial Benefit",
+  "statKeyDetails": "Key Details",
+  "opportunityAbout": "About this Opportunity",
+  "yourProfileValue": "Your profile: {value}",
+  "@yourProfileValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "openToAllGeneral": "Open to all students meeting standard general qualification.",
+
+  "locationNotSet": "Location not set",
+  "demographicsTitle": "Demographics & Quotas",
+  "socialCategoryLabel": "Social Category & Caste",
+  "tribeLabel": "Tribe Affiliation",
+  "annualIncomeLabel": "Annual Family Income",
+  "areaClassificationLabel": "Area Classification",
+  "educationSectionTitle": "Education & Learning",
+  "skillsSectionTitle": "Skills ({count})",
+  "@skillsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "interestsSectionTitle": "Interests ({count})",
+  "@interestsSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "careerAspirationTitle": "Career Ambition / Dream",
+  "btnUpdate": "Update",
+  "btnAddSkill": "+ Add Skill",
+  "btnAddInterest": "+ Add Interest",
+  "btnSwitchProfile": "Switch / Reset Profile",
+  "noneSpecified": "None specified",
+  "nilIncome": "₹0 (Nil Income / Under ₹25k)",
+  "underIncome": "₹{amount} (Under ₹25,000)",
+  "@underIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "perYearIncome": "₹{amount} / year",
+  "@perYearIncome": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "noEducationDescription": "No informal or hands-on description added yet.",
+  "noSkillsAdded": "No skills added yet. Tap \"+ Add Skill\" to link skills from our catalogue.",
+  "noInterestsAdded": "No interests added yet. Tap \"+ Add Interest\" to pick fields you enjoy.",
+  "noAspirationAdded": "No aspiration added yet.",
+  "qualifiesFullWaiver": "✓ Qualifies for 100% full fee waiver and maximum need-based scholarships.",
+
+  "dialogAddSkillTitle": "Add a New Skill",
+  "dialogAllSkillsAdded": "All available catalogue skills are already added!",
+  "dialogAddInterestTitle": "Add a Field of Interest",
+  "dialogAllInterestsAdded": "All available interests are already added!",
+  "dialogUpdateEducationTitle": "Update Education & Learning",
+  "dialogEduLevelLabel": "Education Level",
+  "dialogEduDescLabel": "Hands-on / Informal Learning Description",
+  "dialogEduDescHint": "What have you learned to do practically?",
+  "dialogAspirationTitle": "Your Career Goal / Ambition",
+  "dialogAspirationHint": "e.g. Agricultural Drone Pilot, Electrical Contractor...",
+  "dialogDemographicsTitle": "Update Demographics & Quotas",
+  "dialogCasteQuotaLabel": "Social Category / Caste Quota",
+  "dialogTribeLabel": "Tribe / Community (Optional)",
+  "dialogTribeSubtitle": "Unlocks specific Ministry of Tribal Affairs (MoTA) and PVTG programs.",
+  "dialogTribeCustomHint": "Or enter custom tribe / PVTG name...",
+  "dialogIncomeLabel": "Family Income",
+  "btnCancel": "Cancel",
+  "btnSave": "Save",
+
+  "snackbarSkillAdded": "Added skill: {name}",
+  "@snackbarSkillAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarInterestAdded": "Added interest: {name}",
+  "@snackbarInterestAdded": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "snackbarEducationUpdated": "Education details updated successfully!",
+  "snackbarAspirationUpdated": "Aspiration updated!",
+  "snackbarDemographicsUpdated": "Demographics & quota eligibility updated!",
+  "snackbarError": "Error: {error}",
+  "@snackbarError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "eduPrimary": "Primary School (Up to 5th)",
+  "eduUpperPrimary": "Middle School (6th - 8th)",
+  "eduSecondary": "10th Pass (Secondary)",
+  "eduSeniorSecondary": "12th Pass (Higher Secondary)",
+  "eduDiploma": "Diploma / Polytechnic",
+  "eduVocational": "Vocational / ITI",
+  "eduBachelor": "Bachelor's Degree",
+  "eduMaster": "Master's Degree",
+  "eduInformal": "Informal / Practical Learning",
+  "eduSelfLearning": "Self-Taught",
+  "eduOther": "Other",
+
+  "catGeneral": "General",
+  "catOBC": "OBC",
+  "catSC": "SC",
+  "catST": "ST",
+  "catEWS": "EWS"
 }
