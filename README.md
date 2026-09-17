@@ -1,8 +1,21 @@
-# DreamCatcher
+<p align="center">
+    <img src="DreamCatcherLogo.png" alt="DreamCatcher" width="180">
+</p>
+
+<h1 align="center">DreamCatcher</h1>
+
+<p align="center">
+    Multilingual AI guidance counselor for students in rural India.
+</p>
+
+<p align="center">
+    <img src="RuralEducation.png" alt="Rural education" width="720">
+</p>
+
 
 > Multilingual AI guidance counselor for students in rural India.
 
-DreamCatcher helps students discover career pathways, scholarships, entrance examinations, courses, and internships through a structured database and eventually an AI system that understands their goals in their native language.
+DreamCatcher helps students discover career pathways, scholarships, entrance examinations, courses, and internships through a structured database, profile-aware eligibility matching, multilingual guidance, and voice counselling.
 
 ---
 
@@ -20,7 +33,9 @@ DreamCatcher helps students discover career pathways, scholarships, entrance exa
 10. [Eligibility Engine](#eligibility-engine)
 11. [RAG Architecture](#rag-architecture)
 12. [GCP Deployment](#gcp-deployment)
-13. [Phase Roadmap](#phase-roadmap)
+13. [Client Applications](#client-applications)
+14. [Phase Roadmap](#phase-roadmap)
+15. [Project Structure](#project-structure)
 
 ---
 
@@ -46,9 +61,7 @@ LLM
 Response in Student's Language
 ```
 
-**Phase 1** (this codebase): Database foundation only.
-
-The LLM is **not** the source of truth for eligibility, deadlines, fees, or opportunity details. The database is. The LLM explains, compares, and guides.
+The database remains the source of truth for eligibility, deadlines, fees, and opportunity details. The AI services explain, compare, and guide using verified opportunity data and retrieved document context.
 
 ---
 
@@ -190,6 +203,32 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 # Production
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
+
+### Run both local backends
+
+From the repository root, `run_backends.py` starts the Website credential dispatcher on port `8000` and the FastAPI guidance backend on port `8001`:
+
+```bash
+python run_backends.py
+```
+
+For Vertex AI features, authenticate with Google Application Default Credentials first:
+
+```bash
+gcloud auth application-default login
+```
+
+The Docker Compose backend uses port `8000`; do not run it at the same time as the unified runner unless you change one of the ports.
+
+## Client Applications
+
+| Client | Directory | Start command |
+|--------|-----------|---------------|
+| Flutter student app | [`app/`](app/) | `cd app && flutter run -d chrome` |
+| React voice counselling client | [`call/`](call/) | `cd call && npm install && npm run dev` |
+| React volunteer portal | [`Website/frontend/`](Website/frontend/) | `cd Website/frontend && npm install && npm run dev` |
+
+See the README in each directory for client-specific configuration and backend URLs.
 
 ---
 
@@ -622,7 +661,7 @@ Response in student's language
 
 - `opportunity_documents` — full-text documents (PDFs converted to text, brochures, FAQs)
 - `document_chunks` — split into overlapping chunks (e.g., 512 tokens with 50 overlap)
-- `document_chunks.embedding` — `vector(1536)` column (pgvector)
+- `document_chunks.embedding` — `vector(768)` column by default (pgvector)
 
 ### Vector Index
 
@@ -634,7 +673,7 @@ USING hnsw (embedding vector_cosine_ops)
 WITH (m = 16, ef_construction = 64);
 ```
 
-### Similarity Query (Phase 2)
+### Similarity Query
 
 ```python
 # Find top-5 most similar chunks to a query embedding
@@ -648,7 +687,7 @@ results = db.execute(
 
 ### Embedding Dimension
 
-Default: **1536** (OpenAI ada-002 compatible).
+Default: **768** for Vertex AI `text-embedding-004`.
 
 To change: update `VECTOR_DIM` in `.env` **before** running the first migration.
 
@@ -702,16 +741,13 @@ gs://dreamcatcher-prod/students/{student_id}/documents/{doc_id}.pdf
 
 | Phase | What Gets Built |
 |-------|----------------|
-| **Phase 1** ✅ | Database foundation, migrations, seed data, health API |
-| **Phase 2** ✅ | Complete CRUD API (FastAPI routers, schemas, repositories) |
-| Phase 3 | Authentication & authorization (JWT, role-based access) |
-| Phase 4 | Opportunity ingestion pipeline (web scraping, PDF parsing) |
-| Phase 5 | Embedding generation & RAG pipeline |
-| Phase 6 | AI recommendation engine |
-| Phase 7 | Mobile app (React Native) |
-| Phase 8 | Volunteer portal (Next.js) |
-| Phase 9 | Voice/calling agent (STT/TTS) |
-| Phase 10 | GCP production deployment |
+| **Core platform** ✅ | PostgreSQL/pgvector schema, migrations, seed data, health API |
+| **Guidance APIs** ✅ | FastAPI CRUD, opportunity matching, eligibility, AI assistant, and RAG services |
+| **Student app** ✅ | Flutter onboarding, dashboard, opportunity finder, profile, chat, and localization |
+| **Voice counselling** ✅ | Browser voice client with Google Speech-to-Text and Text-to-Speech |
+| **Volunteer portal** ✅ | React/Vite field portal and credential dispatcher backend |
+| Next | Authentication, authorization, and production hardening |
+| Next | Opportunity ingestion, document processing, and richer offline support |
 
 ---
 
@@ -719,51 +755,21 @@ gs://dreamcatcher-prod/students/{student_id}/documents/{doc_id}.pdf
 
 ```
 DreamCatcher/
-├── backend/
-│   ├── app/
-│   │   ├── main.py                 # FastAPI application
-│   │   ├── core/
-│   │   │   ├── config.py           # Pydantic Settings
-│   │   │   └── database.py         # SQLAlchemy engine + session
-│   │   ├── models/
-│   │   │   ├── base.py             # UUID/Timestamp mixins + enum_values helper
-│   │   │   ├── location.py         # Geographic hierarchy
-│   │   │   ├── language.py         # ISO 639-1 languages
-│   │   │   ├── translation.py      # EAV multilingual translations
-│   │   │   ├── organization.py     # Orgs (govt, NGO, university...)
-│   │   │   ├── institution.py      # Colleges, schools, IITs...
-│   │   │   ├── student.py          # Student profiles
-│   │   │   ├── education.py        # Education history + subjects
-│   │   │   ├── skill.py            # Skills catalogue + student skills
-│   │   │   ├── interest.py         # Interests catalogue + student interests
-│   │   │   ├── aspiration.py       # Free-text student aspirations
-│   │   │   ├── career.py           # Careers, pathways, junctions
-│   │   │   ├── opportunity.py      # Central opportunity + versioning
-│   │   │   ├── scholarship.py      # Scholarship details
-│   │   │   ├── course.py           # Course + institution offering
-│   │   │   ├── exam.py             # Entrance exam details
-│   │   │   ├── internship.py       # Internship details
-│   │   │   ├── eligibility.py      # Eligibility rules engine
-│   │   │   ├── source.py           # Data sources + verification logs
-│   │   │   ├── document.py         # RAG documents + pgvector chunks
-│   │   │   └── student_document.py # Student uploaded documents
-│   │   ├── api/v1/
-│   │   │   └── health.py           # Health endpoints
-│   │   └── services/
-│   │       └── demo_queries.py     # 12 example query functions
-│   ├── alembic/
-│   │   ├── env.py
-│   │   └── versions/
-│   │       └── 0001_initial_schema.py
-│   ├── scripts/
-│   │   └── seed.py                 # Development seed data
-│   ├── tests/
-│   │   ├── test_health.py          # Health endpoint tests
-│   │   └── test_queries.py         # Integration tests (12 queries)
-│   ├── alembic.ini
-│   ├── requirements.txt
-│   └── Dockerfile
-├── docker-compose.yml
+├── app/                              # Flutter student application
+├── backend/                          # FastAPI, SQLAlchemy, AI, and voice APIs
+│   ├── app/api/v1/                   # Health, students, opportunities, chat, voice
+│   ├── app/models/                   # SQLAlchemy domain models
+│   ├── app/services/                 # Eligibility, AI, RAG, student, and voice services
+│   ├── alembic/versions/             # Database migrations
+│   ├── scripts/                      # Seed and embedding utilities
+│   └── tests/                        # Backend API and service tests
+├── call/                             # React/Vite browser voice client
+├── Website/frontend/                 # React/Vite volunteer portal
+├── Website/backend/                  # Credential dispatcher service
+├── docker-compose.yml                # PostgreSQL/pgvector and FastAPI
+├── run_backends.py                   # Starts both local backend services
+├── DreamCatcherLogo.png              # Project logo
+├── RuralEducation.png                # README project image
 ├── .env.example
 ├── .gitignore
 └── README.md

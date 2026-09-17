@@ -1,19 +1,50 @@
-# React + Vite
+# DreamCatcher Volunteer Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img src="../../DreamCatcherLogo.png" alt="DreamCatcher" width="160">
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  <img src="../../RuralEducation.png" alt="Rural education" width="720">
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The volunteer portal is a React/Vite web client for field teams supporting students through onboarding, opportunity discovery, and credential workflows. It uses the companion service in `Website/backend/` for credential dispatch and can be developed independently from the Flutter student app.
 
-## React Compiler
+## Quick start
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Run these commands from the `Website/frontend` directory:
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Vite prints the local development URL, normally `http://localhost:5173`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Available commands
+
+```bash
+npm run dev       # Start Vite with hot reload
+npm run build     # Create a production build
+npm run lint      # Run ESLint
+npm run preview   # Preview the production build locally
+```
+
+## Backend services
+
+The credential dispatcher is in [`Website/backend/server.py`](../backend/server.py). Start it from the repository root with:
+
+```bash
+python Website/backend/server.py
+```
+
+To start the credential dispatcher and FastAPI guidance service together, use [`run_backends.py`](../../run_backends.py) from the repository root. The dispatcher listens on port `8000` and FastAPI listens on port `8001`.
+
+## Project layout
+
+```text
+src/       React entrypoint, components, hooks, and utilities
+public/    Static images and other browser assets
+```
+
+The root [README](../../README.md) documents the database, FastAPI API, Docker services, and other DreamCatcher clients.

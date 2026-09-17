@@ -1,5 +1,13 @@
 # DreamCatcher Student Mobile App (Flutter)
 
+<p align="center">
+   <img src="../DreamCatcherLogo.png" alt="DreamCatcher" width="160">
+</p>
+
+<p align="center">
+   <img src="../RuralEducation.png" alt="Rural education" width="720">
+</p>
+
 An AI-powered opportunity discovery platform for students in rural and underserved regions of India. The application integrates directly with the live FastAPI backend on GCP Cloud Run.
 
 ---
@@ -9,6 +17,7 @@ An AI-powered opportunity discovery platform for students in rural and underserv
 ### 1. Prerequisites
 - Flutter 3.41+ / Dart 3.11+
 - Connected device (Android, iOS, macOS, or Chrome)
+- A running DreamCatcher backend, or access to the configured Cloud Run API
 
 ### 2. Running the App
 Navigate into the `app` directory:
@@ -43,6 +52,12 @@ flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:8000/api/v1
 
 > **Note on Cloud Run Cold Starts:**
 > GCP Cloud Run instances scale down to 0 when idle. The first request after a period of inactivity may experience a latency of 3–5 seconds. The app includes generous timeout configurations (35 seconds) and displays user-friendly loading indicators rather than treating cold starts as connection failures.
+
+For local development, start PostgreSQL with `docker compose up -d db`, then follow the backend setup in the [root README](../README.md). The unified local backend runner exposes FastAPI on port `8001`:
+
+```bash
+flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:8001/api/v1
+```
 
 ---
 
